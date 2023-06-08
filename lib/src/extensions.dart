@@ -1,10 +1,7 @@
 /// adds utility methods to [String]?
 extension StringOrNullUtils on String? {
   /// returns non-nullable string
-  String get orEmpty => orElse('');
-
-  /// returns non-nullable string, defaulting to passed value
-  String orElse(String value) => this ?? value;
+  String get orEmpty => this ?? '';
 }
 
 /// adds utility methods to [String]
@@ -16,16 +13,16 @@ extension StringUtils on String {
   num toNum() => num.parse(this);
 
   /// tries to convert string to int
-  int? tryToInt() => int.tryParse(this);
+  int? tryToInt() => tryToNum()?.toInt();
 
   /// converts to int
-  int toInt() => int.parse(this);
+  int toInt() => toNum().toInt();
 
   /// tries to convert string to double
-  double? tryToDouble() => double.tryParse(this);
+  double? tryToDouble() => tryToNum()?.toDouble();
 
   /// converts to double
-  double toDouble() => double.parse(this);
+  double toDouble() => toNum().toDouble();
 
   /// tries to convert string to DateTime
   DateTime? tryToDateTime() => DateTime.tryParse(this);
@@ -66,4 +63,7 @@ extension DateUtils on DateTime {
 
   /// date only
   DateTime get dateOnly => DateTime(year, month, day);
+
+  /// converts to Iso8601 date date only (yyyy-MM-dd)
+  String toIso8601Date() => '$year-$month-$day';
 }

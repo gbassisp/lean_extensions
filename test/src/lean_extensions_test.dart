@@ -1,11 +1,280 @@
 // ignore_for_file: prefer_const_constructors
+
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:test/test.dart';
 
+// /// converts to nullable DateTime
+// class AnyDateTimeOrNull extends ToDynamicConverter<DateTime?> {
+//   /// default const constructor
+//   const AnyDateTimeOrNull();
+
+//   @override
+//   DateTime? fromJson(dynamic json) => _string.fromJson(json).tryToDateTime();
+// }
+
+// /// converts to DateTime
+// class AnyDateTime extends ToDynamicConverter<DateTime> {
+//   /// default const constructor
+//   const AnyDateTime();
+
+//   @override
+//   DateTime fromJson(dynamic json) => _string.fromJson(json).toDateTime();
+
+//   @override
+//   dynamic toJson(DateTime object) => object.toIso8601String();
+// }
+
+const dateString = '2021-01-01';
+const dateStringWithT = '2021-01-01T00:00:00.000';
+const dateTimeString = '2021-01-01 13:23:31';
+const dateTimeStringWithT = '2021-01-01T13:23:31.000';
 void main() {
-  group('LeanExtensions', () {
-    test('can be instantiated', () {
-      expect(LeanExtensions(), isNotNull);
+  group('converters', () {
+    test('string or null', () {
+      const stringOrNull = AnyStringOrNull();
+      expect(stringOrNull.fromJson(null), null);
+      expect(stringOrNull.fromJson(''), '');
+      expect(stringOrNull.fromJson('a'), 'a');
+      expect(stringOrNull.fromJson('1'), '1');
+      expect(stringOrNull.fromJson(1), '1');
+      expect(stringOrNull.fromJson(1.0), '1.0');
+    });
+
+    test('string', () {
+      const string = AnyString();
+      expect(string.fromJson(null), '');
+      expect(string.fromJson(''), '');
+      expect(string.fromJson('a'), 'a');
+      expect(string.fromJson('1'), '1');
+      expect(string.fromJson(1), '1');
+      expect(string.fromJson(1.0), '1.0');
+    });
+
+    test('int or null', () {
+      const intOrNull = AnyIntOrNull();
+      expect(intOrNull.fromJson(null), null);
+      expect(intOrNull.fromJson(''), null);
+      expect(intOrNull.fromJson('a'), null);
+      expect(intOrNull.fromJson('1'), 1);
+      expect(intOrNull.fromJson(1), 1);
+      expect(intOrNull.fromJson(1.0), 1);
+    });
+
+    test('int', () {
+      const int = AnyInt();
+      expect(() => int.fromJson(null), throwsFormatException);
+      expect(() => int.fromJson(''), throwsFormatException);
+      expect(() => int.fromJson('a'), throwsFormatException);
+      expect(int.fromJson('1'), 1);
+      expect(int.fromJson(1), 1);
+      expect(int.fromJson(1.0), 1);
+    });
+
+    test('double or null', () {
+      const doubleOrNull = AnyDoubleOrNull();
+      expect(doubleOrNull.fromJson(null), null);
+      expect(doubleOrNull.fromJson(''), null);
+      expect(doubleOrNull.fromJson('a'), null);
+      expect(doubleOrNull.fromJson('1'), 1.0);
+      expect(doubleOrNull.fromJson(1), 1.0);
+      expect(doubleOrNull.fromJson(1.0), 1.0);
+    });
+
+    test('double', () {
+      const double = AnyDouble();
+      expect(() => double.fromJson(null), throwsFormatException);
+      expect(() => double.fromJson(''), throwsFormatException);
+      expect(() => double.fromJson('a'), throwsFormatException);
+      expect(double.fromJson('1'), 1.0);
+      expect(double.fromJson(1), 1.0);
+      expect(double.fromJson(1.0), 1.0);
+    });
+
+    test('DateTime or null', () {
+      const dateTimeOrNull = AnyDateTimeOrNull();
+      expect(dateTimeOrNull.fromJson(null), null);
+      expect(dateTimeOrNull.fromJson(''), null);
+      expect(dateTimeOrNull.fromJson('a'), null);
+      expect(dateTimeOrNull.fromJson(dateString), DateTime(2021));
+      expect(
+        dateTimeOrNull.fromJson(dateTimeString),
+        DateTime(2021, 1, 1, 13, 23, 31),
+      );
+      expect(
+        dateTimeOrNull.fromJson(dateTimeStringWithT),
+        DateTime(2021, 1, 1, 13, 23, 31),
+      );
+
+      // toJson
+      expect(dateTimeOrNull.toJson(null), null);
+      expect(dateTimeOrNull.toJson(DateTime(2021)), dateStringWithT);
+      expect(
+        dateTimeOrNull.toJson(DateTime(2021, 1, 1, 13, 23, 31)),
+        dateTimeStringWithT,
+      );
+    });
+
+    test('DateTime', () {
+      const dateTime = AnyDateTime();
+      expect(() => dateTime.fromJson(null), throwsFormatException);
+      expect(() => dateTime.fromJson(''), throwsFormatException);
+      expect(() => dateTime.fromJson('a'), throwsFormatException);
+      expect(dateTime.fromJson(dateString), DateTime(2021));
+      expect(
+        dateTime.fromJson(dateTimeString),
+        DateTime(2021, 1, 1, 13, 23, 31),
+      );
+      expect(
+        dateTime.fromJson(dateTimeStringWithT),
+        DateTime(2021, 1, 1, 13, 23, 31),
+      );
+
+      // toJson
+      expect(dateTime.toJson(DateTime(2021)), dateStringWithT);
+      expect(
+        dateTime.toJson(DateTime(2021, 1, 1, 13, 23, 31)),
+        dateTimeStringWithT,
+      );
+    });
+
+    test('Date or null', () {
+      const dateOrNull = AnyDateOrNull();
+      expect(dateOrNull.fromJson(null), null);
+      expect(dateOrNull.fromJson(''), null);
+      expect(dateOrNull.fromJson('a'), null);
+      expect(dateOrNull.fromJson(dateString), DateTime(2021));
+      expect(
+        dateOrNull.fromJson(dateTimeString),
+        DateTime(2021),
+      );
+      expect(
+        dateOrNull.fromJson(dateTimeStringWithT),
+        DateTime(2021),
+      );
+
+      // toJson
+      expect(dateOrNull.toJson(null), null);
+      expect(dateOrNull.toJson(DateTime(2021)), dateString);
+      expect(
+        dateOrNull.toJson(DateTime(2021, 1, 1, 13, 23, 31)),
+        dateString,
+      );
+    });
+
+    test('Date', () {
+      const date = AnyDate();
+      expect(() => date.fromJson(null), throwsFormatException);
+      expect(() => date.fromJson(''), throwsFormatException);
+      expect(() => date.fromJson('a'), throwsFormatException);
+      expect(date.fromJson(dateString), DateTime(2021));
+      expect(
+        date.fromJson(dateTimeString),
+        DateTime(2021),
+      );
+      expect(
+        date.fromJson(dateTimeStringWithT),
+        DateTime(2021),
+      );
+
+      // toJson
+      expect(date.toJson(DateTime(2021)), dateString);
+      expect(
+        date.toJson(DateTime(2021, 1, 1, 13, 23, 31)),
+        dateString,
+      );
+    });
+  });
+  group('extensions', () {
+    test('String?.orEmpty', () {
+      const empty = '';
+      expect(null.orEmpty, empty);
+      expect(empty.orEmpty, empty);
+      expect('a'.orEmpty, 'a');
+    });
+
+    test('String.tryToNum', () {
+      expect('1'.tryToNum(), 1);
+      expect('1.0'.tryToNum(), 1.0);
+      expect('a'.tryToNum(), null);
+    });
+
+    test('String.toNum', () {
+      expect('1'.toNum(), 1);
+      expect('1.0'.toNum(), 1.0);
+      expect(() => 'a'.toNum(), throwsFormatException);
+    });
+
+    test('String.tryToInt', () {
+      expect('1'.tryToInt(), 1);
+      expect('1.0'.tryToInt(), 1);
+      expect('a'.tryToInt(), null);
+    });
+
+    test('String.toInt', () {
+      expect('1'.toInt(), 1);
+      expect('1.0'.toInt(), 1);
+      expect(() => 'a'.toInt(), throwsFormatException);
+    });
+
+    test('String.tryToDouble', () {
+      expect('1'.tryToDouble(), 1.0);
+      expect('1.0'.tryToDouble(), 1.0);
+      expect('a'.tryToDouble(), null);
+    });
+
+    test('String.toDouble', () {
+      expect('1'.toDouble(), 1.0);
+      expect('1.0'.toDouble(), 1.0);
+      expect(() => 'a'.toDouble(), throwsFormatException);
+    });
+
+    test('String.tryToDateTime', () {
+      expect(dateString.tryToDateTime(), DateTime(2021));
+      expect(
+        dateTimeString.tryToDateTime(),
+        DateTime(2021, 1, 1, 13, 23, 31),
+      );
+      expect('a'.tryToDateTime(), null);
+    });
+
+    test('String.toDateTime', () {
+      expect(dateString.toDateTime(), DateTime(2021));
+      expect(
+        dateTimeString.toDateTime(),
+        DateTime(2021, 1, 1, 13, 23, 31),
+      );
+      expect(() => 'a'.toDateTime(), throwsFormatException);
+    });
+
+    test('String.tryToDate', () {
+      expect(dateString.tryToDate(), DateTime(2021));
+      expect(dateTimeString.tryToDate(), DateTime(2021));
+      expect('a'.tryToDate(), null);
+    });
+
+    test('String.toDate', () {
+      expect(dateString.toDate(), DateTime(2021));
+      expect(dateTimeString.toDate(), DateTime(2021));
+      expect(() => 'a'.toDate(), throwsFormatException);
+    });
+
+    test('DateTime.copyWith', () {
+      final date = DateTime(2021, 1, 1, 13, 23, 31);
+      expect(date.copyWith(), date);
+      expect(date.copyWith(year: 2022), DateTime(2022, 1, 1, 13, 23, 31));
+      expect(date.copyWith(month: 2), DateTime(2021, 2, 1, 13, 23, 31));
+      expect(date.copyWith(day: 2), DateTime(2021, 1, 2, 13, 23, 31));
+      expect(date.copyWith(hour: 2), DateTime(2021, 1, 1, 2, 23, 31));
+      expect(date.copyWith(minute: 2), DateTime(2021, 1, 1, 13, 2, 31));
+      expect(date.copyWith(second: 2), DateTime(2021, 1, 1, 13, 23, 2));
+      expect(
+        date.copyWith(millisecond: 2),
+        DateTime(2021, 1, 1, 13, 23, 31, 2),
+      );
+      expect(
+        date.copyWith(microsecond: 2),
+        DateTime(2021, 1, 1, 13, 23, 31, 0, 2),
+      );
     });
   });
 }

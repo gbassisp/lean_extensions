@@ -74,6 +74,9 @@ class AnyDateTimeOrNull extends ToDynamicConverter<DateTime?> {
 
   @override
   DateTime? fromJson(dynamic json) => _string.fromJson(json).tryToDateTime();
+
+  @override
+  String? toJson(DateTime? object) => object?.toIso8601String();
 }
 
 /// converts to DateTime
@@ -85,5 +88,29 @@ class AnyDateTime extends ToDynamicConverter<DateTime> {
   DateTime fromJson(dynamic json) => _string.fromJson(json).toDateTime();
 
   @override
-  dynamic toJson(DateTime object) => object.toIso8601String();
+  String toJson(DateTime object) => object.toIso8601String();
+}
+
+/// converts to nullable DateTime without the time component
+class AnyDateOrNull extends ToDynamicConverter<DateTime?> {
+  /// default const constructor
+  const AnyDateOrNull();
+
+  @override
+  DateTime? fromJson(dynamic json) => _string.fromJson(json).tryToDate();
+
+  @override
+  String? toJson(DateTime? object) => object?.toIso8601Date();
+}
+
+/// converts to DateTime without the time component
+class AnyDate extends ToDynamicConverter<DateTime> {
+  /// default const constructor
+  const AnyDate();
+
+  @override
+  DateTime fromJson(dynamic json) => _string.fromJson(json).toDate();
+
+  @override
+  String toJson(DateTime object) => object.toIso8601Date();
 }
