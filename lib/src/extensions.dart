@@ -37,6 +37,12 @@ extension StringUtils on String {
   DateTime toDate() => toDateTime().dateOnly;
 }
 
+/// adds utility methods to [num]
+extension NumUtils on num {
+  /// pads left with number of zeros
+  String withLeading(int width) => toString().padLeft(width, '0');
+}
+
 /// adds utility methods to [DateTime]
 extension DateUtils on DateTime {
   /// copy with
@@ -65,5 +71,11 @@ extension DateUtils on DateTime {
   DateTime get dateOnly => DateTime(year, month, day);
 
   /// converts to Iso8601 date date only (yyyy-MM-dd)
-  String toIso8601Date() => '$year-$month-$day';
+  String toIso8601Date() => '$year-${month.withLeading(2)}-${day.withLeading(2)}';
+}
+
+/// adds utility methods to [Iterable]
+extension IterableOrNullUtils<T> on Iterable<T>? {
+  /// returns non-nullable iterable
+  Iterable<T> get orEmpty => this ?? [];
 }

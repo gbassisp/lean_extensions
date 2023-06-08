@@ -187,7 +187,8 @@ void main() {
   group('extensions', () {
     test('String?.orEmpty', () {
       const empty = '';
-      expect(null.orEmpty, empty);
+      const String? nullString = null;
+      expect(nullString.orEmpty, empty);
       expect(empty.orEmpty, empty);
       expect('a'.orEmpty, 'a');
     });
@@ -275,6 +276,15 @@ void main() {
         date.copyWith(microsecond: 2),
         DateTime(2021, 1, 1, 13, 23, 31, 0, 2),
       );
+    });
+
+    test('Iterable?.orEmpty', (){
+      const empty = <int>[];
+      const Iterable<int>? nullIterable = null;
+      expect(nullIterable.orEmpty, empty);
+      expect(empty.orEmpty, empty);
+      expect([1].orEmpty, [1]);
+      expect({1}.orEmpty, {1});
     });
   });
 }
