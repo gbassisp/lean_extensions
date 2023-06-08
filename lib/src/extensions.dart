@@ -71,7 +71,7 @@ extension DateUtils on DateTime {
   DateTime get dateOnly => DateTime(year, month, day);
 
   /// converts to Iso8601 date date only (yyyy-MM-dd)
-  String toIso8601Date(){
+  String toIso8601Date() {
     return '$year-${month.withLeading(2)}-${day.withLeading(2)}';
   }
 }
