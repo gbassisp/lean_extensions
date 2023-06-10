@@ -81,3 +81,34 @@ extension IterableOrNullUtils<T> on Iterable<T>? {
   /// returns non-nullable iterable
   Iterable<T> get orEmpty => this ?? [];
 }
+
+/// adds utility methods to [Iterable]
+extension IterableUtils<T> on Iterable<T> {
+  /// shifts left by [count]
+  Iterable<T> shiftLeft([int count = 1]) {
+    if (count < 0) {
+      return shiftRight(count.abs());
+    }
+    if (count == 0) {
+      return [...this];
+    }
+    // allow circular shift
+    final c = count % length;
+
+    return skip(c).followedBy(take(c));
+  }
+
+  /// shifts right by [count]
+  Iterable<T> shiftRight([int count = 1]) {
+    if (count < 0) {
+      return shiftLeft(count.abs());
+    }
+    if (count == 0) {
+      return [...this];
+    }
+    // allow circular shift
+    final c = count % length;
+
+    return skip(length - c).followedBy(take(length - c));
+  }
+}

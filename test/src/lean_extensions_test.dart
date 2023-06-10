@@ -278,13 +278,37 @@ void main() {
       );
     });
 
-    test('Iterable?.orEmpty', (){
+    test('Iterable?.orEmpty', () {
       const empty = <int>[];
       const Iterable<int>? nullIterable = null;
       expect(nullIterable.orEmpty, empty);
       expect(empty.orEmpty, empty);
       expect([1].orEmpty, [1]);
       expect({1}.orEmpty, {1});
+    });
+
+    test('Iterable.shiftLeft', () {
+      expect([1, 2, 3].shiftLeft(0), [1, 2, 3]);
+      expect([1, 2, 3].shiftLeft(1), [2, 3, 1]);
+      expect([1, 2, 3].shiftLeft(2), [3, 1, 2]);
+      expect([1, 2, 3].shiftLeft(3), [1, 2, 3]);
+      expect([1, 2, 3].shiftLeft(4), [2, 3, 1]);
+      expect([1, 2, 3].shiftLeft(-1), [3, 1, 2]);
+      expect([1, 2, 3].shiftLeft(-2), [2, 3, 1]);
+      expect([1, 2, 3].shiftLeft(-3), [1, 2, 3]);
+      expect([1, 2, 3].shiftLeft(-4), [3, 1, 2]);
+    });
+
+    test('Iterable.shiftRight', () {
+      expect([1, 2, 3].shiftRight(0), [1, 2, 3]);
+      expect([1, 2, 3].shiftRight(1), [3, 1, 2]);
+      expect([1, 2, 3].shiftRight(2), [2, 3, 1]);
+      expect([1, 2, 3].shiftRight(3), [1, 2, 3]);
+      expect([1, 2, 3].shiftRight(4), [3, 1, 2]);
+      expect([1, 2, 3].shiftRight(-1), [2, 3, 1]);
+      expect([1, 2, 3].shiftRight(-2), [3, 1, 2]);
+      expect([1, 2, 3].shiftRight(-3), [1, 2, 3]);
+      expect([1, 2, 3].shiftRight(-4), [2, 3, 1]);
     });
   });
 }
