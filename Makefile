@@ -1,9 +1,6 @@
 # check if fvm command exists, otherwise use empty string
 FVM_CMD := $(shell command -v fvm 2> /dev/null)
 DART_CMD=$(FVM_CMD) dart
-EXAMPLE_DIR=example
-FLUTTER=$(FVM_CMD) flutter
-FLUTTER_CMD=exit 0;
 
 export PATH := $(HOME)/.pub-cache/bin:$(PATH)
 
@@ -25,19 +22,13 @@ dry-run: kill
 test:
 	@echo "Running tests..."
 	$(DART_CMD) pub global activate coverage
-	$(DART_CMD) run coverage:test_with_coverage && $(FLUTTER_CMD) test
+	$(DART_CMD) run coverage:test_with_coverage
 	$(MAKE) format_lcov
 
-.PHONY: clean
-clean:
-	@echo "Cleaning..."
-	$(FLUTTER_CMD) clean
-
-
 .PHONY: get
-get: clean
+get:
 	@echo "Getting dependencies..."
-	$(DART_CMD) pub get && $(FLUTTER_CMD) pub get
+	$(DART_CMD) pub get 
 
 
 .PHONY: doc
@@ -48,14 +39,13 @@ doc:
 .PHONY: analyze
 analyze:
 	@echo "Analyzing..."
-	$(DART_CMD) analyze && $(FLUTTER_CMD) analyze
+	$(DART_CMD) analyze 
 	$(DART_CMD) format --set-exit-if-changed .
 
 .PHONY: version
 version:
 	@echo "Checking version..."
 	$(DART_CMD) --version
-	$(FLUTTER) --version
 
 
 ### Coverage ###
