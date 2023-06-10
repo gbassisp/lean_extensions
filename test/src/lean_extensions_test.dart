@@ -31,7 +31,7 @@ const dateTimeStringWithT = '2021-01-01T13:23:31.000';
 void main() {
   group('converters', () {
     test('string or null', () {
-      const stringOrNull = AnyStringOrNull();
+      const stringOrNull = AnyNullableStringConverter();
       expect(stringOrNull.fromJson(null), null);
       expect(stringOrNull.fromJson(''), '');
       expect(stringOrNull.fromJson('a'), 'a');
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('string', () {
-      const string = AnyString();
+      const string = AnyStringConverter();
       expect(string.fromJson(null), '');
       expect(string.fromJson(''), '');
       expect(string.fromJson('a'), 'a');
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('int or null', () {
-      const intOrNull = AnyIntOrNull();
+      const intOrNull = AnyNullableIntConverter();
       expect(intOrNull.fromJson(null), null);
       expect(intOrNull.fromJson(''), null);
       expect(intOrNull.fromJson('a'), null);
@@ -61,7 +61,7 @@ void main() {
     });
 
     test('int', () {
-      const int = AnyInt();
+      const int = AnyIntConverter();
       expect(() => int.fromJson(null), throwsFormatException);
       expect(() => int.fromJson(''), throwsFormatException);
       expect(() => int.fromJson('a'), throwsFormatException);
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('double or null', () {
-      const doubleOrNull = AnyDoubleOrNull();
+      const doubleOrNull = AnyNullableDoubleConverter();
       expect(doubleOrNull.fromJson(null), null);
       expect(doubleOrNull.fromJson(''), null);
       expect(doubleOrNull.fromJson('a'), null);
@@ -81,7 +81,7 @@ void main() {
     });
 
     test('double', () {
-      const double = AnyDouble();
+      const double = AnyDoubleConverter();
       expect(() => double.fromJson(null), throwsFormatException);
       expect(() => double.fromJson(''), throwsFormatException);
       expect(() => double.fromJson('a'), throwsFormatException);
@@ -91,7 +91,7 @@ void main() {
     });
 
     test('DateTime or null', () {
-      const dateTimeOrNull = AnyDateTimeOrNull();
+      const dateTimeOrNull = AnyNullableDateTimeConverter();
       expect(dateTimeOrNull.fromJson(null), null);
       expect(dateTimeOrNull.fromJson(''), null);
       expect(dateTimeOrNull.fromJson('a'), null);
@@ -115,7 +115,7 @@ void main() {
     });
 
     test('DateTime', () {
-      const dateTime = AnyDateTime();
+      const dateTime = AnyDateTimeConverter();
       expect(() => dateTime.fromJson(null), throwsFormatException);
       expect(() => dateTime.fromJson(''), throwsFormatException);
       expect(() => dateTime.fromJson('a'), throwsFormatException);
@@ -138,7 +138,7 @@ void main() {
     });
 
     test('Date or null', () {
-      const dateOrNull = AnyDateOrNull();
+      const dateOrNull = AnyNullableDateConverter();
       expect(dateOrNull.fromJson(null), null);
       expect(dateOrNull.fromJson(''), null);
       expect(dateOrNull.fromJson('a'), null);
@@ -162,7 +162,7 @@ void main() {
     });
 
     test('Date', () {
-      const date = AnyDate();
+      const date = AnyDateConverter();
       expect(() => date.fromJson(null), throwsFormatException);
       expect(() => date.fromJson(''), throwsFormatException);
       expect(() => date.fromJson('a'), throwsFormatException);

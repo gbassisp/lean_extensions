@@ -10,67 +10,67 @@ abstract class ToDynamicConverter<T> extends JsonConverter<T, dynamic> {
 }
 
 /// casts into nullable string
-class AnyStringOrNull extends ToDynamicConverter<String?> {
+class AnyNullableStringConverter extends ToDynamicConverter<String?> {
   /// default const constructor
-  const AnyStringOrNull();
+  const AnyNullableStringConverter();
 
   @override
   String? fromJson(dynamic json) => json?.toString();
 }
 
-const _stringOrNull = AnyStringOrNull();
+const _stringOrNull = AnyNullableStringConverter();
 
 /// casts into string if not null, otherwise casts to empty string
-class AnyString extends ToDynamicConverter<String> {
+class AnyStringConverter extends ToDynamicConverter<String> {
   /// default const constructor
-  const AnyString();
+  const AnyStringConverter();
 
   @override
   String fromJson(dynamic json) => _stringOrNull.fromJson(json).orEmpty;
 }
 
-const _string = AnyString();
+const _string = AnyStringConverter();
 
 /// converts to nullable int
-class AnyIntOrNull extends ToDynamicConverter<int?> {
+class AnyNullableIntConverter extends ToDynamicConverter<int?> {
   /// default const constructor
-  const AnyIntOrNull();
+  const AnyNullableIntConverter();
 
   @override
   int? fromJson(dynamic json) => _string.fromJson(json).tryToInt();
 }
 
 /// converts to int
-class AnyInt extends ToDynamicConverter<int> {
+class AnyIntConverter extends ToDynamicConverter<int> {
   /// default const constructor
-  const AnyInt();
+  const AnyIntConverter();
 
   @override
   int fromJson(dynamic json) => _string.fromJson(json).toInt();
 }
 
 /// converts to nullable double
-class AnyDoubleOrNull extends ToDynamicConverter<double?> {
+class AnyNullableDoubleConverter extends ToDynamicConverter<double?> {
   /// default const constructor
-  const AnyDoubleOrNull();
+  const AnyNullableDoubleConverter();
 
   @override
   double? fromJson(dynamic json) => _string.fromJson(json).tryToDouble();
 }
 
 /// converts to double
-class AnyDouble extends ToDynamicConverter<double> {
+class AnyDoubleConverter extends ToDynamicConverter<double> {
   /// default const constructor
-  const AnyDouble();
+  const AnyDoubleConverter();
 
   @override
   double fromJson(dynamic json) => _string.fromJson(json).toDouble();
 }
 
 /// converts to nullable DateTime
-class AnyDateTimeOrNull extends ToDynamicConverter<DateTime?> {
+class AnyNullableDateTimeConverter extends ToDynamicConverter<DateTime?> {
   /// default const constructor
-  const AnyDateTimeOrNull();
+  const AnyNullableDateTimeConverter();
 
   @override
   DateTime? fromJson(dynamic json) => _string.fromJson(json).tryToDateTime();
@@ -80,9 +80,9 @@ class AnyDateTimeOrNull extends ToDynamicConverter<DateTime?> {
 }
 
 /// converts to DateTime
-class AnyDateTime extends ToDynamicConverter<DateTime> {
+class AnyDateTimeConverter extends ToDynamicConverter<DateTime> {
   /// default const constructor
-  const AnyDateTime();
+  const AnyDateTimeConverter();
 
   @override
   DateTime fromJson(dynamic json) => _string.fromJson(json).toDateTime();
@@ -92,9 +92,9 @@ class AnyDateTime extends ToDynamicConverter<DateTime> {
 }
 
 /// converts to nullable DateTime without the time component
-class AnyDateOrNull extends ToDynamicConverter<DateTime?> {
+class AnyNullableDateConverter extends ToDynamicConverter<DateTime?> {
   /// default const constructor
-  const AnyDateOrNull();
+  const AnyNullableDateConverter();
 
   @override
   DateTime? fromJson(dynamic json) => _string.fromJson(json).tryToDate();
@@ -104,9 +104,9 @@ class AnyDateOrNull extends ToDynamicConverter<DateTime?> {
 }
 
 /// converts to DateTime without the time component
-class AnyDate extends ToDynamicConverter<DateTime> {
+class AnyDateConverter extends ToDynamicConverter<DateTime> {
   /// default const constructor
-  const AnyDate();
+  const AnyDateConverter();
 
   @override
   DateTime fromJson(dynamic json) => _string.fromJson(json).toDate();

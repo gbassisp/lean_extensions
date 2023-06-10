@@ -4,6 +4,7 @@
 
 - Exports extensions from collection package
 - Add shiftLeft and shiftRight on Iterable. Not in place, it returns new object
+- Renamed json converters
 
 ## 0.1.1
 
