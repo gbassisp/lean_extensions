@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+## 0.2.0
+
+- Exports extensions from collection package
+- Add shiftLeft and shiftRight on Iterable. Not in place, it returns new object
+
 ## 0.1.1
 
 - Fix date only format
