@@ -1,6 +1,6 @@
 name: lean_extensions
 description: A collection of extension methods without flutter dependency
-version: 0.2.0
+version: 0.3.0
 repository: https://github.com/gbassisp/lean_extensions
 
 environment:

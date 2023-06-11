@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+
+## 0.3.0
+
+- Add AnyNumConverter and AnyNullableNumConverter
+
 ## 0.2.0
 
 - Exports extensions from collection package
