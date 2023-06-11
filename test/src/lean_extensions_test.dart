@@ -90,6 +90,26 @@ void main() {
       expect(double.fromJson(1.0), 1.0);
     });
 
+    test('num or null', () {
+      const numOrNull = AnyNullableNumConverter();
+      expect(numOrNull.fromJson(null), null);
+      expect(numOrNull.fromJson(''), null);
+      expect(numOrNull.fromJson('a'), null);
+      expect(numOrNull.fromJson('1'), 1);
+      expect(numOrNull.fromJson(1), 1);
+      expect(numOrNull.fromJson(1.0), 1.0);
+    });
+
+    test('num', () {
+      const num = AnyNumConverter();
+      expect(() => num.fromJson(null), throwsFormatException);
+      expect(() => num.fromJson(''), throwsFormatException);
+      expect(() => num.fromJson('a'), throwsFormatException);
+      expect(num.fromJson('1'), 1);
+      expect(num.fromJson(1), 1);
+      expect(num.fromJson(1.0), 1.0);
+    });
+
     test('DateTime or null', () {
       const dateTimeOrNull = AnyNullableDateTimeConverter();
       expect(dateTimeOrNull.fromJson(null), null);

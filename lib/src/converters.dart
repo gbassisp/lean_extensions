@@ -67,6 +67,24 @@ class AnyDoubleConverter extends ToDynamicConverter<double> {
   double fromJson(dynamic json) => _string.fromJson(json).toDouble();
 }
 
+/// converts to nullable num
+class AnyNullableNumConverter extends ToDynamicConverter<num?> {
+  /// default const constructor
+  const AnyNullableNumConverter();
+
+  @override
+  num? fromJson(dynamic json) => _string.fromJson(json).tryToNum();
+}
+
+/// converts to num
+class AnyNumConverter extends ToDynamicConverter<num> {
+  /// default const constructor
+  const AnyNumConverter();
+
+  @override
+  num fromJson(dynamic json) => _string.fromJson(json).toNum();
+}
+
 /// converts to nullable DateTime
 class AnyNullableDateTimeConverter extends ToDynamicConverter<DateTime?> {
   /// default const constructor
