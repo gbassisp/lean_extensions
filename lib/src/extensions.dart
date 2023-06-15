@@ -1,11 +1,13 @@
+import 'dart:math';
+
 /// adds utility methods to [String]?
-extension StringOrNullUtils on String? {
+extension StringOrNullExtensions on String? {
   /// returns non-nullable string
   String get orEmpty => this ?? '';
 }
 
 /// adds utility methods to [String]
-extension StringUtils on String {
+extension StringExtensions on String {
   /// tries to convert string to num
   num? tryToNum() => num.tryParse(this);
 
@@ -38,13 +40,13 @@ extension StringUtils on String {
 }
 
 /// adds utility methods to [num]
-extension NumUtils on num {
+extension NumExtensions on num {
   /// pads left with number of zeros
   String withLeading(int width) => toString().padLeft(width, '0');
 }
 
 /// adds utility methods to [DateTime]
-extension DateUtils on DateTime {
+extension DateExtensions on DateTime {
   /// copy with
   DateTime copyWith({
     int? year,
@@ -77,13 +79,13 @@ extension DateUtils on DateTime {
 }
 
 /// adds utility methods to [Iterable]
-extension IterableOrNullUtils<T> on Iterable<T>? {
+extension IterableOrNullExtensions<T> on Iterable<T>? {
   /// returns non-nullable iterable
   Iterable<T> get orEmpty => this ?? [];
 }
 
 /// adds utility methods to [Iterable]
-extension IterableUtils<T> on Iterable<T> {
+extension IterableExtensions<T> on Iterable<T> {
   /// shifts left by [count]
   Iterable<T> shiftLeft([int count = 1]) {
     if (count < 0) {
@@ -110,5 +112,26 @@ extension IterableUtils<T> on Iterable<T> {
     final c = count % length;
 
     return skip(length - c).followedBy(take(length - c));
+  }
+}
+
+/// adds utility methods on [Random] to generate strings
+extension RandomExtensions on Random {
+  static const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      'abcdefghijklmnopqrstuvwxyz'
+      '0123456789';
+  static final _symbols = _chars.split('');
+
+  /// generates random character
+  String nextChar() {
+    final result = _symbols[nextInt(_symbols.length)];
+
+    return result;
+  }
+
+  /// generates random string of length [length]
+  String nextString([int length = 32]) {
+    final result = List.generate(length, (index) => nextChar()).join();
+    return result;
   }
 }

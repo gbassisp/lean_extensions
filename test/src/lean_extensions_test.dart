@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:test/test.dart';
 
@@ -329,6 +331,51 @@ void main() {
       expect([1, 2, 3].shiftRight(-2), [3, 1, 2]);
       expect([1, 2, 3].shiftRight(-3), [1, 2, 3]);
       expect([1, 2, 3].shiftRight(-4), [2, 3, 1]);
+    });
+
+    // random string
+    test('Random.nextChar', () {
+      final random = Random();
+      final frequency = <String, int>{};
+      // probabilistic test; run 100mi times just to be sure
+      for (var i = 0; i < 100000000; i++) {
+        final char = random.nextChar();
+        frequency[char] = (frequency[char] ?? 0) + 1;
+        expect(char, isNotEmpty);
+      }
+      // extremely unlikely to fail
+      expect(frequency.length, 62);
+
+      final average = frequency.values.reduce((a, b) => a + b) / 62;
+      for (final value in frequency.values) {
+        expect(value, greaterThan(average * 0.9));
+        expect(value, lessThan(average * 1.1));
+      }
+    });
+
+    // random string
+    test('Random.nextString', () {
+      final random = Random();
+      final results = <String>{};
+      final frequency = <String, int>{};
+      // probabilistic test; run 10mi times just to be sure
+      const limit = 10000000;
+      for (var i = 0; i < limit; i++) {
+        final string = random.nextString(100);
+        expect(string.length, 100);
+        final isNew = results.add(string);
+        expect(isNew, isTrue);
+        for (final char in string.split('')) {
+          frequency[char] = (frequency[char] ?? 0) + 1;
+        }
+      }
+      // extremely unlikely to fail
+      expect(frequency.length, 62);
+      final average = frequency.values.reduce((a, b) => a + b) / 62;
+      for (final value in frequency.values) {
+        expect(value, greaterThan(average * 0.9));
+        expect(value, lessThan(average * 1.1));
+      }
     });
   });
 }
