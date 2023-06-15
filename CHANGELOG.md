@@ -1,5 +1,8 @@
 <!-- dart package changelog -->
 
+## 0.4.0
+
+- Add nextChar and nextString on Random
 
 ## 0.3.0
 
