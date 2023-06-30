@@ -41,8 +41,41 @@ extension StringExtensions on String {
 
 /// adds utility methods to [num]
 extension NumExtensions on num {
+  bool get _isValid => !isNaN;
+
+  /// checks if number is positive
+  bool get isPositive => _isValid && this > 0;
+
+  /// checkis if number is non negative
+  bool get isNonNegative => _isValid && !isNegative || isZero;
+
+  /// checkis if number is non positive
+  bool get isNonPositive => _isValid && !isPositive || isZero;
+
+  /// makes == 0 more readable
+  bool get isZero => _isValid && abs() == 0.0;
+
   /// pads left with number of zeros
-  String withLeading(int width) => toString().padLeft(width, '0');
+  String withLeading(int width) {
+    if (this is int) {
+      return '${this < 0 ? '-' : ''}${abs().toString().padLeft(width, '0')}';
+    } else {
+      return '${floor().withLeading(width)}.'
+          '${(this - floor()).toString().split('.').last}';
+    }
+  }
+
+  /// specifies number of decimal places
+  double toPrecision(int places) => toStringAsFixed(places).toDouble();
+
+  /// checks if is multiple of [number]
+  bool isMultipleOf(num number) {
+    if (number.isZero) {
+      return false;
+    }
+
+    return (this % number).isZero;
+  }
 }
 
 /// adds utility methods to [DateTime]
@@ -91,7 +124,7 @@ extension IterableExtensions<T> on Iterable<T> {
     if (count < 0) {
       return shiftRight(count.abs());
     }
-    if (count == 0) {
+    if (count.isZero) {
       return [...this];
     }
     // allow circular shift
@@ -105,7 +138,7 @@ extension IterableExtensions<T> on Iterable<T> {
     if (count < 0) {
       return shiftLeft(count.abs());
     }
-    if (count == 0) {
+    if (count.isZero) {
       return [...this];
     }
     // allow circular shift

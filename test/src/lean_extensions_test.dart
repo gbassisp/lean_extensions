@@ -281,6 +281,124 @@ void main() {
       expect(() => 'a'.toDate(), throwsFormatException);
     });
 
+    test('num.isPositive', () {
+      expect(1.isPositive, isTrue);
+      expect(0.isPositive, isFalse);
+      expect((-1).isPositive, isFalse);
+      expect(double.nan.isPositive, isFalse);
+      expect(double.infinity.isPositive, isTrue);
+      expect(double.negativeInfinity.isPositive, isFalse);
+      expect(0.1.isPositive, isTrue);
+      expect(0.0.isPositive, isFalse);
+      expect((-0.0).isPositive, isFalse);
+      expect((-0.1).isPositive, isFalse);
+    });
+
+    test('num.isNonPositive', () {
+      expect(1.isNonPositive, isFalse);
+      expect(0.isNonPositive, isTrue);
+      expect((-1).isNonPositive, isTrue);
+      expect(double.nan.isNonPositive, isFalse);
+      expect(double.infinity.isNonPositive, isFalse);
+      expect(double.negativeInfinity.isNonPositive, isTrue);
+      expect(0.1.isNonPositive, isFalse);
+      expect(0.0.isNonPositive, isTrue);
+      expect((-0.0).isNonPositive, isTrue);
+      expect((-0.1).isNonPositive, isTrue);
+    });
+
+    test('num.isNonNegative', () {
+      expect(1.isNonNegative, isTrue);
+      expect(0.isNonNegative, isTrue);
+      expect((-1).isNonNegative, isFalse);
+      expect(double.nan.isNonNegative, isFalse);
+      expect(double.infinity.isNonNegative, isTrue);
+      expect(double.negativeInfinity.isNonNegative, isFalse);
+      expect(0.1.isNonNegative, isTrue);
+      expect(0.0.isNonNegative, isTrue);
+      expect((-0.0).isNonNegative, isTrue);
+      expect((-0.1).isNonNegative, isFalse);
+    });
+
+    test('withLeading', () {
+      expect(1.withLeading(1), '1');
+      expect(1.withLeading(2), '01');
+      expect(1.withLeading(3), '001');
+      expect(1.withLeading(4), '0001');
+
+      expect(1.0.withLeading(1), '1.0');
+      expect(1.0.withLeading(2), '01.0');
+      expect(1.0.withLeading(3), '001.0');
+      expect(1.0.withLeading(4), '0001.0');
+
+      expect(1000000.withLeading(1), '1000000');
+      expect(1000000.withLeading(2), '1000000');
+      expect(1000000.withLeading(3), '1000000');
+      expect(1000000.withLeading(10), '0001000000');
+
+      // same but with negative numbers
+      expect((-1).withLeading(1), '-1');
+      expect((-1).withLeading(2), '-01');
+      expect((-1).withLeading(3), '-001');
+      expect((-1).withLeading(4), '-0001');
+
+      expect((-1.0).withLeading(1), '-1.0');
+      expect((-1.0).withLeading(2), '-01.0');
+      expect((-1.0).withLeading(3), '-001.0');
+      expect((-1.0).withLeading(4), '-0001.0');
+
+      expect((-1000000).withLeading(1), '-1000000');
+      expect((-1000000).withLeading(2), '-1000000');
+      expect((-1000000).withLeading(3), '-1000000');
+      expect((-1000000).withLeading(10), '-0001000000');
+    });
+
+    test(
+      'num.toPrecision',
+      () {
+        expect(1.1234.toPrecision(0), 1.0);
+        expect(1.1234.toPrecision(1), 1.1);
+        expect(1.1234.toPrecision(2), 1.12);
+        expect(1.1234.toPrecision(3), 1.123);
+        expect(1.1234.toPrecision(4), 1.1234);
+        expect(1.1234.toPrecision(5), 1.1234);
+
+        expect(-1.1234.toPrecision(0), -1.0);
+        expect(-1.1234.toPrecision(1), -1.1);
+        expect(-1.1234.toPrecision(2), -1.12);
+        expect(-1.1234.toPrecision(3), -1.123);
+        expect(-1.1234.toPrecision(4), -1.1234);
+        expect(-1.1234.toPrecision(5), -1.1234);
+      },
+    );
+
+    test('num.isMultipleOf', () {
+      expect(1.isMultipleOf(0), isFalse);
+      expect(1.isMultipleOf(1), isTrue);
+      expect(1.isMultipleOf(2), isFalse);
+
+      expect(2.isMultipleOf(0), isFalse);
+      expect(2.isMultipleOf(1), isTrue);
+      expect(2.isMultipleOf(2), isTrue);
+      expect(2.isMultipleOf(-2), isTrue);
+
+      expect((-2).isMultipleOf(0), isFalse);
+      expect((-2).isMultipleOf(1), isTrue);
+      expect((-2).isMultipleOf(2), isTrue);
+      expect((-2).isMultipleOf(-2), isTrue);
+    });
+
+    // /// checks if is multiple of [number]
+    // bool isMultipleOf(num number) {
+    //   if (number == 0) {
+    //     return false;
+    //   }
+
+    //   return this % number == 0;
+    // }
+
+    // });
+
     test('DateTime.copyWith', () {
       final date = DateTime(2021, 1, 1, 13, 23, 31);
       expect(date.copyWith(), date);
