@@ -388,16 +388,18 @@ void main() {
       expect((-2).isMultipleOf(-2), isTrue);
     });
 
-    // /// checks if is multiple of [number]
-    // bool isMultipleOf(num number) {
-    //   if (number == 0) {
-    //     return false;
-    //   }
-
-    //   return this % number == 0;
-    // }
-
-    // });
+    test('num.isZero', () {
+      expect(1.isZero, isFalse);
+      expect(0.isZero, isTrue);
+      expect((-1).isZero, isFalse);
+      expect(double.nan.isZero, isFalse);
+      expect(double.infinity.isZero, isFalse);
+      expect(double.negativeInfinity.isZero, isFalse);
+      expect(0.1.isZero, isFalse);
+      expect(0.0.isZero, isTrue);
+      expect((-0.0).isZero, isTrue);
+      expect((-0.1).isZero, isFalse);
+    });
 
     test('DateTime.copyWith', () {
       final date = DateTime(2021, 1, 1, 13, 23, 31);
