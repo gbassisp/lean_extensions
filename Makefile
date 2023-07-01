@@ -17,6 +17,11 @@ kill:
 	@echo "Killing service..."
 	@kill -9 $(shell lsof -t -i:8181) || echo "Port 8181 is not in use"
 
+.PHONY: publish
+publish: all
+	@echo "Publishing package..."
+	$(DART_CMD) pub publish --force
+
 .PHONY: dry-run
 dry-run: kill
 	@echo "Running dry-run..."
