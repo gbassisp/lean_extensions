@@ -1,5 +1,11 @@
 <!-- dart package changelog -->
 
+## 0.5.0
+
+- Add dart_essentials library
+  - includes Range class and range function for loops similar to python
+- Add a few more extensions on num
+
 ## 0.4.0
 
 - Add nextChar and nextString on Random
