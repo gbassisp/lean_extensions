@@ -18,11 +18,44 @@ Range safeRange(int a, [int? b, int? c]) => Range(a, b, c);
 /// Iterable of integers; Range is open ended on the right
 @immutable
 class Range extends Iterable<int> {
+  /// safe constructor - returns empty range if arguments are invalid
+  factory Range(int a, [int? b, int? c]) {
+    // step is never zero:
+    final step = c ?? 1;
+    if (step.isZero || step.isNaN) {
+      return Range.empty();
+    }
+    // sanity check
+    assert(
+      step != 0,
+      'Something wrong with this logic; '
+      'step should non-zero int, but got $step',
+    );
+
+    var start = 0;
+    var stop = 0;
+    // start and stop values:
+    if (b != null) {
+      start = a;
+      stop = b;
+    } else {
+      start = 0;
+      stop = a;
+    }
+
+    // confirm direction
+    if (_isInRange(start, stop, step)) {
+      return Range._(start, stop, step);
+    }
+    return Range.empty();
+  }
+
   /// dynamic constructor that creates range based on passed arguments;
   /// It does not run any sanity checks, so it is possible to create invalid
   /// ranges where assertion errors will happen.
   factory Range._unsafe(int a, [int? b, int? c, RangeFactory? factory]) {
-    final f = factory ?? (int a, int b, int c) => Range._(a, b, c);
+    final f =
+        factory ?? (int a, int b, int c) => Range._(a, b, c).._assertValid();
     // both null
     if (b == null && c == null) {
       return f(0, a, 1);
@@ -52,31 +85,8 @@ class Range extends Iterable<int> {
         ),
         assert(step != 0, 'step cannot be zero');
 
-  /// safe constructor - overrides values to ensure valid range
-  factory Range(int a, [int? b, int? c]) {
-    // step is never zero:
-    var step = c ?? 1;
-    step = step.isZero || step.isNaN ? 1 : step;
-
-    var start = 0;
-    var stop = 0;
-    // start and stop values:
-    if (b != null) {
-      start = a;
-      stop = b;
-    } else {
-      start = 0;
-      stop = a;
-    }
-
-    // correct direction
-    step = step.abs();
-    if (start > stop) {
-      step = step * -1;
-    }
-
-    return Range._(start, stop, step);
-  }
+  /// empty range - same as range(0)
+  factory Range.empty() => Range(0, 0, 1);
 
   /// start of range
   final int start;
@@ -109,6 +119,10 @@ class Range extends Iterable<int> {
   bool get _isValid =>
       (stop >= start && step > 0) || (stop <= start && step < 0);
 
+  void _assertValid() {
+    assert(_isValid, 'invalid range: $this');
+  }
+
   @override
   Iterator<int> get iterator {
     return _iter.iterator;
@@ -127,4 +141,15 @@ class Range extends Iterable<int> {
       start += step;
     }
   }
+}
+
+bool _isInRange(int start, int stop, int step) {
+  if (step == 0) {
+    return false;
+  }
+
+  if (step > 0) {
+    return start <= stop;
+  }
+  return start >= stop;
 }
