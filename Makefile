@@ -1,3 +1,7 @@
+# ensure target stops if there is an error; run on a single shell
+.ONESHELL:
+.SHELLFLAGS := -e
+
 # check if fvm command exists, otherwise use empty string
 FVM_CMD := $(shell command -v fvm 2> /dev/null)
 DART_CMD=$(FVM_CMD) dart
@@ -39,7 +43,7 @@ doc:
 .PHONY: analyze
 analyze:
 	@echo "Analyzing..."
-	$(DART_CMD) analyze 
+	$(DART_CMD) analyze --fatal-infos --fatal-warnings
 	$(DART_CMD) format --set-exit-if-changed .
 
 .PHONY: version
