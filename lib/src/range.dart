@@ -1,37 +1,48 @@
 import 'package:lean_extensions/src/extensions.dart';
 import 'package:meta/meta.dart';
 
+/// Range builder function signature
+typedef RangeFactory = Range Function(int a, int b, int c);
+
 /// Python like range function
-Range range(int a, [int? b, int? c]) => Range(a, b, c);
+Range range(int a, [int? b, int? c]) {
+  assert(Range._unsafe(a, b, c)._isValid, 'invalid arguments');
+
+  return Range(a, b, c);
+}
 
 /// Python like range function - with some sanity checks
+@visibleForTesting
 Range safeRange(int a, [int? b, int? c]) => Range(a, b, c);
 
 /// Iterable of integers; Range is open ended on the right
 @immutable
 class Range extends Iterable<int> {
-  /// dynamic constructor that creates range based on passed arguments
-  factory Range(int a, [int? b, int? c]) {
+  /// dynamic constructor that creates range based on passed arguments;
+  /// It does not run any sanity checks, so it is possible to create invalid
+  /// ranges where assertion errors will happen.
+  factory Range._unsafe(int a, [int? b, int? c, RangeFactory? factory]) {
+    final f = factory ?? (int a, int b, int c) => Range._(a, b, c);
     // both null
     if (b == null && c == null) {
-      return Range._(0, a, 1);
+      return f(0, a, 1);
     }
 
     if (b != null && c != null) {
       // both not null
-      return Range._(a, b, c);
+      return f(a, b, c);
     }
 
     // one not null
     final d = b ?? c;
     if (d != null) {
-      return Range._(a, d, 1);
+      return f(a, d, 1);
     }
 
     throw ArgumentError('invalid arguments');
   }
 
-  /// main constructor
+  /// main constructor - no defaults
   const Range._(this.start, this.stop, this.step)
       : assert(
           (stop >= start && step > 0) || (stop <= start && step < 0),
@@ -41,19 +52,30 @@ class Range extends Iterable<int> {
         ),
         assert(step != 0, 'step cannot be zero');
 
-  /// safe constructor
-  factory Range.safe({required int stop, int start = 0, int step = 1}) {
+  /// safe constructor - overrides values to ensure valid range
+  factory Range(int a, [int? b, int? c]) {
     // step is never zero:
-    final s = (step.isZero || step.isNaN ? 1 : step);
+    var step = c ?? 1;
+    step = step.isZero || step.isNaN ? 1 : step;
 
-    // range goes in right direction
-    if (stop >= start && s.isNegative) {
-      return Range._(start, stop, s.abs());
+    var start = 0;
+    var stop = 0;
+    // start and stop values:
+    if (b != null) {
+      start = a;
+      stop = b;
+    } else {
+      start = 0;
+      stop = a;
     }
-    if (stop <= start && s.isPositive) {
-      return Range._(start, stop, -s.abs());
+
+    // correct direction
+    step = step.abs();
+    if (start > stop) {
+      step = step * -1;
     }
-    return Range._(start, stop, s);
+
+    return Range._(start, stop, step);
   }
 
   /// start of range
@@ -82,6 +104,10 @@ class Range extends Iterable<int> {
 
   /// check direction of range
   bool get _isForward => step > 0;
+
+  /// check if range is valid
+  bool get _isValid =>
+      (stop >= start && step > 0) || (stop <= start && step < 0);
 
   @override
   Iterator<int> get iterator {

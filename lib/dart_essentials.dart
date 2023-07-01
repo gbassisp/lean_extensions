@@ -4,4 +4,4 @@
 /// Mostly inspired by python
 library dart_essentials;
 
-export 'src/range.dart';
+export 'src/range.dart' hide RangeFactory, safeRange;
