@@ -320,7 +320,7 @@ void main() {
       expect((-0.1).isNonNegative, isFalse);
     });
 
-    test('withLeading', () {
+    test('num.withLeading', () {
       expect(1.withLeading(1), '1');
       expect(1.withLeading(2), '01');
       expect(1.withLeading(3), '001');
@@ -451,6 +451,18 @@ void main() {
       expect([1, 2, 3].shiftRight(-2), [3, 1, 2]);
       expect([1, 2, 3].shiftRight(-3), [1, 2, 3]);
       expect([1, 2, 3].shiftRight(-4), [2, 3, 1]);
+    });
+
+    test('Iterable.separated', () {
+      expect([1, 2, 3].separated(0), [1, 0, 2, 0, 3]);
+      expect([1].separated(0), [1]);
+      expect(<int>[].separated(0), <int>[]);
+    });
+
+    test('Iterable.wrapped', () {
+      expect([1, 2, 3].wrapped(0), [0, 1, 2, 3, 0]);
+      expect([1].wrapped(0), [0, 1, 0]);
+      expect(<int>[].wrapped(0), <int>[]);
     });
 
     // random string

@@ -146,6 +146,28 @@ extension IterableExtensions<T> on Iterable<T> {
 
     return skip(length - c).followedBy(take(length - c));
   }
+
+  /// separates an iterable with [separator] only between items;
+  /// i.e., not at the start or end
+  Iterable<T> separated(T separator) {
+    final result = <T>[];
+
+    var first = true;
+    for (final item in this) {
+      if (first) {
+        first = false;
+      } else {
+        result.add(separator);
+      }
+
+      result.add(item);
+    }
+
+    return result;
+  }
+
+  /// wraps an iterable with [item] at the start and end
+  Iterable<T> wrapped(T item) => isEmpty ? this : [item, ...this, item];
 }
 
 /// adds utility methods on [Random] to generate strings
