@@ -149,21 +149,17 @@ extension IterableExtensions<T> on Iterable<T> {
 
   /// separates an iterable with [separator] only between items;
   /// i.e., not at the start or end
-  Iterable<T> separated(T separator) {
-    final result = <T>[];
-
+  Iterable<T> separated(T separator) sync* {
     var first = true;
     for (final item in this) {
       if (first) {
         first = false;
       } else {
-        result.add(separator);
+        yield separator;
       }
 
-      result.add(item);
+      yield item;
     }
-
-    return result;
   }
 
   /// wraps an iterable with [item] at the start and end
