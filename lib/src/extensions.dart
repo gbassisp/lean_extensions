@@ -4,6 +4,9 @@ import 'dart:math';
 extension StringOrNullExtensions on String? {
   /// returns non-nullable string
   String get orEmpty => this ?? '';
+
+  /// checks if string is null or empty
+  bool get isNullOrEmpty => orEmpty.isEmpty;
 }
 
 /// adds utility methods to [String]

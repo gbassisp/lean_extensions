@@ -215,6 +215,17 @@ void main() {
       expect('a'.orEmpty, 'a');
     });
 
+    test('String?.isNullOrEmpty', () {
+      const nonEmpty = 'bacon';
+      const space = ' ';
+      const empty = '';
+      const String? nullString = null;
+      expect(nullString.isNullOrEmpty, isTrue);
+      expect(empty.isNullOrEmpty, isTrue);
+      expect(nonEmpty.isNullOrEmpty, isFalse);
+      expect(space.isNullOrEmpty, isFalse);
+    });
+
     test('String.tryToNum', () {
       expect('1'.tryToNum(), 1);
       expect('1.0'.tryToNum(), 1.0);
