@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:test/test.dart';
 
@@ -30,6 +31,9 @@ const dateString = '2021-01-01';
 const dateStringWithT = '2021-01-01T00:00:00.000';
 const dateTimeString = '2021-01-01 13:23:31';
 const dateTimeStringWithT = '2021-01-01T13:23:31.000';
+final TypeMatcher<AssertionError> isAssertionError = isA<AssertionError>();
+final Matcher throwsAssertionError = throwsA(isAssertionError);
+
 void main() {
   group('converters', () {
     test('string or null', () {
@@ -440,6 +444,30 @@ void main() {
       expect({1}.orEmpty, {1});
     });
 
+    test('Comparable.limit', () {
+      expect(1.limitTo(0, 2), 1);
+      expect(1.limitTo(1, 2), 1);
+      expect(1.limitTo(2, 2), 2);
+      expect(() => 1.limitTo(3, 2), throwsAssertionError);
+      expect(1.limitTo(0, 1), 1);
+      expect(1.limitTo(1, 1), 1);
+      expect(() => 1.limitTo(2, 1), throwsAssertionError);
+    });
+
+    test('Iterable.elementArOrNull', () {
+      // non-empty list
+      expect([1, 2, 3].elementAtOrNull(0), 1);
+      expect([1, 2, 3].elementAtOrNull(1), 2);
+      expect([1, 2, 3].elementAtOrNull(2), 3);
+      expect([1, 2, 3].elementAtOrNull(3), null);
+      expect([1, 2, 3].elementAtOrNull(-1), null);
+
+      // empty list
+      expect(<int>[].elementAtOrNull(0), null);
+      expect(<int>[].elementAtOrNull(1), null);
+      expect(<int>[].elementAtOrNull(-1), null);
+    });
+
     test('Iterable.shiftLeft', () {
       expect([1, 2, 3].shiftLeft(0), [1, 2, 3]);
       expect([1, 2, 3].shiftLeft(1), [2, 3, 1]);
@@ -518,6 +546,21 @@ void main() {
       for (final value in frequency.values) {
         expect(value, greaterThan(average * 0.9));
         expect(value, lessThan(average * 1.1));
+      }
+    });
+
+    // random string - test seed
+    test('Random.nextString can be seeded', () {
+      final r = Random();
+      for (final _ in range(100)) {
+        final k = r.nextInt(1 << 32);
+        final random = Random(k);
+        final random2 = Random(k);
+
+        // same seed must produce same pseudo random values
+        for (final _ in range(100)) {
+          expect(random.nextString(100), random2.nextString(100));
+        }
       }
     });
   });

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_cast
+
 import 'dart:math';
 
 /// adds utility methods to [String]?
@@ -114,6 +116,66 @@ extension DateExtensions on DateTime {
   }
 }
 
+/// adds limit extensions on [Comparable]
+extension ComparableExtensions<T extends Comparable<T>> on T {
+  bool _smallerThan(T other) => compareTo(other) < 0;
+  bool _greaterThan(T other) => compareTo(other) > 0;
+
+  T _min(T other) => _smallerThan(other) ? this : other;
+  T _max(T other) => _greaterThan(other) ? this : other;
+
+  // these are implemented here and re-used by the extensions below because
+  //the compiler can't see it on int and double
+  T _limitTo(T min, T max) {
+    assert(min.compareTo(max) <= 0, 'expected min ($min) <= max ($max)');
+    final l = min._min(max);
+    final u = max._max(min);
+    return _withLowerLimit(l)._withUpperLimit(u);
+  }
+
+  T _withUpperLimit(T max) => _smallerThan(max) ? this : max;
+  T _withLowerLimit(T min) => _greaterThan(min) ? this : min;
+
+  /// returns this if it is between [min] and [max] (inclusive)
+  /// otherwise returns [min] or [max] whichever is closer
+  T limitTo(T min, T max) => _limitTo(min, max);
+
+  /// returns this if it is not greater than [max], otherwise [max]
+  T withUpperLimit(T max) => _withUpperLimit(max);
+
+  /// returns this if it is not greater than [max], otherwise [max]
+  T withLowerLimit(T min) => _withLowerLimit(min);
+}
+
+/// includes [ComparableExtensions] on double
+extension DoubleExtensions on double {
+  /// returns this if it is between [min] and [max] (inclusive)
+  /// otherwise returns [min] or [max] whichever is closer
+  double limitTo(double min, double max) =>
+      (this as num)._limitTo(min, max).toDouble();
+
+  /// returns this if it is not greater than [max], otherwise [max]
+  double withUpperLimit(double max) =>
+      (this as num)._withUpperLimit(max).toDouble();
+
+  /// returns this if it is not greater than [max], otherwise [max]
+  double withLowerLimit(double min) =>
+      (this as num)._withLowerLimit(min).toDouble();
+}
+
+/// includes [ComparableExtensions] on double
+extension IntExtensions on int {
+  /// returns this if it is between [min] and [max] (inclusive)
+  /// otherwise returns [min] or [max] whichever is closer
+  int limitTo(int min, int max) => (this as num)._limitTo(min, max).toInt();
+
+  /// returns this if it is not greater than [max], otherwise [max]
+  int withUpperLimit(int max) => (this as num)._withUpperLimit(max).toInt();
+
+  /// returns this if it is not greater than [max], otherwise [max]
+  int withLowerLimit(int min) => (this as num)._withLowerLimit(min).toInt();
+}
+
 /// adds utility methods to [Iterable]
 extension IterableOrNullExtensions<T> on Iterable<T>? {
   /// returns non-nullable iterable
@@ -122,6 +184,15 @@ extension IterableOrNullExtensions<T> on Iterable<T>? {
 
 /// adds utility methods to [Iterable]
 extension IterableExtensions<T> on Iterable<T> {
+  /// returns item at [index] or null
+  T? elementAtOrNull(int index) {
+    if (index < 0 || index >= length) {
+      return null;
+    }
+
+    return elementAt(index);
+  }
+
   /// shifts left by [count]
   Iterable<T> shiftLeft([int count = 1]) {
     if (count < 0) {
