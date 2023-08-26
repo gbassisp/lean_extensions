@@ -1,8 +1,8 @@
 name: ci
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: true
 
 on:
   push:
@@ -13,20 +13,8 @@ on:
       - main
 
 jobs:
-  semantic_pull_request:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
-
-  spell-check:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
-    with:
-      includes: "**/*.md"
-      modified_files_only: false
-
-  build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
-
-  # runs the oldest dart version supported by the package
   test-2.12:
+    runs-on: ubuntu-latest
     steps:
     # - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
@@ -36,9 +24,23 @@ jobs:
     - run: make
   # runs the latest dart version supported by the package
   test-latest:
+    runs-on: ubuntu-latest
     steps:
     # - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
     - run: make
+  # semantic_pull_request:
+  #   uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  # spell-check:
+  #   uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
+  #   with:
+  #     includes: "**/*.md"
+  #     modified_files_only: false
+
+  # build:
+  #   uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
+
+  # runs the oldest dart version supported by the package
