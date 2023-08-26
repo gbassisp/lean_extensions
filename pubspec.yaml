@@ -12,5 +12,6 @@ dependencies:
   meta: ^1.0.0
 
 dev_dependencies:
+  coverage:
   test: 
   very_good_analysis:
