@@ -22,6 +22,7 @@ jobs:
         flutter-version: '2.0.0'
         channel: 'stable'
     - run: ls -la
+    - run: cp analysis_options_2_12.yaml analysis_options.yaml
     - run: make
   # runs the latest dart version supported by the package
   test-latest:
