@@ -27,15 +27,18 @@ jobs:
 
   # runs the oldest dart version supported by the package
   test-2.12:
-    uses: subosito/flutter-action@v1
-    with:
-      channel: "stable"
-      flutter-version: "2.0.0"
-    run: make
+    steps:
+    # - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '2.0.0'
+        channel: 'stable'
+    - run: make
   # runs the latest dart version supported by the package
   test-latest:
-    uses: subosito/flutter-action@v1
-    with:
-      channel: "stable"
-      flutter-version: "latest"
-    run: make
+    steps:
+    # - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - run: make
