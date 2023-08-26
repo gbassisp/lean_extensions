@@ -1,10 +1,11 @@
 # ensure target stops if there is an error; run on a single shell
-.ONESHELL:
-.SHELLFLAGS := -e
+# .ONESHELL:
+# SHELL = /usr/bin/perl
+# .SHELLFLAGS = -e
 
 # check if fvm command exists, otherwise use empty string
 FVM_CMD := $(shell command -v fvm 2> /dev/null)
-DART_CMD=$(FVM_CMD) dart
+DART_CMD := $(FVM_CMD) dart
 
 export PATH := $(HOME)/.pub-cache/bin:$(PATH)
 
@@ -65,6 +66,7 @@ FILES := $(shell find coverage/*.info -type f ! -path "$(CWD)")
 
 .PHONY: format_lcov
 format_lcov:
+	@mkdir -p coverage
 	@echo "Formatting lcov.info..."
 	@echo "CWD: $(CWD)"
 	@echo "FILES: $(FILES)"
