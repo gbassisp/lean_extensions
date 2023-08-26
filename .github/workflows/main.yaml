@@ -16,7 +16,7 @@ jobs:
   test-2_12:
     runs-on: ubuntu-latest
     steps:
-    # - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '2.0.0'
@@ -27,7 +27,7 @@ jobs:
   test-latest:
     runs-on: ubuntu-latest
     steps:
-    # - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
