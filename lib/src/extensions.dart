@@ -236,6 +236,9 @@ extension IterableExtensions<T> on Iterable<T> {
     }
   }
 
+  /// separates an iterable with [separator] and cast to list
+  List<T> separatedList(T separator) => separated(separator).toList();
+
   /// wraps an iterable with [item] at the start and end
   Iterable<T> wrapped(T item) => isEmpty ? this : [item, ...this, item];
 }

@@ -498,6 +498,12 @@ void main() {
       expect(<int>[].separated(0), <int>[]);
     });
 
+    test('Iterable.separatedList', () {
+      expect([1, 2, 3].separatedList(0), [1, 0, 2, 0, 3]);
+      expect([1].separatedList(0), [1]);
+      expect(<int>[].separatedList(0), <int>[]);
+    });
+
     test('Iterable.wrapped', () {
       expect([1, 2, 3].wrapped(0), [0, 1, 2, 3, 0]);
       expect([1].wrapped(0), [0, 1, 0]);
