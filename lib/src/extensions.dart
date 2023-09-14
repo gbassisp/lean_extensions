@@ -241,6 +241,9 @@ extension IterableExtensions<T> on Iterable<T> {
 
   /// wraps an iterable with [item] at the start and end
   Iterable<T> wrapped(T item) => isEmpty ? this : [item, ...this, item];
+
+  /// wraps an iterable with [item] at the start and end and cast to list
+  List<T> wrappedList(T item) => wrapped(item).toList();
 }
 
 /// adds utility methods on [Random] to generate strings

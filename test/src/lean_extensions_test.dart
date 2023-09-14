@@ -510,6 +510,12 @@ void main() {
       expect(<int>[].wrapped(0), <int>[]);
     });
 
+    test('Iterable.wrappedList', () {
+      expect([1, 2, 3].wrappedList(0), [0, 1, 2, 3, 0]);
+      expect([1].wrappedList(0), [0, 1, 0]);
+      expect(<int>[].wrappedList(0), <int>[]);
+    });
+
     // random string
     test('Random.nextChar', () {
       final random = Random();
