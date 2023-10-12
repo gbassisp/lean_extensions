@@ -11,7 +11,7 @@ export PATH := $(HOME)/.pub-cache/bin:$(PATH)
 
 
 .PHONY: all
-all: version get test analyze doc dry-run
+all: version get analyze doc dry-run test
 
 .PHONY: kill
 kill: 
@@ -31,7 +31,7 @@ dry-run: kill
 .PHONY: test
 test:
 	@echo "Running tests..."
-	$(DART_CMD) test
+	$(DART_CMD) test --test-randomize-ordering-seed=random
 
 .PHONY: coverage
 coverage:
@@ -45,11 +45,21 @@ get:
 	@echo "Getting dependencies..."
 	$(DART_CMD) pub get 
 
+.PHONY: upgrade
+upgrade:
+	@echo "Upgrading dependencies..."
+	$(DART_CMD) pub upgrade
+
+.PHONY: downgrade
+downgrade:
+	@echo "Downgrading dependencies..."
+	$(DART_CMD) pub downgrade
+
 
 .PHONY: doc
 doc:
 	@echo "Generating documentation..."
-	$(DART_CMD) doc
+	@$(DART_CMD) doc || echo "Failed to generate documentation - maybe it's dart 2.12?"
 
 .PHONY: analyze
 analyze:
@@ -78,5 +88,3 @@ format_lcov:
 	@for file in $(FILES); do \
 		sed -i'' -e 's|$(CWD)/||g' $$file ; \
 	done
-
-

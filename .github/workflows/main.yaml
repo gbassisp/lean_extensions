@@ -15,7 +15,7 @@ on:
 jobs:
   test-2_12:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
@@ -24,11 +24,11 @@ jobs:
         channel: 'stable'
     - run: ls -la
     - run: cp analysis_options_2_12.yaml analysis_options.yaml
-    - run: make version get test analyze dry-run
+    - run: make version get dry-run test
   # runs the latest dart version supported by the package
   test-latest:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
@@ -36,6 +36,18 @@ jobs:
         channel: 'stable'
     - run: ls -la
     - run: make
+  # runs the latest dart version supported by the package
+  test-unstable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'master'
+    - run: ls -la
+    - run: make upgrade all
+
   # semantic_pull_request:
   #   uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 

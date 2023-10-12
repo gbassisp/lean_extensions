@@ -1,12 +1,16 @@
 <!-- dart package changelog -->
 
+## 0.8.0
+
+- Add `separatedList()` and `wrappedList()` on `Iterable`
+
 ## 0.7.0
 
 - Add `isNullOrEmpty` on `String?`
 
 ## 0.6.0
 
-- Add `separated()` and `wrapped` on `Iterable`
+- Add `separated()` and `wrapped()` on `Iterable`
 
 ## 0.5.0
 

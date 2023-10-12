@@ -243,8 +243,14 @@ extension IterableExtensions<T> on Iterable<T> {
     }
   }
 
+  /// separates an iterable with [separator] and cast to list
+  List<T> separatedList(T separator) => separated(separator).toList();
+
   /// wraps an iterable with [item] at the start and end
   Iterable<T> wrapped(T item) => isEmpty ? this : [item, ...this, item];
+
+  /// wraps an iterable with [item] at the start and end and cast to list
+  List<T> wrappedList(T item) => wrapped(item).toList();
 }
 
 /// adds utility methods on [Random] to generate strings
