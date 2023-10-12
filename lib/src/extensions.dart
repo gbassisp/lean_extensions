@@ -2,6 +2,8 @@
 
 import 'dart:math';
 
+import 'package:any_date/any_date.dart';
+
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {
   /// returns non-nullable string
@@ -10,6 +12,8 @@ extension StringOrNullExtensions on String? {
   /// checks if string is null or empty
   bool get isNullOrEmpty => orEmpty.isEmpty;
 }
+
+const _anyDate = AnyDate();
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
@@ -32,10 +36,10 @@ extension StringExtensions on String {
   double toDouble() => toNum().toDouble();
 
   /// tries to convert string to DateTime
-  DateTime? tryToDateTime() => DateTime.tryParse(this);
+  DateTime? tryToDateTime() => _anyDate.tryParse(this);
 
   /// converts to DateTime
-  DateTime toDateTime() => DateTime.parse(this);
+  DateTime toDateTime() => _anyDate.parse(this);
 
   /// converts to DateTime without time component
   DateTime? tryToDate() => tryToDateTime()?.dateOnly;
@@ -184,6 +188,9 @@ extension IterableOrNullExtensions<T> on Iterable<T>? {
 
 /// adds utility methods to [Iterable]
 extension IterableExtensions<T> on Iterable<T> {
+  /// returns this iterable as a fixed-length list
+  List<T> toArray() => toList(growable: false);
+
   /// returns item at [index] or null
   T? elementAtOrNull(int index) {
     if (index < 0 || index >= length) {

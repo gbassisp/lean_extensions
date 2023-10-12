@@ -454,6 +454,20 @@ void main() {
       expect(() => 1.limitTo(2, 1), throwsAssertionError);
     });
 
+    test('Iterable.toArray()', () {
+      final a = [3, 1, 2].toArray();
+      final b = [1, 2, 3];
+
+      // list is mutable
+      expect(a, containsAll(b));
+      expect(a, isNot(containsAllInOrder(b)));
+      expect(a..sort(), containsAllInOrder(b));
+
+      // cannot change size
+      expect(() => a.add(0), throwsA(anything));
+      expect(() => a.remove(1), throwsA(anything));
+    });
+
     test('Iterable.elementArOrNull', () {
       // non-empty list
       expect([1, 2, 3].elementAtOrNull(0), 1);
