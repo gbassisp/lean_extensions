@@ -209,6 +209,26 @@ void main() {
         dateString,
       );
     });
+
+    test('Uri - simple web url', () {
+      const converter = AnyUriConverter();
+      const url = 'https://github.com/gbassisp/lean_extensions';
+      final uri = Uri.parse(url);
+      // sanity check
+      expect(
+        Uri(
+          scheme: 'https',
+          host: 'github.com',
+          pathSegments: ['gbassisp', 'lean_extensions'],
+        ),
+        uri,
+      );
+
+      expect(converter.fromJson(url), uri);
+      expect(converter.fromJson(uri), uri);
+
+      expect(converter.toJson(converter.fromJson(url)), url);
+    });
   });
   group('extensions', () {
     test('String?.orEmpty', () {

@@ -132,3 +132,31 @@ class AnyDateConverter extends ToDynamicConverter<DateTime> {
   @override
   String toJson(DateTime object) => object.toIso8601Date();
 }
+
+/// converts to Uri
+class AnyUriConverter extends ToDynamicConverter<Uri> {
+  /// default const constructor
+  const AnyUriConverter();
+
+  @override
+  Uri fromJson(dynamic json) => Uri.parse(_string.fromJson(json));
+
+  @override
+  String toJson(Uri object) => object.toString();
+}
+
+/// converts to Uri if not null, otherwise returns null
+class AnyUriOrNullConverter extends ToDynamicConverter<Uri?> {
+  /// default const constructor
+  const AnyUriOrNullConverter();
+
+  static const _converter = AnyUriConverter();
+
+  @override
+  Uri? fromJson(dynamic json) =>
+      json == null ? null : _converter.fromJson(json);
+
+  @override
+  String? toJson(Uri? object) =>
+      object == null ? null : _converter.toJson(object);
+}
