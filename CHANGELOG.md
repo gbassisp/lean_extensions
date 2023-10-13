@@ -2,7 +2,9 @@
 
 ## 0.8.0
 
-- Add `separatedList()` and `wrappedList()` on `Iterable`
+- Add `toArray()` `separatedList()` and `wrappedList()` on `Iterable`
+- Add `AnyUriConverter` and `AnyUriOrNullConverter` to converters library
+- Add `sleep()` to dart_essentials library
 
 ## 0.7.0
 
