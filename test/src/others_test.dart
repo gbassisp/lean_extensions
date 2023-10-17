@@ -19,5 +19,12 @@ void main() {
 
       expect(res, containsAllInOrder(range(10)));
     });
+
+    test('eval() - typed', () async {
+      const a = 'range(10).toList()';
+      final res = await eval<List<int>>(a);
+
+      expect(res, containsAllInOrder(range(10)));
+    });
   });
 }
