@@ -8,7 +8,14 @@ import 'package:lean_extensions/lean_extensions.dart';
 Future<void> sleep(num seconds) =>
     Future.delayed(Duration(microseconds: (seconds * 1000000).toInt()));
 
-/// evaluates a dart expression
+/// evaluates a dart expression.
+///
+/// **IMPORTANT**
+///
+/// This is just for fun; if the language doesn't support this, there is no
+/// point in trying to use this hack!
+///
+/// I just wanted to how this works and experiment with the Dart VM
 Future<T> eval<T>(String expression, {T Function(String raw)? decoder}) async {
   final dec = decoder ?? extendedJsonDecode;
   final uri = Uri.dataFromString(
@@ -21,7 +28,7 @@ Future<T> eval<T>(String expression, {T Function(String raw)? decoder}) async {
     import "package:lean_extensions/lean_extensions.dart";
 
     Future<void> main(_, SendPort port) async {
-      port.send(await $expression);
+      port.send(extendedJsonEncode(await $expression));
     }
     ''',
     mimeType: 'application/dart',
@@ -41,11 +48,18 @@ Future<T> eval<T>(String expression, {T Function(String raw)? decoder}) async {
   return dec(response) as T;
 }
 
+/// a wrapper around jsonEncode which resolves lazy iterators
+dynamic extendedJsonEncode(dynamic value) {
+  return value is Iterable ? value.map(extendedJsonEncode).toList() : value;
+}
+
+const _intConverter = AnyIntConverter();
+
 /// a wrapper around jsonDecode to upcast types from dynamic to primitives
 dynamic extendedJsonDecode(String encoded) {
-  const intConverter = AnyIntConverter();
-
   final r = jsonDecode(encoded);
 
-  return r is Iterable ? r.map((e) => intConverter.fromJson(e)).toList() : r;
+  return r is Iterable ? r.map((e) => _intConverter.fromJson(e)).toList() : r;
 }
+
+// List<dynamic> _upcastJsonList(Iterable<dynamic> list) {}
