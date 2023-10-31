@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.9.0
+
+- Created `eval()` function, just for fun; does not serve any real purpose and should not be used 😅
+
 ## 0.8.0
 
 - Add `toArray()` `separatedList()` and `wrappedList()` on `Iterable`
