@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.9.1
+
+- Update readme and improve score by providing example
+
 ## 0.9.0
 
 - Created `eval()` function, just for fun; does not serve any real purpose and should not be used 😅
