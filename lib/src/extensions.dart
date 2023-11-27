@@ -54,9 +54,16 @@ extension StringExtensions on String {
       return toUpperCase();
     }
 
+    // recursively apply for each sentence
+    final sentence = RegExp(r'\.\s');
+    if (sentence.hasMatch(this)) {
+      return splitMapJoin(sentence, onNonMatch: (p0) => p0.toSentenceCase());
+    }
+
     if (!startsWith(RegExp(r'^\s'))) {
       return '${substring(0, 1).toUpperCase()}' '${substring(1).toLowerCase()}';
     } else {
+      // recursively apply to trimmed string
       final start = RegExp(r'^\s+').firstMatch(this)!.group(0).orEmpty;
       return '$start'
           '${substring(start.length).toSentenceCase()}';

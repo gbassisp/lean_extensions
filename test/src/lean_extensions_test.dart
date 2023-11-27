@@ -344,23 +344,23 @@ void main() {
       expect('\nDART is awesome'.toSentenceCase(), '\nDart is awesome');
       expect('\n\ndart IS awesome'.toSentenceCase(), '\n\nDart is awesome');
 
-      // // multiple sentences
-      // expect(
-      //   '💙 dart is awesome. but ThIs is a hack'.toSentenceCase(),
-      //   '💙 dart is awesome. But this is a hack',
-      // );
-      // expect(
-      //   '💙 dart is awesome.   but this is a hack'.toSentenceCase(),
-      //   '💙 dart is awesome.   But this is a hack',
-      // );
-      // expect(
-      //   '💙 dart is awesome.\nbut this is a hack'.toSentenceCase(),
-      //   '💙 dart is awesome.\nBut this is a hack',
-      // );
-      // expect(
-      //   '💙 dart is awesome.\n  but this is a hack'.toSentenceCase(),
-      //   '💙 dart is awesome.\n  But this is a hack',
-      // );
+      // multiple sentences
+      expect(
+        '💙 dart is awesome. but ThIs is a hack'.toSentenceCase(),
+        '💙 dart is awesome. But this is a hack',
+      );
+      expect(
+        '💙 dart is awesome.   but this is a hack'.toSentenceCase(),
+        '💙 dart is awesome.   But this is a hack',
+      );
+      expect(
+        '💙 dart is awesome.\nbut this is a hack'.toSentenceCase(),
+        '💙 dart is awesome.\nBut this is a hack',
+      );
+      expect(
+        '💙 dart is awesome.\n  but this is a hack'.toSentenceCase(),
+        '💙 dart is awesome.\n  But this is a hack',
+      );
     });
 
     test('num.isPositive', () {
