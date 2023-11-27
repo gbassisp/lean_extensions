@@ -316,6 +316,53 @@ void main() {
       expect(() => 'a'.toDate(), throwsFormatException);
     });
 
+    test('String.toSentenceCase', () {
+      // basic - up to 1 word
+      expect(''.toSentenceCase(), '');
+      expect('a'.toSentenceCase(), 'A');
+      expect('A'.toSentenceCase(), 'A');
+      expect('ab'.toSentenceCase(), 'Ab');
+      expect('Ab'.toSentenceCase(), 'Ab');
+      expect('aB'.toSentenceCase(), 'Ab');
+      expect('AB'.toSentenceCase(), 'Ab');
+
+      // 2 words
+      expect('ab AB'.toSentenceCase(), 'Ab ab');
+      expect('Ab aB'.toSentenceCase(), 'Ab ab');
+      expect('aB ab'.toSentenceCase(), 'Ab ab');
+      expect('AB Ab'.toSentenceCase(), 'Ab ab');
+
+      // with emojis
+      expect('💙 dart is awesome'.toSentenceCase(), '💙 dart is awesome');
+      expect('💙 dart iS aweSomE'.toSentenceCase(), '💙 dart is awesome');
+      expect('💙 DART is awesome'.toSentenceCase(), '💙 dart is awesome');
+      expect('💙 dart IS awesome'.toSentenceCase(), '💙 dart is awesome');
+
+      // // with spaces
+      // expect(' dart is awesome'.toSentenceCase(), ' Dart is awesome');
+      // expect('\n dart iS aweSomE'.toSentenceCase(), '\n Dart is awesome');
+      // expect('\nDART is awesome'.toSentenceCase(), '\nDart is awesome');
+      // expect('\n\ndart IS awesome'.toSentenceCase(), '\n\nDart is awesome');
+
+      // // multiple sentences
+      // expect(
+      //   '💙 dart is awesome. but ThIs is a hack'.toSentenceCase(),
+      //   '💙 dart is awesome. But this is a hack',
+      // );
+      // expect(
+      //   '💙 dart is awesome.   but this is a hack'.toSentenceCase(),
+      //   '💙 dart is awesome.   But this is a hack',
+      // );
+      // expect(
+      //   '💙 dart is awesome.\nbut this is a hack'.toSentenceCase(),
+      //   '💙 dart is awesome.\nBut this is a hack',
+      // );
+      // expect(
+      //   '💙 dart is awesome.\n  but this is a hack'.toSentenceCase(),
+      //   '💙 dart is awesome.\n  But this is a hack',
+      // );
+    });
+
     test('num.isPositive', () {
       expect(1.isPositive, isTrue);
       expect(0.isPositive, isFalse);

@@ -46,6 +46,14 @@ extension StringExtensions on String {
 
   /// converts to DateTime without time component
   DateTime toDate() => toDateTime().dateOnly;
+
+  /// naive implementation of sentence case, not using locale; this works for
+  /// english, but has no guarantees for other languages
+  String toSentenceCase() {
+    return (length <= 1)
+        ? toUpperCase()
+        : '${substring(0, 1).toUpperCase()}' '${substring(1).toLowerCase()}';
+  }
 }
 
 /// adds utility methods to [num]
