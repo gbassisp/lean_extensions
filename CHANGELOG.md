@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.10.0
+
+- Add `toSentenceCase()` and `toTitleCase()` extensions
+
 ## 0.9.1
 
 - Update readme and improve score by providing example
