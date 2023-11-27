@@ -49,6 +49,8 @@ extension StringExtensions on String {
 
   /// naive implementation of sentence case, not using locale; this works for
   /// english, but has no guarantees for other languages
+  ///
+  /// First non-space character of each sentence is upper-cased
   String toSentenceCase() {
     if (length <= 1) {
       return toUpperCase();
@@ -68,6 +70,17 @@ extension StringExtensions on String {
       return '$start'
           '${substring(start.length).toSentenceCase()}';
     }
+  }
+
+  /// naive implementation of title case, not using locale; this works for
+  /// english, but has no guarantees for other languages
+  ///
+  /// First character after each space is upper-cased
+  String toTitleCase() {
+    return splitMapJoin(
+      RegExp(r'\s+'),
+      onNonMatch: (p0) => p0.toSentenceCase(),
+    );
   }
 }
 

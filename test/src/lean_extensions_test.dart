@@ -362,6 +362,52 @@ void main() {
         '💙 dart is awesome.\n  But this is a hack',
       );
     });
+    test('String.toTitleCase', () {
+      // basic - up to 1 word
+      expect(''.toTitleCase(), '');
+      expect('a'.toTitleCase(), 'A');
+      expect('A'.toTitleCase(), 'A');
+      expect('ab'.toTitleCase(), 'Ab');
+      expect('Ab'.toTitleCase(), 'Ab');
+      expect('aB'.toTitleCase(), 'Ab');
+      expect('AB'.toTitleCase(), 'Ab');
+
+      // 2 words
+      expect('ab AB'.toTitleCase(), 'Ab Ab');
+      expect('Ab aB'.toTitleCase(), 'Ab Ab');
+      expect('aB ab'.toTitleCase(), 'Ab Ab');
+      expect('AB Ab'.toTitleCase(), 'Ab Ab');
+
+      // with emojis
+      expect('💙 dart is awesome'.toTitleCase(), '💙 Dart Is Awesome');
+      expect('💙 dart iS aweSomE'.toTitleCase(), '💙 Dart Is Awesome');
+      expect('💙 DART is awesome'.toTitleCase(), '💙 Dart Is Awesome');
+      expect('💙 dart IS awesome'.toTitleCase(), '💙 Dart Is Awesome');
+
+      // with spaces
+      expect(' dart is awesome'.toTitleCase(), ' Dart Is Awesome');
+      expect('\n dart iS aweSomE'.toTitleCase(), '\n Dart Is Awesome');
+      expect('\nDART is awesome'.toTitleCase(), '\nDart Is Awesome');
+      expect('\n\ndart IS awesome'.toTitleCase(), '\n\nDart Is Awesome');
+
+      // multiple sentences
+      expect(
+        '💙 dart is awesome. but ThIs is a hack'.toTitleCase(),
+        '💙 Dart Is Awesome. But This Is A Hack',
+      );
+      expect(
+        '💙 dart is awesome.   but this is a hack'.toTitleCase(),
+        '💙 Dart Is Awesome.   But This Is A Hack',
+      );
+      expect(
+        '💙 dart is awesome.\nbut this is a hack'.toTitleCase(),
+        '💙 Dart Is Awesome.\nBut This Is A Hack',
+      );
+      expect(
+        '💙 dart is awesome.\n  but this is a hack'.toTitleCase(),
+        '💙 Dart Is Awesome.\n  But This Is A Hack',
+      );
+    });
 
     test('num.isPositive', () {
       expect(1.isPositive, isTrue);
