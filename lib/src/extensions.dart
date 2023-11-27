@@ -50,9 +50,17 @@ extension StringExtensions on String {
   /// naive implementation of sentence case, not using locale; this works for
   /// english, but has no guarantees for other languages
   String toSentenceCase() {
-    return (length <= 1)
-        ? toUpperCase()
-        : '${substring(0, 1).toUpperCase()}' '${substring(1).toLowerCase()}';
+    if (length <= 1) {
+      return toUpperCase();
+    }
+
+    if (!startsWith(RegExp(r'^\s'))) {
+      return '${substring(0, 1).toUpperCase()}' '${substring(1).toLowerCase()}';
+    } else {
+      final start = RegExp(r'^\s+').firstMatch(this)!.group(0).orEmpty;
+      return '$start'
+          '${substring(start.length).toSentenceCase()}';
+    }
   }
 }
 

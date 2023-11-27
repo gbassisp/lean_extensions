@@ -338,11 +338,11 @@ void main() {
       expect('💙 DART is awesome'.toSentenceCase(), '💙 dart is awesome');
       expect('💙 dart IS awesome'.toSentenceCase(), '💙 dart is awesome');
 
-      // // with spaces
-      // expect(' dart is awesome'.toSentenceCase(), ' Dart is awesome');
-      // expect('\n dart iS aweSomE'.toSentenceCase(), '\n Dart is awesome');
-      // expect('\nDART is awesome'.toSentenceCase(), '\nDart is awesome');
-      // expect('\n\ndart IS awesome'.toSentenceCase(), '\n\nDart is awesome');
+      // with spaces
+      expect(' dart is awesome'.toSentenceCase(), ' Dart is awesome');
+      expect('\n dart iS aweSomE'.toSentenceCase(), '\n Dart is awesome');
+      expect('\nDART is awesome'.toSentenceCase(), '\nDart is awesome');
+      expect('\n\ndart IS awesome'.toSentenceCase(), '\n\nDart is awesome');
 
       // // multiple sentences
       // expect(
