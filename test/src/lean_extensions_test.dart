@@ -33,6 +33,11 @@ const dateTimeString = '2021-01-01 13:23:31';
 const dateTimeStringWithT = '2021-01-01T13:23:31.000';
 final TypeMatcher<AssertionError> isAssertionError = isA<AssertionError>();
 final Matcher throwsAssertionError = throwsA(isAssertionError);
+// valid locales
+const us = [null, '', 'en', 'en_us', 'en-us', 'en-_us'];
+const uk = ['en-au', 'en_uk', 'en_-nz'];
+// invalid locales
+const invalidLocales = ['pt', 'anything else'];
 
 void main() {
   group('converters', () {
@@ -530,10 +535,6 @@ void main() {
     });
 
     test('int.toNumeral()', () {
-      // valid locales
-      const us = [null, '', 'en', 'en_us'];
-      const uk = ['en_au', 'en_uk', 'en_nz'];
-
       for (final tag in [...us, ...uk]) {
         expect(0.toNumeral(tag), 'zero');
         expect(10.toNumeral(tag), 'ten');
@@ -541,7 +542,9 @@ void main() {
       }
       // invalid locale
       for (final i in range(-100, 100)) {
-        expect(() => i.toNumeral('pt'), throwsUnimplementedError);
+        for (final tag in invalidLocales) {
+          expect(() => i.toNumeral(tag), throwsUnimplementedError);
+        }
       }
       for (final tag in uk) {
         expect(999.toNumeral(tag), 'nine hundred and ninety-nine');

@@ -38,7 +38,9 @@ List<String> _simple(String? tag) {
   return t
       .trim()
       .toLowerCase()
+      .replaceAll(RegExp(r'\W+'), '-')
       .replaceAll(RegExp('_+'), '-')
-      .replaceAll('-+', '-')
-      .split('-');
+      .replaceAll(RegExp('-+'), '-')
+      .split('-')
+    ..removeWhere((element) => element.trim().isEmpty);
 }
