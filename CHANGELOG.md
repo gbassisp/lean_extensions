@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.10.1
+
+- Bump dependency to include a required fix for `AnyDateConverter`
+
 ## 0.10.0
 
 - Add `toSentenceCase()` and `toTitleCase()` extensions
