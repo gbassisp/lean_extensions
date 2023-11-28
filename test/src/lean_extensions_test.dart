@@ -529,6 +529,28 @@ void main() {
       expect((-0.1).isZero, isFalse);
     });
 
+    test('int.toNumeral()', () {
+      // valid locales
+      const us = [null, '', 'en', 'en_us'];
+      const uk = ['en_au', 'en_uk', 'en_nz'];
+
+      for (final tag in [...us, ...uk]) {
+        expect(0.toNumeral(tag), 'zero');
+        expect(10.toNumeral(tag), 'ten');
+        expect(100.toNumeral(tag), 'one hundred');
+      }
+      // invalid locale
+      for (final i in range(-100, 100)) {
+        expect(() => i.toNumeral('pt'), throwsUnimplementedError);
+      }
+      for (final tag in uk) {
+        expect(999.toNumeral(tag), 'nine hundred and ninety-nine');
+      }
+      for (final tag in us) {
+        expect(999.toNumeral(tag), 'nine hundred ninety-nine');
+      }
+    });
+
     test('DateTime.copyWith', () {
       final date = DateTime(2021, 1, 1, 13, 23, 31);
       expect(date.copyWith(), date);
