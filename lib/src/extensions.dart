@@ -3,6 +3,8 @@
 import 'dart:math';
 
 import 'package:any_date/any_date.dart';
+import 'package:english_numerals/english_numerals.dart';
+import 'package:lean_extensions/src/locale.dart';
 
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {
@@ -214,6 +216,23 @@ extension IntExtensions on int {
 
   /// returns this if it is not greater than [max], otherwise [max]
   int withLowerLimit(int min) => (this as num)._withLowerLimit(min).toInt();
+
+  /// represents this number on its text form as a cardinal
+  String toNumeral([String? locale]) {
+    final t = parseLocale(locale);
+    final c = Cardinal(this);
+    switch (t) {
+      case InternalLocale.enUk:
+        return c.enUk;
+      case InternalLocale.enUs:
+        return c.enUs;
+      case InternalLocale.unsupported:
+        throw UnimplementedError(
+          'Attempted to represent $this as numeral with locale $locale, '
+          'but it is not yet supported',
+        );
+    }
+  }
 }
 
 /// adds utility methods to [Iterable]
