@@ -234,6 +234,25 @@ void main() {
 
       expect(converter.toJson(converter.fromJson(url)), url);
     });
+    test('Uri - relative path', () {
+      const converter = AnyUriConverter();
+      const url = 'gbassisp/lean_extensions';
+      final uri = Uri.parse(url);
+      // sanity check
+      expect(
+        Uri(
+          // scheme: 'https',
+          // host: 'github.com',
+          pathSegments: ['gbassisp', 'lean_extensions'],
+        ),
+        uri,
+      );
+
+      expect(converter.fromJson(url), uri);
+      expect(converter.fromJson(uri), uri);
+
+      expect(converter.toJson(converter.fromJson(url)), url);
+    });
   });
   group('extensions', () {
     test('String?.orEmpty', () {
