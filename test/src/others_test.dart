@@ -79,13 +79,13 @@ void main() {
   group('numeral system', () {
     test('simple cases', () {
       // specific well-known number
-      expect(toRadix(45, 16), '2d');
+      expect(toRadix(45, 16), '2D');
 
       // several numbers match native int.toRadixString()
       for (final i in range(-10000, 10000)) {
         expect(toRadix(i, 10), '$i');
         for (final b in range(2, 33)) {
-          expect(toRadix(i, b), i.toRadixString(b));
+          expect(toRadix(i, b), i.toRadixString(b).toUpperCase());
         }
       }
 

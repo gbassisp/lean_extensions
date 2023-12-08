@@ -1,7 +1,7 @@
 const _base64 = '0123456789'
-    'abcdefghijklmnopqrstuvwxyz'
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    '+_';
+    'abcdefghijklmnopqrstuvwxyz'
+    '+/';
 const _size = _base64.length;
 
 String _toRadixString(BigInt number, int base) {
@@ -29,6 +29,8 @@ String _toRadixString(BigInt number, int base) {
 
 /// simple implementation of a number system conversion;
 /// from base 10 to n, where n is between 2 and 64 inclusive
+/// based on https://en.wikipedia.org/wiki/Base62 and 
+/// https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.408
 String toRadix(Object number, int base) {
   return _toRadixString(BigInt.parse('$number'), base);
 }
