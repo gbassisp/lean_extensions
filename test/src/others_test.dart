@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:lean_extensions/dart_essentials.dart';
+import 'package:lean_extensions/src/numeral_system.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -72,6 +73,26 @@ void main() {
       final res = await eval<Map<String, dynamic>>(encoded);
 
       expect(res, jsonDecode(a), reason: 'failed to eval $a');
+    });
+  });
+
+  group('numeral system', () {
+    test('simple cases', () {
+      // specific well-known number
+      expect(toRadix(45, 16), '2d');
+
+      // several numbers match native int.toRadixString()
+      for (final i in range(-10000, 10000)) {
+        expect(toRadix(i, 10), '$i');
+        for (final b in range(2, 33)) {
+          expect(toRadix(i, b), i.toRadixString(b));
+        }
+      }
+
+      // number to its own base is always 10
+      for (final i in range(2, 65)) {
+        expect(toRadix(i, i), '10');
+      }
     });
   });
 }
