@@ -77,21 +77,32 @@ void main() {
   });
 
   group('numeral system', () {
-    test('simple cases', () {
+    test('simple case - specific number', () {
       // specific well-known number
       expect(toRadix(45, 16), '2D');
-
+      expect(fromRadixString('2D', 16).toInt(), 45);
+    });
+    test('matches int.toRadixString', () {
       // several numbers match native int.toRadixString()
       for (final i in range(-10000, 10000)) {
         expect(toRadix(i, 10), '$i');
         for (final b in range(2, 33)) {
-          expect(toRadix(i, b), i.toRadixString(b).toUpperCase());
+          final converted = toRadix(i, b);
+          expect(converted, i.toRadixString(b).toUpperCase());
+
+          // convert back
+          expect(fromRadixString(converted, b).toInt(), i);
         }
       }
-
+    });
+    test('number on its own radix', () {
       // number to its own base is always 10
       for (final i in range(2, 65)) {
+        expect(toRadix(0, i), '0');
         expect(toRadix(i, i), '10');
+
+        expect(fromRadixString('0', i).toInt(), 0);
+        expect(fromRadixString('10', i).toInt(), i);
       }
     });
   });
