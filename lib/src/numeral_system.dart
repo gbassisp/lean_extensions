@@ -1,4 +1,5 @@
 import 'package:lean_extensions/src/range.dart';
+import 'package:meta/meta.dart';
 
 const _base64 = '0123456789'
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -6,6 +7,26 @@ const _base64 = '0123456789'
     '+/';
 const _size = _base64.length;
 final _mapped = {for (final i in range(_size)) _base64[i]: i};
+
+/// converts a normal baseN to bash-like baseN; keeps the same base
+@internal
+String toBashVersion(String encoded) =>
+    encoded.replaceAll('+', '@').replaceAll('/', '_');
+
+/// converts a bash-like baseN to a normal baseN; keeps the same base
+@internal
+String fromBashVersion(String encoded) =>
+    encoded.replaceAll('@', '+').replaceAll('_', '/');
+
+/// converts a normal baseN to a Youtube-like baseN; keeps the same base
+@internal
+String toYoutubeVersion(String encoded) =>
+    encoded.replaceAll('+', '-').replaceAll('/', '_');
+
+/// converts a Youtube-like baseN to a normal baseN; keeps the same base
+@internal
+String fromYoutubeVersion(String encoded) =>
+    encoded.replaceAll('-', '+').replaceAll('_', '/');
 
 String _toRadixString(BigInt number, int radix) {
   final valid = radix >= 2 && radix <= _size;
@@ -34,6 +55,7 @@ String _toRadixString(BigInt number, int radix) {
 /// must be from base 10 to n, where n is between 2 and 64 inclusive
 /// based on https://en.wikipedia.org/wiki/Base62 and
 /// https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.408
+@internal
 BigInt fromRadixString(String number, int radix) {
   final valid = radix >= 2 && radix <= _size;
   if (!valid) {
@@ -62,6 +84,7 @@ BigInt fromRadixString(String number, int radix) {
 /// from base 10 to n, where n is between 2 and 64 inclusive
 /// based on https://en.wikipedia.org/wiki/Base62 and
 /// https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.408
+@internal
 String toRadix(Object number, int radix) {
   return _toRadixString(BigInt.parse('$number'), radix);
 }
