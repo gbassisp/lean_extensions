@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/src/locale.dart';
+import 'package:lean_extensions/src/numeral_system.dart';
 
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {
@@ -216,6 +217,13 @@ extension IntExtensions on int {
 
   /// returns this if it is not greater than [max], otherwise [max]
   int withLowerLimit(int min) => (this as num)._withLowerLimit(min).toInt();
+
+  /// similar to [toRadixString] but supports up to base 64. It does not match
+  /// the original [toRadixString] implementation, because Dart uses lower-case
+  /// representation for digits 10 to 35, while this one uses upper-case first.
+  /// This matches encoding of https://en.wikipedia.org/wiki/Base62 and
+  /// https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.408
+  String toRadixExtended(int radix) => toRadix(this, radix);
 
   /// represents this number on its text form as a cardinal
   String toNumeral([String? locale]) {

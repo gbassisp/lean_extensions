@@ -573,6 +573,14 @@ void main() {
       }
     });
 
+    // this is tested on others_test.dart
+    test('int.toRadixExtended()', () {
+      for (final i in range(2, 65)) {
+        expect(0.toRadixExtended(i), '0');
+        expect(i.toRadixExtended(i), '10');
+      }
+    });
+
     test('DateTime.copyWith', () {
       final date = DateTime(2021, 1, 1, 13, 23, 31);
       expect(date.copyWith(), date);
