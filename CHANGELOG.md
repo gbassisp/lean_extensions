@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.11.0
+
+- Allow setting characters to be used by Random() extensions
+
 ## 0.10.1
 
 - Bump dependency to include a required fix for `AnyDateConverter`
