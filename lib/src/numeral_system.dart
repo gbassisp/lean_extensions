@@ -1,12 +1,17 @@
 import 'package:lean_extensions/src/range.dart';
 import 'package:meta/meta.dart';
 
-const _base64 = '0123456789'
+/// chars used by base64 encoding
+@internal
+const base62chars = '0123456789'
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    'abcdefghijklmnopqrstuvwxyz'
-    '+/';
-const _size = _base64.length;
-final _mapped = {for (final i in range(_size)) _base64[i]: i};
+    'abcdefghijklmnopqrstuvwxyz';
+
+/// chars used by base64 encoding
+@internal
+const base64chars = '$base62chars+/';
+const _size = base64chars.length;
+final _mapped = {for (final i in range(_size)) base64chars[i]: i};
 
 /// converts a normal baseN to bash-like baseN; keeps the same base
 @internal
@@ -43,7 +48,7 @@ String _toRadixString(BigInt number, int radix) {
   final b = BigInt.from(radix);
   while (n > BigInt.zero) {
     final r = (n % b).toInt();
-    final c = _base64[r];
+    final c = base64chars[r];
     res = '$c$res';
     n = n ~/ b;
   }

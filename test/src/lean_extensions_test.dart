@@ -706,7 +706,7 @@ void main() {
         expect(char, isNotEmpty);
       }
       // extremely unlikely to fail
-      expect(frequency.length, 62);
+      expect(frequency.length, LeanExtensions.charactersForRandomChar.length);
 
       final average = frequency.values.reduce((a, b) => a + b) / 62;
       for (final value in frequency.values) {

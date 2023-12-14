@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
+import 'package:lean_extensions/src/config.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
 
@@ -316,21 +317,21 @@ extension IterableExtensions<T> on Iterable<T> {
   List<T> wrappedList(T item) => wrapped(item).toList();
 }
 
+String get _chars => LeanExtensions.charactersForRandomChar;
+
 /// adds utility methods on [Random] to generate strings
 extension RandomExtensions on Random {
-  static const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      'abcdefghijklmnopqrstuvwxyz'
-      '0123456789';
   static final _symbols = _chars.split('');
 
-  /// generates random character
-  String nextChar() {
-    final result = _symbols[nextInt(_symbols.length)];
+  /// generates random character; defaults to using chars of base64 encoding
+  String nextChar({String? chars}) {
+    final symbols = (chars?.split('') ?? _symbols).toList();
+    final result = symbols[nextInt(symbols.length)];
 
     return result;
   }
 
-  /// generates random string of length [length]
+  /// generates random string of length [length]; uses base64 chars for string
   String nextString([int length = 32]) {
     final result = List.generate(length, (index) => nextChar()).join();
     return result;
