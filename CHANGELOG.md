@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+## 0.11.1
+
+- Fix: allow changing characters to be used by Random() extensions more than once
+- Added homeage to pubspec
+
 ## 0.11.0
 
 - Allow setting characters to be used by Random() extensions
