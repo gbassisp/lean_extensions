@@ -3,6 +3,7 @@
 ## 0.11.0
 
 - Allow setting characters to be used by Random() extensions
+- Added `int.toRadixExtended()` extension to allow up to base 64 numeral system
 
 ## 0.10.1
 
