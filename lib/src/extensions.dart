@@ -321,7 +321,7 @@ String get _chars => LeanExtensions.charactersForRandomChar;
 
 /// adds utility methods on [Random] to generate strings
 extension RandomExtensions on Random {
-  static final _symbols = _chars.split('');
+  static Iterable<String> get _symbols => _chars.split('');
 
   /// generates random character; defaults to using chars of base64 encoding
   String nextChar({String? chars}) {
