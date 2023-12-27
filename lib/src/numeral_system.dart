@@ -66,7 +66,10 @@ BigInt fromRadixString(String number, int radix) {
   if (!valid) {
     throw RangeError('Invalid value: Not in inclusive range 2..$_size: $radix');
   }
-  final n = number.replaceAll('-', '').trim();
+  var n = number.replaceAll('-', '').trim();
+  if (radix <= 32) {
+    n = n.toUpperCase();
+  }
 
   if (n.isEmpty) {
     throw ArgumentError.value(number);

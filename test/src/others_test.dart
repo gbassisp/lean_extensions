@@ -105,5 +105,20 @@ void main() {
         expect(fromRadixString('10', i).toInt(), i);
       }
     });
+
+    test(
+      'fromRadix with base <=32 should be case insesitive',
+      () {
+        for (final r in range(2, 33)) {
+          for (final i in range(-1000, 1000)) {
+            final low = i.toRadixString(r).toLowerCase();
+            final upp = i.toRadixString(r).toUpperCase();
+
+            expect(fromRadixString(low, r).toInt(), equals(i));
+            expect(fromRadixString(upp, r).toInt(), equals(i));
+          }
+        }
+      },
+    );
   });
 }
