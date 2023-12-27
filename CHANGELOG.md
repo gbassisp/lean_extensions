@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.11.2
+
+- Fix: ensure fromRadixString() is case insensitive when radix is <= 32
+
 ## 0.11.1
 
 - Fix: allow changing characters to be used by Random() extensions more than once
