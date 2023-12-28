@@ -1,5 +1,8 @@
 <!-- dart package changelog -->
 
+## 0.12.1
+
+- Fix: ensure fromRadixString() doesn't accept invalid digits
 
 ## 0.12.0
 
