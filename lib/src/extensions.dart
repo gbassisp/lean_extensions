@@ -19,6 +19,8 @@ extension StringOrNullExtensions on String? {
 
 const _anyDate = AnyDate();
 
+// TODO(gbassisp): add support for radix on String.toInt() and similar
+
 /// adds utility methods to [String]
 extension StringExtensions on String {
   /// tries to convert string to num
@@ -38,6 +40,18 @@ extension StringExtensions on String {
 
   /// converts to double
   double toDouble() => toNum().toDouble();
+
+  /// tries to convert [String] to [BigInt] based on given [radix]
+  BigInt? tryToBigInt([int? radix]) {
+    try {
+      return fromRadixString(this, radix ?? 10);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// converts to [BigInt] based on the given [radix]
+  BigInt toBigInt([int? radix]) => tryToBigInt(radix)!;
 
   /// tries to convert string to DateTime
   DateTime? tryToDateTime() => _anyDate.tryParse(this);
@@ -336,4 +350,10 @@ extension RandomExtensions on Random {
     final result = List.generate(length, (index) => nextChar()).join();
     return result;
   }
+}
+
+/// adds extensions to [BigInt]
+extension BigIntLeanExtensions on BigInt {
+  /// converts to a given [radix] with base up to 64
+  String toRadixExtended(int radix) => toRadix(this, radix);
 }
