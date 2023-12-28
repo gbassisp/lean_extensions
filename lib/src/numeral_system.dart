@@ -81,6 +81,12 @@ BigInt fromRadixString(String number, int radix) {
   final digits = n.split('').reversed;
   for (final d in digits) {
     final value = _mapped[d]!;
+    if (value >= radix) {
+      throw RangeError(
+        'Digit $d was mapped to $value,'
+        ' which is not within $radix',
+      );
+    }
     res = res + b * BigInt.from(value);
     b = b * r;
   }

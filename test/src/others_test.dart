@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:lean_extensions/dart_essentials.dart';
+import 'package:lean_extensions/src/extensions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
 import 'package:test/test.dart';
+
+import 'test_utils.dart';
 
 void main() {
   group('utils.dart', () {
@@ -120,5 +123,19 @@ void main() {
         }
       },
     );
+
+    test('number from invalid radix throws', () {
+      // well-know
+      expect(() => '3'.toBigInt(2), throwsSomething);
+
+      for (final r in range(2, 64)) {
+        // a radix on the next base is the next one; e.g., 2 on radix 3 is 2,
+        // but 2 doesn't exist on radix 2 (binary)
+        final invalidNumber = r.toRadixExtended(r + 1);
+
+        expect(() => invalidNumber.toBigInt(r), throwsSomething);
+        expect(invalidNumber.tryToBigInt(r), isNull);
+      }
+    });
   });
 }
