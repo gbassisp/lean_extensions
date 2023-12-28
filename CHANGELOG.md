@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+
+## 0.12.0
+
+- Added `String` <-> `BigInt` converter extensions with support for radix up to 64
+
 ## 0.11.2
 
 - Fix: ensure fromRadixString() is case insensitive when radix is <= 32
