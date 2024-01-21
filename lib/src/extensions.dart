@@ -6,6 +6,7 @@ import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/src/config.dart';
 import 'package:lean_extensions/src/locale.dart';
+import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
 
 /// adds utility methods to [String]?
@@ -350,6 +351,17 @@ extension RandomExtensions on Random {
     final result = List.generate(length, (index) => nextChar()).join();
     return result;
   }
+}
+
+/// extensions on [Map] with a lot of recursion; needs more testing
+extension MapLeanExtension<K, V> on Map<K, V> {
+  /// returns the difference between this map and another
+  Map<K, V> difference(Map<K, V> other) => mapDifference(this, other);
+
+  /// removes entries where value is null.
+  ///
+  /// does NOT remove empty values
+  Map<K, V> get withoutNulls => removeNulls(this);
 }
 
 /// adds extensions to [BigInt]
