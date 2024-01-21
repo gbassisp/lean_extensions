@@ -4,8 +4,10 @@ import 'dart:math';
 
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
+import 'package:lean_extensions/src/config.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
+import 'package:lean_extensions/src/numeral_system.dart';
 
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {
@@ -17,6 +19,8 @@ extension StringOrNullExtensions on String? {
 }
 
 const _anyDate = AnyDate();
+
+// TODO(gbassisp): add support for radix on String.toInt() and similar
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
@@ -37,6 +41,18 @@ extension StringExtensions on String {
 
   /// converts to double
   double toDouble() => toNum().toDouble();
+
+  /// tries to convert [String] to [BigInt] based on given [radix]
+  BigInt? tryToBigInt([int? radix]) {
+    try {
+      return fromRadixString(this, radix ?? 10);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// converts to [BigInt] based on the given [radix]
+  BigInt toBigInt([int? radix]) => tryToBigInt(radix)!;
 
   /// tries to convert string to DateTime
   DateTime? tryToDateTime() => _anyDate.tryParse(this);
@@ -218,6 +234,13 @@ extension IntExtensions on int {
   /// returns this if it is not greater than [max], otherwise [max]
   int withLowerLimit(int min) => (this as num)._withLowerLimit(min).toInt();
 
+  /// similar to [toRadixString] but supports up to base 64. It does not match
+  /// the original [toRadixString] implementation, because Dart uses lower-case
+  /// representation for digits 10 to 35, while this one uses upper-case first.
+  /// This matches encoding of https://en.wikipedia.org/wiki/Base62 and
+  /// https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.408
+  String toRadixExtended(int radix) => toRadix(this, radix);
+
   /// represents this number on its text form as a cardinal
   String toNumeral([String? locale]) {
     final t = parseLocale(locale);
@@ -309,21 +332,21 @@ extension IterableExtensions<T> on Iterable<T> {
   List<T> wrappedList(T item) => wrapped(item).toList();
 }
 
+String get _chars => LeanExtensions.charactersForRandomChar;
+
 /// adds utility methods on [Random] to generate strings
 extension RandomExtensions on Random {
-  static const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      'abcdefghijklmnopqrstuvwxyz'
-      '0123456789';
-  static final _symbols = _chars.split('');
+  static Iterable<String> get _symbols => _chars.split('');
 
-  /// generates random character
-  String nextChar() {
-    final result = _symbols[nextInt(_symbols.length)];
+  /// generates random character; defaults to using chars of base64 encoding
+  String nextChar({String? chars}) {
+    final symbols = (chars?.split('') ?? _symbols).toList();
+    final result = symbols[nextInt(symbols.length)];
 
     return result;
   }
 
-  /// generates random string of length [length]
+  /// generates random string of length [length]; uses base64 chars for string
   String nextString([int length = 32]) {
     final result = List.generate(length, (index) => nextChar()).join();
     return result;
@@ -334,4 +357,10 @@ extension MapLeanExtension<K, V> on Map<K, V> {
   Map<K, V> difference(Map<K, V> other) => mapDifference(this, other);
 
   Map<K, V> get withoutNulls => removeNulls(this);
+}
+
+/// adds extensions to [BigInt]
+extension BigIntLeanExtensions on BigInt {
+  /// converts to a given [radix] with base up to 64
+  String toRadixExtended(int radix) => toRadix(this, radix);
 }

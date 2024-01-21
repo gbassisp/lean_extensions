@@ -234,6 +234,25 @@ void main() {
 
       expect(converter.toJson(converter.fromJson(url)), url);
     });
+    test('Uri - relative path', () {
+      const converter = AnyUriConverter();
+      const url = 'gbassisp/lean_extensions';
+      final uri = Uri.parse(url);
+      // sanity check
+      expect(
+        Uri(
+          // scheme: 'https',
+          // host: 'github.com',
+          pathSegments: ['gbassisp', 'lean_extensions'],
+        ),
+        uri,
+      );
+
+      expect(converter.fromJson(url), uri);
+      expect(converter.fromJson(uri), uri);
+
+      expect(converter.toJson(converter.fromJson(url)), url);
+    });
   });
   group('extensions', () {
     test('String?.orEmpty', () {
@@ -554,6 +573,14 @@ void main() {
       }
     });
 
+    // this is tested on others_test.dart
+    test('int.toRadixExtended()', () {
+      for (final i in range(2, 65)) {
+        expect(0.toRadixExtended(i), '0');
+        expect(i.toRadixExtended(i), '10');
+      }
+    });
+
     test('DateTime.copyWith', () {
       final date = DateTime(2021, 1, 1, 13, 23, 31);
       expect(date.copyWith(), date);
@@ -679,7 +706,7 @@ void main() {
         expect(char, isNotEmpty);
       }
       // extremely unlikely to fail
-      expect(frequency.length, 62);
+      expect(frequency.length, LeanExtensions.charactersForRandomChar.length);
 
       final average = frequency.values.reduce((a, b) => a + b) / 62;
       for (final value in frequency.values) {

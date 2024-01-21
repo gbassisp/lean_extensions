@@ -15,3 +15,5 @@ void expectSameCollection(Object? value, Object? expected) {
         '${diff.entries.isEmpty ? '' : 'Difference: $diff'}',
   );
 }
+
+final throwsSomething = throwsA(anything);

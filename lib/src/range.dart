@@ -2,6 +2,7 @@ import 'package:lean_extensions/src/extensions.dart';
 import 'package:meta/meta.dart';
 
 /// Range builder function signature
+@internal
 typedef RangeFactory = Range Function(int a, int b, int c);
 
 /// Python like range function
@@ -12,7 +13,7 @@ Range range(int a, [int? b, int? c]) {
 }
 
 /// Python like range function - with some sanity checks
-@visibleForTesting
+@internal
 Range safeRange(int a, [int? b, int? c]) => Range(a, b, c);
 
 /// Iterable of integers; Range is open ended on the right

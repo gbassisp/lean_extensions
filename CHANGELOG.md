@@ -1,5 +1,27 @@
 <!-- dart package changelog -->
 
+## 0.12.1
+
+- Fix: ensure fromRadixString() doesn't accept invalid digits
+
+## 0.12.0
+
+- Added `String` <-> `BigInt` converter extensions with support for radix up to 64
+
+## 0.11.2
+
+- Fix: ensure fromRadixString() is case insensitive when radix is <= 32
+
+## 0.11.1
+
+- Fix: allow changing characters to be used by Random() extensions more than once
+- Added homeage to pubspec
+
+## 0.11.0
+
+- Allow setting characters to be used by Random() extensions
+- Added `int.toRadixExtended()` extension to allow up to base 64 numeral system
+
 ## 0.10.1
 
 - Bump dependency to include a required fix for `AnyDateConverter`
