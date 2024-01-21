@@ -48,7 +48,12 @@ void main() {
         'd': null,
         'e': [],
         'f': ['string'],
-        'g': {},
+        'g': {
+          'a1': 1,
+          'b1': 'string',
+          'e1': [],
+          'f1': ['string'],
+        },
       };
       const b = {
         'a': 1,
@@ -56,9 +61,19 @@ void main() {
         'c': 1.5,
         'e': [],
         'f': ['string'],
-        'g': {},
+        'g': {
+          'a1': 1,
+          'c1': 1.5,
+          'e1': [],
+          'f1': ['string'],
+        },
       };
-      const expected = {'d': null};
+      const expected = {
+        'd': null,
+        'g': {
+          'b1': 'string',
+        },
+      };
 
       expectSameCollection(a.difference(b), expected);
     });
