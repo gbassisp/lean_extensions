@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/src/locale.dart';
+import 'package:lean_extensions/src/map_functions.dart';
 
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {
@@ -327,4 +328,10 @@ extension RandomExtensions on Random {
     final result = List.generate(length, (index) => nextChar()).join();
     return result;
   }
+}
+
+extension MapLeanExtension<K, V> on Map<K, V> {
+  Map<K, V> difference(Map<K, V> other) => mapDifference(this, other);
+
+  Map<K, V> get withoutNulls => removeNulls(this);
 }
