@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_collection_literal
+
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:test/test.dart';
 

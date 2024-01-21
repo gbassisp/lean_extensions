@@ -353,9 +353,14 @@ extension RandomExtensions on Random {
   }
 }
 
+/// extensions on [Map] with a lot of recursion; needs more testing
 extension MapLeanExtension<K, V> on Map<K, V> {
+  /// returns the difference between this map and another
   Map<K, V> difference(Map<K, V> other) => mapDifference(this, other);
 
+  /// removes entries where value is null.
+  ///
+  /// does NOT remove empty values
   Map<K, V> get withoutNulls => removeNulls(this);
 }
 

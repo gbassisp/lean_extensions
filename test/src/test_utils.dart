@@ -5,8 +5,10 @@ import 'package:test/test.dart';
 void expectSameCollection(Object? value, Object? expected) {
   const d = DeepCollectionEquality();
 
-  final diff =
-      value is Map && expected is Map ? value.difference(expected) : {};
+  final diff = value is Map && expected is Map
+      ? value.difference(expected)
+      // ignore: inference_failure_on_collection_literal
+      : {};
 
   expect(
     d.equals(value, expected),
