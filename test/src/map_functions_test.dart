@@ -13,7 +13,14 @@ void main() {
         'd': null,
         'e': [],
         'f': ['string'],
-        'g': {},
+        'g': {
+          'a1': 1,
+          'b1': 'string',
+          'c1': 1.5,
+          'd1': null,
+          'e1': [],
+          'f1': ['string'],
+        },
       };
       const expected = {
         'a': 1,
@@ -21,7 +28,13 @@ void main() {
         'c': 1.5,
         'e': [],
         'f': ['string'],
-        'g': {},
+        'g': {
+          'a1': 1,
+          'b1': 'string',
+          'c1': 1.5,
+          'e1': [],
+          'f1': ['string'],
+        },
       };
 
       expectSameCollection(a.withoutNulls, expected);

@@ -13,6 +13,7 @@ Map<K, V> removeNulls<K, V>(Map<K, V> map) {
     if (e.value is Map) {
       final v = e.value as Map;
       res[e.key] = removeNulls(v) as V;
+      continue;
     }
 
     res.addEntries([e]);
@@ -32,6 +33,7 @@ Map<K, V> mapDifference<K, V>(Map<K, V> m1, Map<K, V> m2) {
     if (e.value is Map && m2[e.key] is Map) {
       final v = e.value as Map;
       res[e.key] = mapDifference(v, m2[e.key] as Map) as V;
+      continue;
     }
 
     res.addEntries([e]);
