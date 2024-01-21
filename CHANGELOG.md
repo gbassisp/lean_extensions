@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.13.0
+
+- Started adding extensions to Map
+
 ## 0.12.1
 
 - Fix: ensure fromRadixString() doesn't accept invalid digits
