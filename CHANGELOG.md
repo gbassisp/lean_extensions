@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.13.1
+
+- Fix caret syntax on dependencies
+
 ## 0.13.0
 
 - Started adding extensions to Map
