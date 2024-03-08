@@ -20,21 +20,30 @@ extension StringOrNullExtensions on String? {
 
 const _anyDate = AnyDate();
 
+T? _tryOrNull<T>(T Function() fn) {
+  try {
+    return fn();
+  } catch (_) {
+    return null;
+  }
+}
+
 // TODO(gbassisp): add support for radix on String.toInt() and similar
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
   /// tries to convert string to num
-  num? tryToNum() => num.tryParse(trim());
+  num? tryToNum() => num.tryParse(trim()) ?? _tryIntFromCardinal();
 
-  /// converts to num
-  num toNum() => num.parse(trim());
+  /// converts to num. Uses [tryToNum] and ultimately throws error from
+  /// [num.parse] if invalid
+  num toNum() => tryToNum() ?? num.parse(trim());
 
   /// tries to convert string to int
   int? tryToInt() => tryToNum()?.toInt();
 
   /// converts to int
-  int toInt() => toNum().toInt();
+  int toInt() => tryToInt() ?? toNum().toInt();
 
   /// tries to convert string to double
   double? tryToDouble() => tryToNum()?.toDouble();
@@ -42,17 +51,19 @@ extension StringExtensions on String {
   /// converts to double
   double toDouble() => toNum().toDouble();
 
+  BigInt _fromCardinal() => Cardinal(trim()).toBigInt();
+  int _intFromCardinal() => Cardinal(trim()).toInt();
+  int? _tryIntFromCardinal() => _tryOrNull(_intFromCardinal);
+  // BigInt? _tryFromCardinal() => _tryOrNull(_fromCardinal);
+
   /// tries to convert [String] to [BigInt] based on given [radix]
-  BigInt? tryToBigInt([int? radix]) {
-    try {
-      return fromRadixString(this, radix ?? 10);
-    } catch (_) {
-      return null;
-    }
-  }
+  BigInt? tryToBigInt([int? radix]) => _tryOrNull(() => toBigInt(radix));
 
   /// converts to [BigInt] based on the given [radix]
-  BigInt toBigInt([int? radix]) => tryToBigInt(radix)!;
+  BigInt toBigInt([int? radix]) {
+    final r = radix ?? 10;
+    return r == 10 ? _fromCardinal() : fromRadixString(this, r);
+  }
 
   /// tries to convert string to DateTime
   DateTime? tryToDateTime() => _anyDate.tryParse(trim());

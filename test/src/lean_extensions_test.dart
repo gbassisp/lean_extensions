@@ -278,36 +278,66 @@ void main() {
       expect('1'.tryToNum(), 1);
       expect('1.0'.tryToNum(), 1.0);
       expect('a'.tryToNum(), null);
+      expect('one'.tryToNum(), 1);
+      expect(' 1'.tryToNum(), 1);
+      expect('1.0 '.tryToNum(), 1.0);
+      expect('a '.tryToNum(), null);
+      expect(' one '.tryToNum(), 1);
     });
 
     test('String.toNum', () {
       expect('1'.toNum(), 1);
       expect('1.0'.toNum(), 1.0);
       expect(() => 'a'.toNum(), throwsFormatException);
+      expect('one'.toNum(), 1);
+      expect(' 1'.toNum(), 1);
+      expect('1.0 '.toNum(), 1.0);
+      expect(() => 'a '.toNum(), throwsFormatException);
+      expect(' one '.toNum(), 1);
     });
 
     test('String.tryToInt', () {
       expect('1'.tryToInt(), 1);
       expect('1.0'.tryToInt(), 1);
       expect('a'.tryToInt(), null);
+      expect('one'.tryToInt(), 1);
+      expect(' 1'.tryToInt(), 1);
+      expect('1.0 '.tryToInt(), 1);
+      expect('a '.tryToInt(), null);
+      expect(' one '.tryToInt(), 1);
     });
 
     test('String.toInt', () {
       expect('1'.toInt(), 1);
       expect('1.0'.toInt(), 1);
       expect(() => 'a'.toInt(), throwsFormatException);
+      expect('one'.toInt(), 1);
+      expect(' 1'.toInt(), 1);
+      expect('1.0 '.toInt(), 1);
+      expect(() => 'a '.toInt(), throwsFormatException);
+      expect(' one '.toInt(), 1);
     });
 
     test('String.tryToDouble', () {
       expect('1'.tryToDouble(), 1.0);
       expect('1.0'.tryToDouble(), 1.0);
       expect('a'.tryToDouble(), null);
+      expect('one'.tryToDouble(), 1.0);
+      expect(' 1'.tryToDouble(), 1.0);
+      expect('1.0 '.tryToDouble(), 1.0);
+      expect('a '.tryToDouble(), null);
+      expect(' one '.tryToDouble(), 1.0);
     });
 
     test('String.toDouble', () {
       expect('1'.toDouble(), 1.0);
       expect('1.0'.toDouble(), 1.0);
       expect(() => 'a'.toDouble(), throwsFormatException);
+      expect('one'.toDouble(), 1.0);
+      expect(' 1'.toDouble(), 1.0);
+      expect('1.0 '.toDouble(), 1.0);
+      expect(() => 'a '.toDouble(), throwsFormatException);
+      expect(' one '.toDouble(), 1.0);
     });
 
     test('String.tryToDateTime', () {
