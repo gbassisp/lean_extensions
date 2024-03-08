@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.14.0
+
+- Use `Cardinal` feature to convert text to `int` and `BigInt` 
+
 ## 0.13.1
 
 - Fix caret syntax on dependencies

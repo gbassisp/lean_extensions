@@ -28,6 +28,7 @@ dart pub get
 ## Example
 
 ```dart
+
 // some python-like functionality
 for (final i in range(10)) {
   await sleep(i);
@@ -39,6 +40,13 @@ final date1 = converter.fromJson('25 Nov 2023');
 if (date1 == DateTime(2023, 11, 25)) {
   // easily deserializes common types
 }
+
+// some extensions with common functionality
+final anInt = '1'.toInt(); // resolves to 1
+
+// and a touch of magic
+final anotherInt = 'one'.toInt(); // resolves to 1 as well
+
 ```
 
 
