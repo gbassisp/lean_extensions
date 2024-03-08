@@ -25,10 +25,10 @@ const _anyDate = AnyDate();
 /// adds utility methods to [String]
 extension StringExtensions on String {
   /// tries to convert string to num
-  num? tryToNum() => num.tryParse(this);
+  num? tryToNum() => num.tryParse(trim());
 
   /// converts to num
-  num toNum() => num.parse(this);
+  num toNum() => num.parse(trim());
 
   /// tries to convert string to int
   int? tryToInt() => tryToNum()?.toInt();
@@ -55,10 +55,10 @@ extension StringExtensions on String {
   BigInt toBigInt([int? radix]) => tryToBigInt(radix)!;
 
   /// tries to convert string to DateTime
-  DateTime? tryToDateTime() => _anyDate.tryParse(this);
+  DateTime? tryToDateTime() => _anyDate.tryParse(trim());
 
   /// converts to DateTime
-  DateTime toDateTime() => _anyDate.parse(this);
+  DateTime toDateTime() => _anyDate.parse(trim());
 
   /// converts to DateTime without time component
   DateTime? tryToDate() => tryToDateTime()?.dateOnly;
