@@ -725,6 +725,26 @@ void main() {
       expect(<int>[].wrappedList(0), <int>[]);
     });
 
+    // random int max range
+    test('Random.nextIntMax', () {
+      final random = Random();
+      // final results = <int>{};
+      int? maximum;
+      int? mininum;
+      // probabilistic test; run several times to get big and small values at
+      // least once
+      final limit = 1e9.toInt();
+      for (final _ in range(limit)) {
+        final value = random.nextIntMax();
+        // final _ = results.add(value);
+        maximum = max(maximum ?? value, value);
+        mininum = min(mininum ?? value, value);
+      }
+
+      expect(maximum, greaterThan(pow(2, 30)));
+      expect(mininum, lessThan(pow(2, 30)));
+    });
+
     // random string
     test('Random.nextChar', () {
       final random = Random();

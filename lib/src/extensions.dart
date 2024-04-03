@@ -348,6 +348,7 @@ String get _chars => LeanExtensions.charactersForRandomChar;
 /// adds utility methods on [Random] to generate strings
 extension RandomExtensions on Random {
   static Iterable<String> get _symbols => _chars.split('');
+  static const int _maxInt = 1 << 32;
 
   /// generates random character; defaults to using chars of base64 encoding
   String nextChar({String? chars}) {
@@ -361,6 +362,11 @@ extension RandomExtensions on Random {
   String nextString([int length = 32]) {
     final result = List.generate(length, (index) => nextChar()).join();
     return result;
+  }
+
+  /// generates a random int within max limits, which is max 32-bit int
+  int nextIntMax() {
+    return nextInt(_maxInt);
   }
 }
 
