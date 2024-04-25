@@ -19,3 +19,4 @@ void expectSameCollection(Object? value, Object? expected) {
 }
 
 final throwsSomething = throwsA(anything);
+final throwsNothing = isNot(throwsSomething);
