@@ -4,6 +4,24 @@ import 'dart:isolate';
 
 import 'package:lean_extensions/lean_extensions.dart';
 
+/// similar to kIsDebug from flutter, but not dependent on it
+bool get isDebug {
+  try {
+    assert(false, 'this only throws in debug mode');
+    return false;
+  } catch (_) {
+    return true;
+  }
+}
+
+/// use [print] iff [isDebug]
+void warn(Object? message) {
+  if (isDebug) {
+    // ignore: avoid_print
+    print('WARNING: $message');
+  }
+}
+
 /// wrapper around Future.delayed to have a simpler syntax
 Future<void> sleep(num seconds) =>
     Future.delayed(Duration(microseconds: (seconds * 1000000).toInt()));

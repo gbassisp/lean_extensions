@@ -9,6 +9,13 @@ import 'test_utils.dart';
 
 void main() {
   group('utils.dart', () {
+    test('isDebug', () {
+      expect(isDebug, isTrue, reason: 'tests are run in debug mode');
+    });
+    test('warn', () {
+      expect(() => warn('something'), throwsNothing);
+      expect(() => warn(null), throwsNothing);
+    });
     test('sleep()', () async {
       final a = Stopwatch()..start();
       const t = 5;
