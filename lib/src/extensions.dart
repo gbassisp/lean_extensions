@@ -375,6 +375,12 @@ extension MapLeanExtension<K, V> on Map<K, V> {
   Map<K, V> get withoutNulls => removeNulls(this);
 }
 
+/// extensions on [Map]?
+extension NullableMapLeanExtension<K, V> on Map<K, V>? {
+  /// returns an empty [Map] if this is null
+  Map<K, V> get orEmpty => this == null ? {} : this!;
+}
+
 /// adds extensions to [BigInt]
 extension BigIntLeanExtensions on BigInt {
   /// converts to a given [radix] with base up to 64
