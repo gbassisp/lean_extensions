@@ -19,3 +19,17 @@ void expectSameCollection(Object? value, Object? expected) {
 }
 
 final throwsSomething = throwsA(anything);
+
+final isTruthy = _Truthy();
+final isFalsy = isNot(isTruthy);
+
+class _Truthy extends Matcher {
+  @override
+  Description describe(Description description) {
+    return description.add('a truthy value');
+  }
+
+  @override
+  bool matches(Object? item, Map<Object?, Object?> matchState) =>
+      item.isTruthy && item.toBoolean() && !item.isFalsy;
+}

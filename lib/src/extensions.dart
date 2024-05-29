@@ -375,8 +375,39 @@ extension MapLeanExtension<K, V> on Map<K, V> {
   Map<K, V> get withoutNulls => removeNulls(this);
 }
 
+/// extensions on [Map]?
+extension NullableMapLeanExtension<K, V> on Map<K, V>? {
+  /// returns an empty [Map] if this is null
+  Map<K, V> get orEmpty => this == null ? {} : this!;
+}
+
 /// adds extensions to [BigInt]
 extension BigIntLeanExtensions on BigInt {
   /// converts to a given [radix] with base up to 64
   String toRadixExtended(int radix) => toRadix(this, radix);
+}
+
+/// adds "truthy" / "falsy" extensions
+extension NullableObjectLeanExtensions on Object? {
+  /// similar to JS "falsy", but treats empty collections as falsy, like
+  /// any sane person would
+  ///
+  /// in addition, treats white space strings as falsy
+  bool get isFalsy =>
+      this == null ||
+      this is bool && this == false ||
+      this is num && (this as num? ?? 0) == 0 ||
+      this is Iterable && (this as Iterable?).orEmpty.isEmpty ||
+      this is Map && (this as Map?).orEmpty.isEmpty ||
+      toString().trim().isEmpty ||
+      toString().toLowerCase().trim() == 'false' ||
+      toString().toLowerCase().trim() == 'null' ||
+      toString().toLowerCase().trim().tryToNum() == 0;
+
+  /// similar to JS "truthy", but treats empty collections as falsy, like
+  /// any sane person would
+  bool get isTruthy => !isFalsy;
+
+  /// converts this to a bool based on its "truthy" value
+  bool toBoolean() => isTruthy;
 }
