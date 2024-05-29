@@ -409,5 +409,5 @@ extension NullableObjectLeanExtensions on Object? {
   bool get isTruthy => !isFalsy;
 
   /// converts this to a bool based on its "truthy" value
-  bool get toBoolean => isTruthy;
+  bool toBoolean() => isTruthy;
 }

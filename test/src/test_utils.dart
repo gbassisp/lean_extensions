@@ -31,5 +31,5 @@ class _Truthy extends Matcher {
 
   @override
   bool matches(Object? item, Map<Object?, Object?> matchState) =>
-      item.isTruthy && item.toBoolean && !item.isFalsy;
+      item.isTruthy && item.toBoolean() && !item.isFalsy;
 }
