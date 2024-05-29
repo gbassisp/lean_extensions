@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.14.1
+
+- Created 'truthy' / 'falsy' features: extensions on `Object?` and `AnyBoolConverter` + `AnyNullableBoolConverter`
+
 ## 0.14.0
 
 - Use `Cardinal` feature to convert text to `int` and `BigInt` 
