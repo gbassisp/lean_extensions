@@ -6,6 +6,8 @@ import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:test/test.dart';
 
+import 'truthy_test.dart';
+
 // /// converts to nullable DateTime
 // class AnyDateTimeOrNull extends ToDynamicConverter<DateTime?> {
 //   /// default const constructor
@@ -41,6 +43,31 @@ const invalidLocales = ['pt', 'anything else'];
 
 void main() {
   group('converters', () {
+    test('bool or null', () {
+      const boolOrNull = AnyNullableBoolConverter();
+      for (final t in truthy) {
+        expect(boolOrNull.fromJson(t), isTrue);
+      }
+      for (final f in falsy) {
+        expect(boolOrNull.fromJson(f), f == null ? isNull : isFalse);
+      }
+      for (final f in opinionatedFalsy) {
+        expect(boolOrNull.fromJson(f), isFalse);
+      }
+    });
+
+    test('bool', () {
+      const boolean = AnyBoolConverter();
+      for (final t in truthy) {
+        expect(boolean.fromJson(t), isTrue);
+      }
+      for (final f in falsy) {
+        expect(boolean.fromJson(f), isFalse);
+      }
+      for (final f in opinionatedFalsy) {
+        expect(boolean.fromJson(f), isFalse);
+      }
+    });
     test('string or null', () {
       const stringOrNull = AnyNullableStringConverter();
       expect(stringOrNull.fromJson(null), null);

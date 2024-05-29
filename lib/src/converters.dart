@@ -9,6 +9,26 @@ abstract class ToDynamicConverter<T> extends JsonConverter<T, dynamic> {
   dynamic toJson(T object) => object;
 }
 
+/// Converts [Object]? into [bool] using its "truthy" value
+///
+/// **NOTE** extremely opinionated
+class AnyBoolConverter extends ToDynamicConverter<bool> {
+  /// default const constructor
+  const AnyBoolConverter();
+  @override
+  bool fromJson(Object? json) => json.toBoolean();
+}
+
+/// Converts [Object]? into [bool]? using its "truthy" value
+///
+/// **NOTE** extremely opinionated
+class AnyNullableBoolConverter extends ToDynamicConverter<bool?> {
+  /// default const constructor
+  const AnyNullableBoolConverter();
+  @override
+  bool? fromJson(Object? json) => json?.toBoolean();
+}
+
 /// casts into nullable string
 class AnyNullableStringConverter extends ToDynamicConverter<String?> {
   /// default const constructor
