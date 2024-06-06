@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 0.14.2
+
+- Added `replaceLineBreaks()` method on `String`
+
 ## 0.14.1
 
 - Created 'truthy' / 'falsy' features: extensions on `Object?` and `AnyBoolConverter` + `AnyNullableBoolConverter`
