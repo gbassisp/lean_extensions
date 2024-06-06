@@ -301,6 +301,35 @@ void main() {
       expect(space.isNullOrEmpty, isFalse);
     });
 
+    test('String.replaceLineBreaks', () {
+      expect(''.replaceLineBreaks(), '');
+      expect(' '.replaceLineBreaks(), ' ');
+      expect('abc'.replaceLineBreaks(), 'abc');
+      expect('abc\n'.replaceLineBreaks(), 'abc');
+      expect('abc\r\n'.replaceLineBreaks(), 'abc');
+      expect('a\r\nb\nc'.replaceLineBreaks(), 'abc');
+      expect('a\r\n\n\r\r\n\r\nbc\n'.replaceLineBreaks(), 'a\rbc');
+      expect('a\rb\nc'.replaceLineBreaks(), 'a\rbc');
+    });
+
+    test('String.replaceLineBreaks with something', () {
+      const a = 'something';
+      expect(''.replaceLineBreaks(a), '');
+      expect(' '.replaceLineBreaks(a), ' ');
+      expect('abc'.replaceLineBreaks(a), 'abc');
+      expect('abc\n'.replaceLineBreaks(a), 'abc$a');
+      expect('abc\r\n'.replaceLineBreaks(a), 'abc$a');
+      expect('a\r\nb\nc'.replaceLineBreaks(a), 'a${a}b${a}c');
+      expect('a\r\n\n\r\r\n\r\nbc\n'.replaceLineBreaks(a), 'a$a$a\r$a${a}bc$a');
+      expect('a\rb\nc'.replaceLineBreaks(a), 'a\rb${a}c');
+
+      expect(
+        '\r and \n or \r\n'.contains(r'\'),
+        isFalse,
+        reason: r'expected \r to be special char',
+      );
+    });
+
     test('String.tryToNum', () {
       expect('1'.tryToNum(), 1);
       expect('1.0'.tryToNum(), 1.0);

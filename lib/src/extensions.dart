@@ -32,6 +32,11 @@ T? _tryOrNull<T>(T Function() fn) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
+  /// replaces line endings with support for windows non-sense \r\n
+  /// defaults to replacing with empty string
+  String replaceLineBreaks([String replacement = '']) =>
+      replaceAll(RegExp(r'\r?\n'), replacement);
+
   /// tries to convert string to num
   num? tryToNum() => num.tryParse(trim()) ?? _tryIntFromCardinal();
 
