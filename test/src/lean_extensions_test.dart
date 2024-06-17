@@ -301,6 +301,24 @@ void main() {
       expect(space.isNullOrEmpty, isFalse);
     });
 
+    test('String.normalizeLineBreaks', () {
+      expect(''.normalizeLineBreaks(), '');
+      expect(' '.normalizeLineBreaks(), ' ');
+      expect('abc'.normalizeLineBreaks(), 'abc');
+      expect('abc\n'.normalizeLineBreaks(), 'abc\n');
+      expect('abc\r\n'.normalizeLineBreaks(), 'abc\n');
+      expect('a\rbc'.normalizeLineBreaks(), 'a\nbc');
+      // being realistic, mixed cases should never happen; but still supported
+      expect('a\r\nb\nc'.normalizeLineBreaks(), 'a\nb\nc');
+      expect(
+        'a\r\n\n\r\r\n\r\nbc\n'.normalizeLineBreaks(),
+        'a\n\n\n\n\nbc\n',
+        reason: 'should replace the ones in brackets:\n'
+            r'a(\r\n)(\n)(\r)(\r\n)(\r\n)bc(\n)',
+      );
+      expect('a\rb\nc'.normalizeLineBreaks(), 'a\nb\nc');
+    });
+
     test('String.replaceLineBreaks', () {
       expect(''.replaceLineBreaks(), '');
       expect(' '.replaceLineBreaks(), ' ');

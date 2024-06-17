@@ -32,6 +32,9 @@ T? _tryOrNull<T>(T Function() fn) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
+  /// replaces all windows (CRLF) and old mac (CR) line breaks with normal (LF)
+  String normalizeLineBreaks() => replaceLineBreaks('\n');
+
   /// replaces line endings with support for windows non-sense \r\n
   /// defaults to replacing with empty string
   String replaceLineBreaks([String replacement = '']) =>
