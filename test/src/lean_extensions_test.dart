@@ -308,8 +308,9 @@ void main() {
       expect('abc\n'.replaceLineBreaks(), 'abc');
       expect('abc\r\n'.replaceLineBreaks(), 'abc');
       expect('a\r\nb\nc'.replaceLineBreaks(), 'abc');
-      expect('a\r\n\n\r\r\n\r\nbc\n'.replaceLineBreaks(), 'a\rbc');
-      expect('a\rb\nc'.replaceLineBreaks(), 'a\rbc');
+      expect('a\r\n\n\r\r\n\r\nbc\n'.replaceLineBreaks(), 'abc');
+      expect('a\rb\nc'.replaceLineBreaks(), 'abc');
+      expect('a\rbc'.replaceLineBreaks(), 'abc');
     });
 
     test('String.replaceLineBreaks with something', () {
@@ -320,9 +321,11 @@ void main() {
       expect('abc\n'.replaceLineBreaks(a), 'abc$a');
       expect('abc\r\n'.replaceLineBreaks(a), 'abc$a');
       expect('a\r\nb\nc'.replaceLineBreaks(a), 'a${a}b${a}c');
-      expect('a\r\n\n\r\r\n\r\nbc\n'.replaceLineBreaks(a), 'a$a$a\r$a${a}bc$a');
-      expect('a\rb\nc'.replaceLineBreaks(a), 'a\rb${a}c');
+      expect('a\r\n\n\r\r\n\r\nbc\n'.replaceLineBreaks(a), 'a$a$a$a$a${a}bc$a');
+      expect('a\rb\nc'.replaceLineBreaks(a), 'a${a}b${a}c');
+      expect('a\rbc'.replaceLineBreaks(a), 'a${a}bc');
 
+      // sanity check that \r is actually CR
       expect(
         '\r and \n or \r\n'.contains(r'\'),
         isFalse,

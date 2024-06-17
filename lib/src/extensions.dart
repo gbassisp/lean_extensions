@@ -35,7 +35,7 @@ extension StringExtensions on String {
   /// replaces line endings with support for windows non-sense \r\n
   /// defaults to replacing with empty string
   String replaceLineBreaks([String replacement = '']) =>
-      replaceAll(RegExp(r'\r?\n'), replacement);
+      replaceAll(RegExp(r'((\r?\n)|\r)'), replacement);
 
   /// tries to convert string to num
   num? tryToNum() => num.tryParse(trim()) ?? _tryIntFromCardinal();
