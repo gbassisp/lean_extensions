@@ -2,6 +2,5 @@
 /// dependencies.
 library lean_extensions;
 
-export 'src/config.dart';
 export 'src/converters.dart';
 export 'src/extensions.dart';

@@ -9,14 +9,13 @@ void main() {
   group('config', () {
     test('random char and string', () {
       const iters = 1000000;
-      // set to a low number of chars
-      LeanExtensions.charactersForRandomChar = 'a';
       final chars = <String>{};
       final strings = <String>{};
       final r = Random();
       for (final _ in range(iters)) {
-        chars.add(r.nextChar());
-        strings.add(r.nextString(50));
+        chars.add(r.nextChar(chars: 'a'));
+        // set to a low number of chars (only 1)
+        strings.add(r.nextString(length: 50, chars: 'a'));
       }
 
       expect(chars, {'a'});
@@ -25,14 +24,13 @@ void main() {
       // set to a high number of chars
       const others = '$base64chars&^%#@!()';
       const count = others.length;
-      LeanExtensions.charactersForRandomChar = others;
       chars.clear();
       strings.clear();
       final chars2 = <String>{};
       // r should not require a new object
       for (final _ in range(iters)) {
-        chars.add(r.nextChar());
-        final str = r.nextString(50);
+        chars.add(r.nextChar(chars: others));
+        final str = r.nextString(length: 50, chars: others);
         strings.add(str);
         chars2.addAll(str.split(''));
       }

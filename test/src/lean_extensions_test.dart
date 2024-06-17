@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
+import 'package:lean_extensions/src/numeral_system.dart';
 import 'package:test/test.dart';
 
 import 'truthy_test.dart';
@@ -813,7 +814,7 @@ void main() {
         expect(char, isNotEmpty);
       }
       // extremely unlikely to fail
-      expect(frequency.length, LeanExtensions.charactersForRandomChar.length);
+      expect(frequency.length, base62chars.length);
 
       final average = frequency.values.reduce((a, b) => a + b) / 62;
       for (final value in frequency.values) {
@@ -830,7 +831,7 @@ void main() {
       // probabilistic test; run 10mi times just to be sure
       const limit = 10000000;
       for (var i = 0; i < limit; i++) {
-        final string = random.nextString(100);
+        final string = random.nextString(length: 100);
         expect(string.length, 100);
         final isNew = results.add(string);
         expect(isNew, isTrue);
@@ -857,7 +858,10 @@ void main() {
 
         // same seed must produce same pseudo random values
         for (final _ in range(100)) {
-          expect(random.nextString(100), random2.nextString(100));
+          expect(
+            random.nextString(length: 100),
+            random2.nextString(length: 100),
+          );
         }
       }
     });
