@@ -1,5 +1,11 @@
 <!-- dart package changelog -->
 
+## 1.0.0 
+
+- Stable release
+- Removed static configuration
+- Updated dependencies
+
 ## 0.14.3
 
 - Added `normalizeLineBreaks()` method on `String` to replace all windows (CRLF) and old macos (CR) breaks with normal LF
