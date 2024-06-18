@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:lean_extensions/lean_extensions.dart';
+import 'package:meta/meta.dart';
 
 /// wrapper around Future.delayed to have a simpler syntax
 Future<void> sleep(num seconds) =>
@@ -16,6 +17,7 @@ Future<void> sleep(num seconds) =>
 /// point in trying to use this hack!
 ///
 /// I just wanted to how this works and experiment with the Dart VM
+@experimental
 Future<T> eval<T>(String expression, {T Function(String raw)? decoder}) async {
   final dec = decoder ?? extendedJsonDecode;
   final uri = Uri.dataFromString(
