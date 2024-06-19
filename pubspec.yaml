@@ -1,6 +1,6 @@
 name: lean_extensions
 description: A collection of extension methods without flutter dependency. Also includes some python-like functionality and json converters for easy validation
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/gbassisp/lean_extensions
 homepage: https://github.com/gbassisp/lean_extensions
 
@@ -11,7 +11,7 @@ dependencies:
   any_date: ^1.0.0
   collection: ^1.0.0
   english_numerals: ^1.0.0
-  json_annotation: ^4.0.0
+  json_annotation: ^4.1.0
   meta: ^1.0.0
 
 dev_dependencies:

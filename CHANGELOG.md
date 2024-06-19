@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+## 1.1.0 
+<!-- although this version is a fix, I bumped the minor number because it's the same level as the deps change -->
+
+- Bump dependency with analysis error on lower constraints
+
 ## 1.0.0 
 
 - Stable release
