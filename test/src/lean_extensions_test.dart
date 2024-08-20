@@ -305,6 +305,36 @@ void main() {
       expect(space.isNullOrEmpty, isFalse);
     });
 
+    const str = 'abc';
+    final re1 = RegExp('abc');
+    final re2 = RegExp('abc?');
+    final patterns = [str, re1, re2];
+    for (final p in patterns) {
+      test('String.endsWithPattern - pattern $p', () {
+        expect(''.endsWithPattern(p), isFalse);
+        expect('abcdef'.endsWithPattern(p), isFalse);
+        expect('abc '.endsWithPattern(p), isFalse);
+        expect('abc\n'.endsWithPattern(p), isFalse);
+
+        expect('abc'.endsWithPattern(p), isTrue);
+        expect('abcabc'.endsWithPattern(p), isTrue);
+        expect('defabc'.endsWithPattern(p), isTrue);
+      });
+    }
+    test('String.endsWithPattern - $re2', () {
+      final p = re2;
+      expect('ab'.endsWithPattern(p), isTrue);
+    });
+
+    test('String.endsWithPattern - .', () {
+      const st = '.';
+      final re = RegExp('.');
+      for (final s in randomStrings) {
+        expect(s.endsWithPattern(st), isFalse);
+        expect(s.endsWithPattern(re), isTrue);
+      }
+    });
+
     test('String.normalizeLineBreaks', () {
       expect(''.normalizeLineBreaks(), '');
       expect(' '.normalizeLineBreaks(), ' ');

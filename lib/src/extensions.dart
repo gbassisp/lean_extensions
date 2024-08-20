@@ -32,6 +32,21 @@ T? _tryOrNull<T>(T Function() fn) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
+  /// checks if string ends with pattern
+  bool endsWithPattern(Pattern exp) {
+    if (exp is String) {
+      return endsWith(exp);
+    }
+
+    final matches = exp.allMatches(this);
+    final last = matches._lastOrNull;
+    if (last != null) {
+      return _tryOrNull(() => endsWith(last.group(0)!)) ?? false;
+    }
+
+    return false;
+  }
+
   /// replaces all windows (CRLF) and old mac (CR) line breaks with normal (LF)
   String normalizeLineBreaks() => replaceLineBreaks('\n');
 
@@ -286,6 +301,9 @@ extension IterableOrNullExtensions<T> on Iterable<T>? {
 
 /// adds utility methods to [Iterable]
 extension IterableExtensions<T> on Iterable<T> {
+  T? get _firstOrNull => isEmpty ? null : first;
+  T? get _lastOrNull => isEmpty ? null : last;
+
   /// returns this iterable as a fixed-length list
   List<T> toArray() => toList(growable: false);
 
