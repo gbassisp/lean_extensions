@@ -41,6 +41,10 @@ const uk = ['en-au', 'en_uk', 'en_-nz'];
 // invalid locales
 const invalidLocales = ['pt', 'anything else'];
 
+/// 1 million random 32-length strings
+Iterable<String> get randomStrings =>
+    List.generate(1000000, (index) => Random().nextString());
+
 void main() {
   group('converters', () {
     test('bool or null', () {
