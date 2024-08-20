@@ -351,7 +351,7 @@ extension IterableExtensions<T> on Iterable<T> {
   List<T> wrappedList(T item) => wrapped(item).toList();
 }
 
-String get _defaultChars => base62chars;
+String get _defaultChars => base64chars;
 
 /// adds utility methods on [Random] to generate strings
 extension RandomExtensions on Random {

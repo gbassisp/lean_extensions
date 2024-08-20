@@ -813,9 +813,9 @@ void main() {
         expect(char, isNotEmpty);
       }
       // extremely unlikely to fail
-      expect(frequency.length, base62chars.length);
+      expect(frequency.length, 64);
 
-      final average = frequency.values.reduce((a, b) => a + b) / 62;
+      final average = frequency.values.reduce((a, b) => a + b) / 64;
       for (final value in frequency.values) {
         expect(value, greaterThan(average * 0.9));
         expect(value, lessThan(average * 1.1));
@@ -839,8 +839,8 @@ void main() {
         }
       }
       // extremely unlikely to fail
-      expect(frequency.length, 62);
-      final average = frequency.values.reduce((a, b) => a + b) / 62;
+      expect(frequency.length, 64);
+      final average = frequency.values.reduce((a, b) => a + b) / 64;
       for (final value in frequency.values) {
         expect(value, greaterThan(average * 0.9));
         expect(value, lessThan(average * 1.1));
