@@ -7,6 +7,7 @@ import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
+import 'package:lean_extensions/src/string_values.dart';
 
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {

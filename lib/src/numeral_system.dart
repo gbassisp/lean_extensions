@@ -1,13 +1,7 @@
 import 'package:lean_extensions/src/range.dart';
+import 'package:lean_extensions/src/string_values.dart';
 import 'package:meta/meta.dart';
 
-/// chars used by base64 encoding
-const base62chars = '0123456789'
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    'abcdefghijklmnopqrstuvwxyz';
-
-/// chars used by base64 encoding
-const base64chars = '$base62chars+/';
 const _size = base64chars.length;
 final _mapped = {for (final i in range(_size)) base64chars[i]: i};
 
