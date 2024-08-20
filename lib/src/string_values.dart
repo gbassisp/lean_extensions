@@ -2,10 +2,10 @@
 const emptyString = string.empty;
 
 /// chars used by base64 encoding
-const base62chars = digits + asciiUppercase + asciiLowercase;
+const base62chars = string.base62digits;
 
 /// chars used by base64 encoding
-const base64chars = '$base62chars+/';
+const base64chars = string.base64digits;
 
 // python inspired
 
@@ -57,10 +57,10 @@ class string {
   static const empty = '';
 
   /// chars used by base64 encoding
-  static const base62chars = digits + asciiUppercase + asciiLowercase;
+  static const base62digits = digits + asciiUppercase + asciiLowercase;
 
   /// chars used by base64 encoding
-  static const base64chars = '$base62chars+/';
+  static const base64digits = '$base62digits+/';
 
   // python inspired
 
