@@ -414,6 +414,12 @@ extension BigIntLeanExtensions on BigInt {
   String toRadixExtended(int radix) => toRadix(this, radix);
 }
 
+/// adds extensions on non-nullable [Object]
+extension ObjectLeanExtensions on Object {
+  /// wrapper around `int.parse(this.toString())`
+  int toInt() => toString().toInt();
+}
+
 /// adds "truthy" / "falsy" extensions
 extension NullableObjectLeanExtensions on Object? {
   /// similar to JS "falsy", but treats empty collections as falsy, like
