@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 abstract class EasyComparable<T> implements Comparable<T> {
   /// [>] operator to compare this and [other]. If this is overridden, the [<]
   /// operator uses it to compute its value, but can also be overridden
-  @mustBeOverridden
   bool operator >(Object other);
 
   @override
@@ -19,7 +18,7 @@ abstract class EasyComparable<T> implements Comparable<T> {
 
   /// [<] operator to compare this and [other]. Overriding it is optional,
   /// it has a default implementation that uses [==] and [>] operators
-  bool operator <(Object other) => !(this > other || this == other);
+  bool operator <(Object other) => this != other && !(this > other);
 
   @override
   int compareTo(T other) {
