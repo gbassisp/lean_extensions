@@ -5,5 +5,5 @@
 library dart_essentials;
 
 export 'src/range.dart' hide RangeFactory, safeRange;
-export 'src/string_values.dart';
+export 'src/string_values.dart' show string;
 export 'src/utils.dart';
