@@ -7,6 +7,7 @@ import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
+import 'package:lean_extensions/src/string_values.dart';
 
 /// adds utility methods to [String]?
 extension StringOrNullExtensions on String? {
@@ -31,6 +32,21 @@ T? _tryOrNull<T>(T Function() fn) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
+  /// checks if string ends with pattern
+  bool endsWithPattern(Pattern exp) {
+    if (exp is String) {
+      return endsWith(exp);
+    }
+
+    final matches = exp.allMatches(this);
+    final last = matches._lastOrNull;
+    if (last != null) {
+      return _tryOrNull(() => endsWith(last.group(0)!)) ?? false;
+    }
+
+    return false;
+  }
+
   /// replaces all windows (CRLF) and old mac (CR) line breaks with normal (LF)
   String normalizeLineBreaks() => replaceLineBreaks('\n');
 
@@ -285,6 +301,9 @@ extension IterableOrNullExtensions<T> on Iterable<T>? {
 
 /// adds utility methods to [Iterable]
 extension IterableExtensions<T> on Iterable<T> {
+  // T? get _firstOrNull => isEmpty ? null : first;
+  T? get _lastOrNull => isEmpty ? null : last;
+
   /// returns this iterable as a fixed-length list
   List<T> toArray() => toList(growable: false);
 
@@ -350,7 +369,7 @@ extension IterableExtensions<T> on Iterable<T> {
   List<T> wrappedList(T item) => wrapped(item).toList();
 }
 
-String get _defaultChars => base62chars;
+String get _defaultChars => base64chars;
 
 /// adds utility methods on [Random] to generate strings
 extension RandomExtensions on Random {
@@ -393,6 +412,12 @@ extension NullableMapLeanExtension<K, V> on Map<K, V>? {
 extension BigIntLeanExtensions on BigInt {
   /// converts to a given [radix] with base up to 64
   String toRadixExtended(int radix) => toRadix(this, radix);
+}
+
+/// adds extensions on non-nullable [Object]
+extension ObjectLeanExtensions on Object {
+  /// wrapper around `int.parse(this.toString())`
+  int toInt() => toString().toInt();
 }
 
 /// adds "truthy" / "falsy" extensions

@@ -41,6 +41,10 @@ const uk = ['en-au', 'en_uk', 'en_-nz'];
 // invalid locales
 const invalidLocales = ['pt', 'anything else'];
 
+/// 1 million random 32-length strings
+Iterable<String> get randomStrings =>
+    List.generate(1000000, (index) => Random().nextString());
+
 void main() {
   group('converters', () {
     test('bool or null', () {
@@ -299,6 +303,36 @@ void main() {
       expect(empty.isNullOrEmpty, isTrue);
       expect(nonEmpty.isNullOrEmpty, isFalse);
       expect(space.isNullOrEmpty, isFalse);
+    });
+
+    const str = 'abc';
+    final re1 = RegExp('abc');
+    final re2 = RegExp('abc?');
+    final patterns = [str, re1, re2];
+    for (final p in patterns) {
+      test('String.endsWithPattern - pattern $p', () {
+        expect(''.endsWithPattern(p), isFalse);
+        expect('abcdef'.endsWithPattern(p), isFalse);
+        expect('abc '.endsWithPattern(p), isFalse);
+        expect('abc\n'.endsWithPattern(p), isFalse);
+
+        expect('abc'.endsWithPattern(p), isTrue);
+        expect('abcabc'.endsWithPattern(p), isTrue);
+        expect('defabc'.endsWithPattern(p), isTrue);
+      });
+    }
+    test('String.endsWithPattern - $re2', () {
+      final p = re2;
+      expect('ab'.endsWithPattern(p), isTrue);
+    });
+
+    test('String.endsWithPattern - .', () {
+      const st = '.';
+      final re = RegExp('.');
+      for (final s in randomStrings) {
+        expect(s.endsWithPattern(st), isFalse);
+        expect(s.endsWithPattern(re), isTrue);
+      }
     });
 
     test('String.normalizeLineBreaks', () {
@@ -813,9 +847,9 @@ void main() {
         expect(char, isNotEmpty);
       }
       // extremely unlikely to fail
-      expect(frequency.length, base62chars.length);
+      expect(frequency.length, 64);
 
-      final average = frequency.values.reduce((a, b) => a + b) / 62;
+      final average = frequency.values.reduce((a, b) => a + b) / 64;
       for (final value in frequency.values) {
         expect(value, greaterThan(average * 0.9));
         expect(value, lessThan(average * 1.1));
@@ -839,8 +873,8 @@ void main() {
         }
       }
       // extremely unlikely to fail
-      expect(frequency.length, 62);
-      final average = frequency.values.reduce((a, b) => a + b) / 62;
+      expect(frequency.length, 64);
+      final average = frequency.values.reduce((a, b) => a + b) / 64;
       for (final value in frequency.values) {
         expect(value, greaterThan(average * 0.9));
         expect(value, lessThan(average * 1.1));

@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 1.2.0 
+
+- Expose `string` constants as static class and as top-level values, e.g., `base62chars` and `base64chars`
+
 ## 1.1.0 
 <!-- although this version is a fix, I bumped the minor number because it's the same level as the deps change -->
 
