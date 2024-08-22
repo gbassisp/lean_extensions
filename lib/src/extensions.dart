@@ -301,7 +301,7 @@ extension IterableOrNullExtensions<T> on Iterable<T>? {
 
 /// adds utility methods to [Iterable]
 extension IterableExtensions<T> on Iterable<T> {
-  T? get _firstOrNull => isEmpty ? null : first;
+  // T? get _firstOrNull => isEmpty ? null : first;
   T? get _lastOrNull => isEmpty ? null : last;
 
   /// returns this iterable as a fixed-length list
