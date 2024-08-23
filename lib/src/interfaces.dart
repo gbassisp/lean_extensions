@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 /// An easy way to implement [Comparable] in a way that [compareTo] aggrees
 /// with [>] and [==] operators
 @immutable
-@internal
 abstract class EasyComparable<T> implements Comparable<T> {
   /// [>] operator to compare this and [other]. If this is overridden, the [<]
   /// operator uses it to compute its value, but can also be overridden
