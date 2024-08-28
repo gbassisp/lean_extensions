@@ -12,7 +12,7 @@ dependencies:
   collection: ^1.0.0
   english_numerals: ^1.0.0
   json_annotation: ^4.1.0
-  meta: ^1.0.0
+  meta: ^1.9.0
 
 dev_dependencies:
   test: 
