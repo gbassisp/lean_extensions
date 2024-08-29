@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 1.3.0 
+
+- Created `EasyComparable`, `SpecificComparable` and `StrictComparable` to facilitate aligning `>` and `<` operators with `Comparable` interface
+
 ## 1.2.0 
 
 - Expose `string` constants as static class and as top-level values, e.g., `base62chars` and `base64chars`

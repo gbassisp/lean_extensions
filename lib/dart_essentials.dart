@@ -4,6 +4,7 @@
 /// Mostly inspired by python
 library dart_essentials;
 
+export 'src/interfaces.dart';
 export 'src/range.dart' hide RangeFactory, safeRange;
 export 'src/string_values.dart' show string;
 export 'src/utils.dart';
