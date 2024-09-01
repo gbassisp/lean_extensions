@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 1.3.1
+
+- Lowered constraints on `any_date` dependency
+
 ## 1.3.0 
 
 - Created `EasyComparable`, `SpecificComparable` and `StrictComparable` to facilitate aligning `>` and `<` operators with `Comparable` interface
