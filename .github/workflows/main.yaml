@@ -24,7 +24,7 @@ jobs:
         channel: 'stable'
     - run: ls -la
     - run: cp analysis_options_2_12.yaml analysis_options.yaml
-    - run: make version get dry-run test && make downgrade test
+    - run: make version downgrade test && make version get dry-run test
   # runs the latest dart version supported by the package
   test-latest:
     runs-on: ubuntu-latest
