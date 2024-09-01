@@ -15,5 +15,6 @@ dependencies:
   meta: ^1.9.0
 
 dev_dependencies:
-  test: ^1.0.0
+  http_multi_server: ">=2.2.0"
+  test:
   very_good_analysis:
