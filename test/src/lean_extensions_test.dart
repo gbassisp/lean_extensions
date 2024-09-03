@@ -898,5 +898,66 @@ void main() {
         }
       }
     });
+
+    test('Random.nextBigInt is normally distributed', () {
+      final random = Random();
+      final results = <BigInt>{};
+      final frequency = <BigInt, int>{};
+      const intLimit = 1000;
+      final limit = BigInt.from(intLimit);
+      // probabilistic test; run 10mi times just to be sure
+      // extremely unlikely to fail
+
+      const iterations = 10000000;
+      for (var i = 0; i < iterations; i++) {
+        final value = random.nextBigInt(limit);
+        expect(value, lessThan(limit));
+        expect(value, greaterThanOrEqualTo(BigInt.zero));
+        results.add(value);
+        frequency[value] = (frequency[value] ?? 0) + 1;
+      }
+
+      // expect to have generated all numbers from 0 to 1000
+      expect(frequency.length, intLimit);
+      const average = iterations ~/ intLimit;
+      for (final value in frequency.values) {
+        // each number from 0 to 1000 is normally distributed
+        expect(value, greaterThan(average * 0.95));
+        expect(value, lessThan(average * 1.05));
+      }
+    });
+
+    test('Random.nextBigInt converges', () {
+      final random = Random();
+      final results = <BigInt>{};
+      final limit = BigInt.parse('5' * 1000);
+
+      // run 10mi times and still should always be a new number
+      for (final _ in range(10000000)) {
+        final value = random.nextBigInt(limit);
+        expect(value, lessThan(limit));
+        expect(value, greaterThanOrEqualTo(BigInt.zero));
+        final isNew = results.add(value);
+        expect(isNew, isTrue);
+      }
+    });
+
+    test('Random.nextBigInt can be seeded', () {
+      final r = Random();
+      final max = BigInt.parse('123456789123456789123456789123456789123456789');
+      for (final _ in range(100)) {
+        final k = r.nextInt(1 << 32);
+        final random = Random(k);
+        final random2 = Random(k);
+
+        // same seed must produce same pseudo random values
+        for (final _ in range(100)) {
+          expect(
+            random.nextBigInt(max),
+            random2.nextBigInt(max),
+          );
+        }
+      }
+    });
   });
 }

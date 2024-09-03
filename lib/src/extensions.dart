@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
+import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
@@ -388,6 +389,29 @@ extension RandomExtensions on Random {
     final result =
         List.generate(length, (index) => nextChar(chars: chars)).join();
     return result;
+  }
+
+  /// generates a random [BigInt] between 0 (inclusive) and [max] exclusive
+  BigInt nextBigInt(BigInt max) {
+    if (max <= BigInt.zero) {
+      throw RangeError(
+        '$max must be greater than 0 to generate number between 0 and $max',
+      );
+    }
+
+    final size = max.abs().toString().length;
+    for (final _ in range(1000000)) {
+      final a = nextString(length: size, chars: string.digits);
+      final b = BigInt.parse(a);
+      if (b < max) {
+        return b;
+      }
+    }
+
+    throw RangeError(
+      'Unable to generate a random number between 0 and $max.\n'
+      'This is definitely a bug',
+    );
   }
 }
 
