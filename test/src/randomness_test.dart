@@ -9,11 +9,11 @@ void main() {
   testRandomValidity('nextChar', () => NextCharCase());
   testRandomValidity(
     'nextString - short',
-    () => NextStringCase(2, string.base64digits),
+    () => NextStringCase(1, string.base64digits),
   );
   testRandomValidity(
     'nextString - long',
-    () => NextStringCase(5, string.digits),
+    () => NextStringCase(3, string.digits),
   );
 }
 
@@ -38,4 +38,15 @@ class NextStringCase extends RandomValidityCase<String> {
   @override
   String generateNextValue(Random random) =>
       random.nextString(length: length, chars: chars);
+}
+
+class NotRandomCase extends RandomValidityCase<int> {
+  int i = 0;
+  @override
+  int get codomainSize => 10;
+
+  @override
+  int generateNextValue(Random random) {
+    return ++i;
+  }
 }

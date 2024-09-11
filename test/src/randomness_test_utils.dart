@@ -16,6 +16,10 @@ void testRandomValidity<T extends Object>(
     n,
     () {
       test(
+        '$n - can generate without throwing',
+        testCase._generateMain,
+      );
+      test(
         '$n - seeded randoms produce the same value',
         testCase._generateSeeded,
       );
@@ -47,7 +51,7 @@ abstract class RandomValidityCase<T extends Object> {
   final _main = Random();
   late final _seededs = List.generate(3, (_) => Random(_seed));
   final _smallSample = 100000;
-  late final _sampleSize = max(_smallSample, codomainSize * 10000);
+  late final _sampleSize = max(_smallSample, codomainSize * 100000);
   List<T>? _sample;
   Map<T, int>? _frequency;
 
@@ -92,10 +96,24 @@ abstract class RandomValidityCase<T extends Object> {
     final sample = _generateMain();
     expect(sample, isNotEmpty);
     expect(sample.length, equals(_sampleSize));
-    final clone = [...sample]..sort();
     final reason = 'Generated values should not be sorted: $sample';
-    expect(clone, isNot(containsAllInOrder(sample)), reason: reason);
-    expect(clone.reversed, isNot(containsAllInOrder(sample)), reason: reason);
+    var asc = true;
+    var desc = true;
+    var previous = sample.first;
+    for (final current in sample.skip(1)) {
+      if (desc && previous.isLessThan(current)) {
+        desc = false;
+      }
+      if (asc && previous.isGreaterThan(current)) {
+        asc = false;
+      }
+
+      if (!asc && !desc) {
+        return;
+      }
+      previous = current;
+    }
+    fail(reason);
   }
 
   void _checkCodomainAndImage() {
@@ -128,4 +146,27 @@ void _expectAllEqual<T>(Iterable<T> collection) {
   final s = collection.toSet();
   final reason = 'Expected $collection to have only 1 unique value, but got $s';
   expect(s.length, equals(1), reason: reason);
+}
+
+extension _ForcefulCompare on Object? {
+  bool isGreaterThan(Object? other) =>
+      isGreaterOrEqualThan(other) && !isEqualTo(other);
+
+  bool isEqualTo(Object? other) =>
+      isLessOrEqualThan(other) && isGreaterOrEqualThan(other);
+
+  bool isGreaterOrEqualThan(Object? other) {
+    final unsorted = [other, this];
+    final sorted = [...unsorted]..sort();
+    return unsorted.first == sorted.first && unsorted.last == sorted.last;
+  }
+
+  bool isLessOrEqualThan(Object? other) {
+    final unsorted = [this, other];
+    final sorted = [...unsorted]..sort();
+    return unsorted.first == sorted.first && unsorted.last == sorted.last;
+  }
+
+  bool isLessThan(Object? other) =>
+      isLessOrEqualThan(other) && !isEqualTo(other);
 }
