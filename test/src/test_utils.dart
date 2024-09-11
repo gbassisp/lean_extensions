@@ -1,3 +1,4 @@
+import 'package:change_case/change_case.dart';
 import 'package:collection/collection.dart';
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:test/test.dart';
@@ -33,3 +34,5 @@ class _Truthy extends Matcher {
   bool matches(Object? item, Map<Object?, Object?> matchState) =>
       item.isTruthy && item.toBoolean() && !item.isFalsy;
 }
+
+String fileRename(String original) => original.toSnakeCase();
