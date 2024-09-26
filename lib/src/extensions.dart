@@ -393,6 +393,9 @@ extension RandomExtensions on Random {
 
 /// extensions on [Map] with a lot of recursion; needs more testing
 extension MapLeanExtension<K, V> on Map<K, V> {
+  /// returns a deep copy of this map
+  Map<K, V> clone() => deepCopyMap(this);
+
   /// returns the difference between this map and another
   Map<K, V> difference(Map<K, V> other) => mapDifference(this, other);
 

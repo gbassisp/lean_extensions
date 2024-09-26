@@ -42,28 +42,34 @@ void main() {
   );
 
   group('internal Map functions to be used on extensions', () {
-    test('deepCopyMap', () {
-      final map2 = deepCopyMap(map1);
+    final cloners = <Map<K, V> Function<K, V>(Map<K, V>)>[
+      deepCopyMap,
+      <K, V>(map) => map.clone(),
+    ];
+    for (final cloner in cloners) {
+      test('deepCopyMap - $cloner', () {
+        final map2 = cloner(map1);
 
-      final reason = 'map1 $map1 is different than map2 $map2';
-      expect(deepEquality.equals(map1, map2), isTrue, reason: reason);
+        final reason = 'map1 $map1 is different than map2 $map2';
+        expect(deepEquality.equals(map1, map2), isTrue, reason: reason);
 
-      for (final maps in [
-        [map1, map2],
-        [map1['g'], map2['g']],
-      ]) {
-        final m1 = maps.first.asJsonMap();
-        final m2 = maps.last.asJsonMap();
-        for (final k in m1.keys) {
-          expect(m2[k], equals(m1[k]));
-          if (m1[k].isPrimitive) {
-            expect(m2[k], same(m1[k]));
-          } else {
-            expect(m2[k], isNot(same(m1[k])));
+        for (final maps in [
+          [map1, map2],
+          [map1['g'], map2['g']],
+        ]) {
+          final m1 = maps.first.asJsonMap();
+          final m2 = maps.last.asJsonMap();
+          for (final k in m1.keys) {
+            expect(m2[k], equals(m1[k]));
+            if (m1[k].isPrimitive) {
+              expect(m2[k], same(m1[k]));
+            } else {
+              expect(m2[k], isNot(same(m1[k])));
+            }
           }
         }
-      }
-    });
+      });
+    }
 
     const list = [
       null,
