@@ -3,6 +3,75 @@
 import 'package:meta/meta.dart';
 
 @internal
+Map<K, V> deepCopyMap<K, V>(Map<K, V> map) {
+  final res = <K, V>{};
+  for (final e in map.entries) {
+    final k = e.key;
+    final v = e.value;
+    if (v is Map) {
+      final c = deepCopyMap(v);
+      assert(
+        c is V,
+        'attempted to deep copy a Map of type '
+        '${c.runtimeType}, but expected $V from the context',
+      );
+      res[k] = c as V;
+    } else if (v is Iterable) {
+      final c = deepCopyIterable(v);
+      assert(
+        c is V,
+        'attempted to deep copy an Iterable of type '
+        '${c.runtimeType}, but expected $V from the context',
+      );
+      res[k] = c as V;
+    } else {
+      res[k] = v;
+    }
+  }
+
+  return res;
+}
+
+@internal
+Iterable<V> deepCopyIterable<V>(Iterable<V> collection) {
+  final res = <V>[];
+  for (final e in collection) {
+    if (e is Map) {
+      final c = deepCopyMap(e);
+      assert(
+        c is V,
+        'attempted to deep copy a Map of type '
+        '${c.runtimeType}, but expected $V from the context',
+      );
+      res.add(c as V);
+    } else if (e is Iterable) {
+      final c = deepCopyIterable(e);
+      assert(
+        c is V,
+        'attempted to deep copy an Iterable of type '
+        '${c.runtimeType}, but expected $V from the context',
+      );
+      res.add(c as V);
+    } else {
+      res.add(e);
+    }
+  }
+
+  if (collection is List) {
+    return res.toList();
+  } else if (collection is Set) {
+    return res.toSet();
+  }
+
+  return res;
+}
+
+// @internal
+// Iterable<MapEntry<K, V>> visitMap<K, V>(Map<K, V> map) sync* {
+//   for (final e in map.entries) {}
+// }
+
+@internal
 Map<K, V> removeNulls<K, V>(Map<K, V> map) {
   final res = <K, V>{};
   for (final e in map.entries) {

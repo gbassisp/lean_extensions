@@ -19,6 +19,7 @@ void expectSameCollection(Object? value, Object? expected) {
 }
 
 final throwsSomething = throwsA(anything);
+final doesNotThrow = isNot(throwsA(anything));
 
 final isTruthy = _Truthy();
 final isFalsy = isNot(isTruthy);
