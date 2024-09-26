@@ -1,6 +1,7 @@
 // ignore_for_file: inference_failure_on_collection_literal
 
 import 'package:collection/collection.dart';
+import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
 import 'package:lean_extensions/src/internal_extensions.dart';
 import 'package:lean_extensions/src/map_functions.dart';
@@ -60,6 +61,49 @@ void main() {
           } else {
             expect(m2[k], isNot(same(m1[k])));
           }
+        }
+      }
+    });
+
+    const list = [
+      null,
+      true,
+      1,
+      'a',
+      ['b'],
+    ];
+    test('deepCopyIterable - list', () {
+      final list1 = list.toList();
+      final list2 = deepCopyIterable(list1);
+      expect(list2 is List, isTrue);
+
+      final reason = 'list1 $list1 is different than list2 $list2';
+      expect(deepEquality.equals(list1, list2), isTrue, reason: reason);
+
+      for (final i in range(list1.length)) {
+        expect(list2.elementAt(i), equals(list1.elementAt(i)));
+        if (list1.elementAt(i).isPrimitive) {
+          expect(list2.elementAt(i), same(list1.elementAt(i)));
+        } else {
+          expect(list2.elementAt(i), isNot(same(list1.elementAt(i))));
+        }
+      }
+    });
+
+    test('deepCopyIterable - set', () {
+      final list1 = list.toSet();
+      final list2 = deepCopyIterable(list1);
+      expect(list2 is Set, isTrue);
+
+      final reason = 'set1 $list1 is different than set2 $list2';
+      expect(deepEquality.equals(list1, list2), isTrue, reason: reason);
+
+      for (final i in range(list1.length)) {
+        expect(list2.elementAt(i), equals(list1.elementAt(i)));
+        if (list1.elementAt(i).isPrimitive) {
+          expect(list2.elementAt(i), same(list1.elementAt(i)));
+        } else {
+          expect(list2.elementAt(i), isNot(same(list1.elementAt(i))));
         }
       }
     });
