@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_collection_literal
-
 import 'package:collection/collection.dart';
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
@@ -15,14 +13,14 @@ void main() {
     'b': 'string',
     'c': 1.5,
     'd': null,
-    'e': [],
+    'e': <Object?>[],
     'f': ['string'],
     'g': {
       'a1': 1,
       'b1': 'string',
       'c1': 1.5,
       'd1': null,
-      'e1': [],
+      'e1': <Object?>[],
       'f1': ['string'],
     },
   };
@@ -120,14 +118,14 @@ void main() {
         'b': 'string',
         'c': 1.5,
         'd': null,
-        'e': [],
+        'e': <Object?>[],
         'f': ['string'],
         'g': {
           'a1': 1,
           'b1': 'string',
           'c1': 1.5,
           'd1': null,
-          'e1': [],
+          'e1': <Object?>[],
           'f1': ['string'],
         },
       };
@@ -135,13 +133,13 @@ void main() {
         'a': 1,
         'b': 'string',
         'c': 1.5,
-        'e': [],
+        'e': <Object?>[],
         'f': ['string'],
         'g': {
           'a1': 1,
           'b1': 'string',
           'c1': 1.5,
-          'e1': [],
+          'e1': <Object?>[],
           'f1': ['string'],
         },
       };
@@ -155,12 +153,12 @@ void main() {
         'b': 'string',
         'c': 1.5,
         'd': null,
-        'e': [],
+        'e': <Object?>[],
         'f': ['string'],
         'g': {
           'a1': 1,
           'b1': 'string',
-          'e1': [],
+          'e1': <Object?>[],
           'f1': ['string'],
         },
       };
@@ -168,12 +166,12 @@ void main() {
         'a': 1,
         'b': 'string',
         'c': 1.5,
-        'e': [],
+        'e': <Object?>[],
         'f': ['string'],
         'g': {
           'a1': 1,
           'c1': 1.5,
-          'e1': [],
+          'e1': <Object?>[],
           'f1': ['string'],
         },
       };
