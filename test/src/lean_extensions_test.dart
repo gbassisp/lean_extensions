@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
 import 'dart:math';
 
+import 'package:csv/csv.dart';
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
+import 'test_utils.dart';
 import 'truthy_test.dart';
 
 // /// converts to nullable DateTime
@@ -836,128 +840,210 @@ void main() {
       expect(<int>[].wrappedList(0), <int>[]);
     });
 
-    // random string
-    test('Random.nextChar', () {
-      final random = Random();
-      final frequency = <String, int>{};
-      // probabilistic test; run 100mi times just to be sure
-      for (var i = 0; i < 100000000; i++) {
-        final char = random.nextChar();
-        frequency[char] = (frequency[char] ?? 0) + 1;
-        expect(char, isNotEmpty);
-      }
-      // extremely unlikely to fail
-      expect(frequency.length, 64);
+    group(
+      'Random.nextChar and nextString',
+      () {
+        // random string
+        testFrequency<String>('Random.nextChar', (frequency) {
+          final random = Random();
+          // probabilistic test; run 100mi times just to be sure
+          for (var i = 0; i < 100000000; i++) {
+            final char = random.nextChar();
+            frequency[char] = (frequency[char] ?? 0) + 1;
+            expect(char, isNotEmpty);
+          }
 
-      final average = frequency.values.reduce((a, b) => a + b) / 64;
-      for (final value in frequency.values) {
-        expect(value, greaterThan(average * 0.9));
-        expect(value, lessThan(average * 1.1));
-      }
-    });
+          expect(frequency.length, 64);
+        });
 
-    // random string
-    test('Random.nextString', () {
-      final random = Random();
-      final results = <String>{};
-      final frequency = <String, int>{};
-      // probabilistic test; run 10mi times just to be sure
-      const limit = 10000000;
-      for (var i = 0; i < limit; i++) {
-        final string = random.nextString(length: 100);
-        expect(string.length, 100);
-        final isNew = results.add(string);
-        expect(isNew, isTrue);
-        for (final char in string.split('')) {
-          frequency[char] = (frequency[char] ?? 0) + 1;
+        // random string
+        testFrequency<String>('Random.nextString long strings', (frequency) {
+          final random = Random();
+          final results = <String>{};
+          // probabilistic test; run 10mi times just to be sure
+          const limit = 10000000;
+          for (var i = 0; i < limit; i++) {
+            final string = random.nextString(length: 100);
+            expect(string.length, 100);
+            final isNew = results.add(string);
+            expect(isNew, isTrue);
+            for (final char in string.split('')) {
+              frequency[char] = (frequency[char] ?? 0) + 1;
+            }
+          }
+
+          expect(frequency.length, 64);
+        });
+
+        testFrequency<String>('Random.nextString short strings', (frequency) {
+          final random = Random();
+          const limit = 200000000;
+          const length = 3;
+          const chars = string.asciiLowercase;
+          for (var i = 0; i < limit; i++) {
+            final res = random.nextString(length: length, chars: chars);
+            expect(res.length, length);
+            frequency[res] = (frequency[res] ?? 0) + 1;
+          }
+
+          expect(frequency.length, pow(chars.length, length));
+        });
+
+        // random string - test seed
+        test('Random.nextString can be seeded', () {
+          final r = Random();
+          for (final _ in range(100)) {
+            final k = r.nextInt(1 << 32);
+            final random = Random(k);
+            final random2 = Random(k);
+
+            // same seed must produce same pseudo random values
+            for (final _ in range(100)) {
+              expect(
+                random.nextString(length: 100),
+                random2.nextString(length: 100),
+              );
+            }
+          }
+        });
+      },
+    );
+    group('Random.nextBigInt', () {
+      testFrequency('Random.nextBigInt is normally distributed', (frequency) {
+        final random = Random();
+        final results = <BigInt>{};
+        const intLimit = 999;
+        final limit = BigInt.from(intLimit);
+        // probabilistic test; run 10mi times just to be sure
+        // extremely unlikely to fail
+
+        const iterations = 10000000;
+        for (var i = 0; i < iterations; i++) {
+          final value = random.nextBigInt(limit);
+          expect(value, lessThan(limit));
+          expect(value, greaterThanOrEqualTo(BigInt.zero));
+          results.add(value);
+          frequency[value] = (frequency[value] ?? 0) + 1;
         }
-      }
-      // extremely unlikely to fail
-      expect(frequency.length, 64);
-      final average = frequency.values.reduce((a, b) => a + b) / 64;
-      for (final value in frequency.values) {
-        expect(value, greaterThan(average * 0.9));
-        expect(value, lessThan(average * 1.1));
-      }
-    });
 
-    // random string - test seed
-    test('Random.nextString can be seeded', () {
-      final r = Random();
-      for (final _ in range(100)) {
-        final k = r.nextInt(1 << 32);
-        final random = Random(k);
-        final random2 = Random(k);
+        // expect to have generated all numbers from 0 to 1000
+        expect(frequency.length, intLimit);
+        const average = iterations ~/ intLimit;
+        for (final entry in frequency.entries) {
+          final k = entry.key;
+          final value = entry.value;
+          // each number from 0 to 1000 is normally distributed
+          final reason = 'value $k had a frequency of $value';
+          expect(value, greaterThan(average * 0.95), reason: reason);
+          expect(value, lessThan(average * 1.05), reason: reason);
+        }
+      });
 
-        // same seed must produce same pseudo random values
+      test('Random.nextBigInt converges', () {
+        final random = Random();
+        final results = <BigInt>{};
+        final limit = BigInt.parse('5' * 1000);
+
+        // run 10mi times and still should always be a new number
+        for (final _ in range(10000000)) {
+          final value = random.nextBigInt(limit);
+          expect(value, lessThan(limit));
+          expect(value, greaterThanOrEqualTo(BigInt.zero));
+          final isNew = results.add(value);
+          expect(isNew, isTrue);
+        }
+      });
+
+      test('Random.nextBigInt short conversion case', () {
+        final random = Random();
+        final results = <BigInt>{};
+        final limit = BigInt.parse('5' * 1000);
+
+        // run 10mi times and still should always be a new number
+        for (final _ in range(10000)) {
+          final value = random.nextBigInt(limit);
+          expect(value, lessThan(limit));
+          expect(value, greaterThanOrEqualTo(BigInt.zero));
+          final isNew = results.add(value);
+          expect(isNew, isTrue);
+        }
+      });
+
+      test('Random.nextBigInt can be seeded', () {
+        final r = Random();
+        final max =
+            BigInt.parse('123456789123456789123456789123456789123456789');
         for (final _ in range(100)) {
-          expect(
-            random.nextString(length: 100),
-            random2.nextString(length: 100),
-          );
+          final k = r.nextInt(1 << 32);
+          final random = Random(k);
+          final random2 = Random(k);
+
+          // same seed must produce same pseudo random values
+          for (final _ in range(100)) {
+            expect(
+              random.nextBigInt(max),
+              random2.nextBigInt(max),
+            );
+          }
         }
-      }
-    });
-
-    test('Random.nextBigInt is normally distributed', () {
-      final random = Random();
-      final results = <BigInt>{};
-      final frequency = <BigInt, int>{};
-      const intLimit = 1000;
-      final limit = BigInt.from(intLimit);
-      // probabilistic test; run 10mi times just to be sure
-      // extremely unlikely to fail
-
-      const iterations = 10000000;
-      for (var i = 0; i < iterations; i++) {
-        final value = random.nextBigInt(limit);
-        expect(value, lessThan(limit));
-        expect(value, greaterThanOrEqualTo(BigInt.zero));
-        results.add(value);
-        frequency[value] = (frequency[value] ?? 0) + 1;
-      }
-
-      // expect to have generated all numbers from 0 to 1000
-      expect(frequency.length, intLimit);
-      const average = iterations ~/ intLimit;
-      for (final value in frequency.values) {
-        // each number from 0 to 1000 is normally distributed
-        expect(value, greaterThan(average * 0.95));
-        expect(value, lessThan(average * 1.05));
-      }
-    });
-
-    test('Random.nextBigInt converges', () {
-      final random = Random();
-      final results = <BigInt>{};
-      final limit = BigInt.parse('5' * 1000);
-
-      // run 10mi times and still should always be a new number
-      for (final _ in range(10000000)) {
-        final value = random.nextBigInt(limit);
-        expect(value, lessThan(limit));
-        expect(value, greaterThanOrEqualTo(BigInt.zero));
-        final isNew = results.add(value);
-        expect(isNew, isTrue);
-      }
-    });
-
-    test('Random.nextBigInt can be seeded', () {
-      final r = Random();
-      final max = BigInt.parse('123456789123456789123456789123456789123456789');
-      for (final _ in range(100)) {
-        final k = r.nextInt(1 << 32);
-        final random = Random(k);
-        final random2 = Random(k);
-
-        // same seed must produce same pseudo random values
-        for (final _ in range(100)) {
-          expect(
-            random.nextBigInt(max),
-            random2.nextBigInt(max),
-          );
-        }
-      }
+      });
     });
   });
+}
+
+@isTest
+void testFrequency<T>(
+  String name,
+  void Function(Map<T, int> occurrences) testCase,
+) {
+  final frequency = <T, int>{};
+  test(
+    name,
+    () async {
+      try {
+        testCase(frequency);
+        final size = frequency.length;
+        final iterations = frequency.values.sum;
+        final average = iterations ~/ size;
+        final expectedSample = size * 10000.0;
+        expect(
+          iterations,
+          greaterThan(expectedSample),
+          reason: 'Sample size is too small. '
+              'You generated $size cases in $iterations iterations. '
+              'You need at least ${expectedSample / iterations}x more iters',
+        );
+        for (final entry in frequency.entries) {
+          final k = entry.key;
+          final value = entry.value;
+          final reason = 'value $k had a frequency of $value';
+          expect(value, greaterThan(average * 0.95), reason: reason);
+          expect(value, lessThan(average * 1.05), reason: reason);
+        }
+      } finally {
+        final fileName = fileRename(name);
+        final data = frequency.entries
+            .map((entry) => [entry.key, entry.value])
+            .toList()
+          ..insert(0, ['Value', 'Occurrences']);
+        final csv = const ListToCsvConverter().convert(data);
+        final directory = '${Directory.current.path}/test/results';
+        await Directory(directory).create(recursive: true);
+        final pathOfTheFileToWrite = '$directory/$fileName.csv';
+        final file = File(pathOfTheFileToWrite);
+        await file.writeAsString(csv);
+      }
+    },
+    timeout: Timeout(Duration(days: 2)),
+  );
+}
+
+extension _Sum on Iterable<num> {
+  num get sum {
+    num result = 0;
+    for (final value in this) {
+      result += value;
+    }
+    return result;
+  }
 }

@@ -1,6 +1,6 @@
 # coverage
 coverage/
-
+test/results/
 
 # See https://www.dartlang.org/guides/libraries/private-files
 
