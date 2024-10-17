@@ -39,7 +39,7 @@ test:
 .PHONY: test-all
 test-all:
 	@echo "Running all tests (exhaustive flag ON)..."
-	$(DART_CMD) --define=exhaustive=true test --test-randomize-ordering-seed=random
+	$(DART_CMD) --define=exhaustive=true test --test-randomize-ordering-seed=random --use-data-isolate-strategy
 
 .PHONY: coverage
 coverage:
