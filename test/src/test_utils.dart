@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:change_case/change_case.dart';
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:lean_extensions/lean_extensions.dart';
@@ -48,7 +47,7 @@ class _Truthy extends Matcher {
       item.isTruthy && item.toBoolean() && !item.isFalsy;
 }
 
-String fileRename(String original) => original.toSnakeCase();
+String fileRename(String original) => original.replaceAll(RegExp(r'\s+'), '_');
 
 @isTest
 void testFrequency<T>(
