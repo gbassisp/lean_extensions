@@ -35,6 +35,9 @@ T? _tryOrNull<T>(T Function() fn) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
+  /// split this string into an [Iterable]<[String]> with each character
+  Iterable<String> get chars => split('');
+
   /// checks if string ends with pattern
   bool endsWithPattern(Pattern exp) {
     if (exp is String) {
