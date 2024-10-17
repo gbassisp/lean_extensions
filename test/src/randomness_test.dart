@@ -11,12 +11,19 @@ void main() {
     () => NextIntBetweenCase(0, 10),
   );
   testRandomValidity(
-    'nextIntBetween - -10~10',
-    () => NextIntBetweenCase(-10, 10),
+    'nextIntBetween - -100~100',
+    () => NextIntBetweenCase(-100, 100),
   );
   testRandomValidity(
-    'nextIntBetween - -1000~1000',
-    () => NextIntBetweenCase(-1000, 1000),
+    'nextIntBetween - -2000~-1500',
+    () => NextIntBetweenCase(-2000, -1500),
+  );
+
+  final a = BigInt.parse('1' * 100);
+  final b = a + BigInt.from(100);
+  testRandomValidity(
+    'nextBigIntBetween - $a~$b',
+    () => NextBigIntBetweenCase(a, b),
   );
   testRandomValidity(
     'nextBigInt - short',
@@ -47,17 +54,31 @@ class NextIntBetweenCase extends RandomValidityCase<int> {
 
   @override
   int generateNextValue(Random random) => random.nextIntBetween(min, max);
+
+  @override
+  bool valueIsValid(int value) => value >= min && value < max;
 }
 
-class NextBigIntCase extends RandomValidityCase<BigInt> {
-  NextBigIntCase(this.max);
+class NextBigIntCase extends NextBigIntBetweenCase {
+  NextBigIntCase(BigInt max) : super(BigInt.zero, max);
 
+  @override
+  BigInt generateNextValue(Random random) => random.nextBigInt(this.max);
+}
+
+class NextBigIntBetweenCase extends RandomValidityCase<BigInt> {
+  NextBigIntBetweenCase(this.min, this.max);
+
+  final BigInt min;
   final BigInt max;
   @override
-  int get codomainSize => max.toInt();
+  int get codomainSize => (max - min).toInt();
 
   @override
-  BigInt generateNextValue(Random random) => random.nextBigInt(max);
+  BigInt generateNextValue(Random random) => random.nextBigIntBetween(min, max);
+
+  @override
+  bool valueIsValid(BigInt value) => value >= min && value < max;
 }
 
 class NextCharCase extends RandomValidityCase<String> {
@@ -67,6 +88,9 @@ class NextCharCase extends RandomValidityCase<String> {
   @override
   String generateNextValue(Random random) =>
       random.nextChar(chars: string.printable);
+
+  @override
+  bool valueIsValid(String value) => string.printable.contains(value);
 }
 
 class NextStringCase extends RandomValidityCase<String> {
@@ -81,15 +105,15 @@ class NextStringCase extends RandomValidityCase<String> {
   @override
   String generateNextValue(Random random) =>
       random.nextString(length: length, chars: chars);
-}
-
-class NotRandomCase extends RandomValidityCase<int> {
-  int i = 0;
-  @override
-  int get codomainSize => 10;
 
   @override
-  int generateNextValue(Random random) {
-    return ++i;
+  bool valueIsValid(String value) {
+    final chars = value.chars.toSet();
+    for (final c in chars) {
+      if (!this.chars.contains(c)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

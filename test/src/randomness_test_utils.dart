@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:lean_extensions/dart_essentials.dart';
+import 'package:lean_extensions/src/extensions.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
@@ -18,25 +19,38 @@ void testRandomValidity<T extends Object>(
       test(
         '$n - can generate without throwing',
         testCase._generateMain,
+        skip: skip,
       );
       test(
         '$n - seeded randoms produce the same value',
         testCase._generateSeeded,
+        skip: skip,
       );
       test(
         '$n - random values are not in order',
         testCase._checkOrder,
-        skip: !testCase.isComparable,
+        skip: skip.toBoolean() || !testCase.isComparable,
       );
       test(
         '$n - sample is big enough to generate all possible values in codomain',
         testCase._checkCodomainAndImage,
+        skip: skip,
       );
       test(
         '$n - random values are normally distributed',
         testCase._checkDistribution,
+        skip: skip,
       );
-      test('$n - random values are not predictable', () {});
+      test(
+        '$n - generated values are valid',
+        testCase._checkValidity,
+        skip: skip,
+      );
+      test(
+        '$n - random values are not predictable',
+        () {},
+        skip: skip,
+      );
     },
     skip: skip,
   );
@@ -46,6 +60,7 @@ abstract class RandomValidityCase<T extends Object> {
   T generateNextValue(Random random);
   int get codomainSize;
   bool get isComparable => true;
+  bool valueIsValid(T value);
 
   final _seed = Random().nextInt(1 << 32);
   final _main = Random();
@@ -138,6 +153,17 @@ abstract class RandomValidityCase<T extends Object> {
       final reason = 'value $k had a frequency of $value';
       expect(value, greaterThan(average * 0.95), reason: reason);
       expect(value, lessThan(average * 1.05), reason: reason);
+    }
+  }
+
+  void _checkValidity() {
+    final sample = _generateMain();
+    for (final i in sample) {
+      expect(
+        valueIsValid(i),
+        isTrue,
+        reason: '$i is invalid an random for $this',
+      );
     }
   }
 }
