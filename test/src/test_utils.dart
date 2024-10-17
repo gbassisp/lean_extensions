@@ -14,6 +14,8 @@ bool get exhaustive {
   return _exhaustive;
 }
 
+bool get notExhaustive => !exhaustive;
+
 void expectSameCollection(Object? value, Object? expected) {
   const d = DeepCollectionEquality();
 
@@ -92,6 +94,6 @@ void testFrequency<T>(
       }
     },
     timeout: const Timeout(Duration(minutes: 15)),
-    skip: !exhaustive,
+    skip: notExhaustive,
   );
 }

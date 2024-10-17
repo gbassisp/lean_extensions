@@ -936,20 +936,24 @@ void main() {
         }
       });
 
-      test('Random.nextBigInt converges', () {
-        final random = Random();
-        final results = <BigInt>{};
-        final limit = BigInt.parse('5' * 1000);
+      test(
+        'Random.nextBigInt converges',
+        () {
+          final random = Random();
+          final results = <BigInt>{};
+          final limit = BigInt.parse('5' * 1000);
 
-        // run 10mi times and still should always be a new number
-        for (final _ in range(10000000)) {
-          final value = random.nextBigInt(limit);
-          expect(value, lessThan(limit));
-          expect(value, greaterThanOrEqualTo(BigInt.zero));
-          final isNew = results.add(value);
-          expect(isNew, isTrue);
-        }
-      });
+          // run 10mi times and still should always be a new number
+          for (final _ in range(10000000)) {
+            final value = random.nextBigInt(limit);
+            expect(value, lessThan(limit));
+            expect(value, greaterThanOrEqualTo(BigInt.zero));
+            final isNew = results.add(value);
+            expect(isNew, isTrue);
+          }
+        },
+        skip: notExhaustive,
+      );
 
       test('Random.nextBigInt short conversion case', () {
         final random = Random();
