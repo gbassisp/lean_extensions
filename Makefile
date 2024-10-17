@@ -10,8 +10,11 @@ DART_CMD := $(FVM_CMD) dart
 export PATH := $(HOME)/.pub-cache/bin:$(PATH)
 
 
+.PHONY: all-short
+all-short: version get analyze doc dry-run test
+
 .PHONY: all
-all: version get analyze doc dry-run test
+all: version get analyze doc dry-run test-all
 
 .PHONY: kill
 kill: 
@@ -30,8 +33,13 @@ dry-run: kill
 
 .PHONY: test
 test:
-	@echo "Running tests..."
+	@echo "Running tests (exhaustive flag OFF)..."
 	$(DART_CMD) test --test-randomize-ordering-seed=random
+
+.PHONY: test-all
+test-all:
+	@echo "Running all tests (exhaustive flag ON)..."
+	$(DART_CMD) --define=exhaustive=true test --test-randomize-ordering-seed=random
 
 .PHONY: coverage
 coverage:
