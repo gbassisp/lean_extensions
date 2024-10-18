@@ -4,6 +4,9 @@ import 'dart:math';
 
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
+import 'package:lean_extensions/collection_extensions.dart';
+import 'package:lean_extensions/dart_essentials.dart';
+import 'package:lean_extensions/src/exceptions.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
@@ -32,6 +35,9 @@ T? _tryOrNull<T>(T Function() fn) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
+  /// split this string into an [Iterable]<[String]> with each character
+  Iterable<String> get chars => split('');
+
   /// checks if string ends with pattern
   bool endsWithPattern(Pattern exp) {
     if (exp is String) {
@@ -389,6 +395,103 @@ extension RandomExtensions on Random {
         List.generate(length, (index) => nextChar(chars: chars)).join();
     return result;
   }
+
+  /// generates a random [int] between [min] inclusive and [max] exclusive
+  int nextIntBetween(int min, int max) =>
+      nextBigIntBetween(BigInt.from(min), BigInt.from(max)).toIntOrThrow();
+
+  /// generates a random [BigInt] between [min] inclusive and [max] exclusive
+  BigInt nextBigIntBetween(BigInt min, BigInt max) {
+    assert(min < max, '$min should be less than $max.\nNot greater nor equal');
+    final sorted = [min, max].sorted();
+    final a = sorted.first;
+    final b = sorted.last;
+    final diff = b - a;
+    final r = nextBigInt(diff);
+
+    return a + r;
+  }
+
+  /// generates a random [BigInt] between 0 (inclusive) and [max] exclusive
+  BigInt nextBigInt(BigInt max) {
+    try {
+      return _nextBigInt1(max);
+    } on InternalException catch (_) {
+      return _nextBigInt2(max);
+    }
+  }
+
+  BigInt _nextBigInt1(BigInt max) {
+    if (max <= BigInt.zero) {
+      throw RangeError(
+        '$max must be greater than 0 to generate number between 0 and $max',
+      );
+    }
+
+    final size = max.abs().toString().length;
+    for (final _ in range(1000000)) {
+      final a = nextString(length: size, chars: string.digits);
+      final b = BigInt.parse(a);
+      if (b < max) {
+        return b;
+      }
+    }
+
+    throw InternalException(
+      'Unable to generate a random number between 0 and $max.\n'
+      'This is definitely a bug',
+    );
+  }
+
+  BigInt _nextBigInt2(BigInt max) {
+    if (max <= BigInt.zero) {
+      throw RangeError(
+        '$max must be greater than 0 to generate number between 0 and $max',
+      );
+    }
+
+    final ints = max
+        .abs()
+        .toString()
+        .split('')
+        .map((e) => e.toInt())
+        .toList(growable: false);
+    final size = ints.length;
+    int newInt([int? discard]) => nextInt(10);
+    bool isInRange(List<int> original, List<int> generated) {
+      assert(original.length == generated.length, 'sizes are different');
+      for (final i in range(size)) {
+        final g = generated[i];
+        final o = original[i];
+        if (g < o) {
+          return true;
+        } else if (o > g) {
+          return false;
+          // } else {
+          //   continue;
+        }
+      }
+      return false;
+    }
+
+    final generated = List.generate(size, newInt);
+
+    // pseudo-infinite loop
+    for (final _ in range(1000000)) {
+      if (isInRange(ints, generated)) {
+        return BigInt.parse(generated.join());
+      }
+
+      generated
+        ..removeLast()
+        ..insert(0, newInt());
+    }
+
+    throw RangeError(
+      'Unable to generate a random number between 0 and $max.\n'
+      'This is definitely a bug',
+    );
+  }
 }
 
 /// extensions on [Map] with a lot of recursion; needs more testing
@@ -412,6 +515,15 @@ extension NullableMapLeanExtension<K, V> on Map<K, V>? {
 extension BigIntLeanExtensions on BigInt {
   /// converts to a given [radix] with base up to 64
   String toRadixExtended(int radix) => toRadix(this, radix);
+
+  /// converts to [int] without clamping. Throws if invalid
+  int toIntOrThrow() {
+    if (isValidInt) {
+      return toInt();
+    }
+
+    throw RangeError('$this is not a valid [int]');
+  }
 }
 
 /// adds extensions on non-nullable [Object]
