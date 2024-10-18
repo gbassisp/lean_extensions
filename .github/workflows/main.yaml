@@ -46,7 +46,7 @@ jobs:
       with:
         channel: 'master'
     - run: ls -la
-    - run: make upgrade all
+    - run: make upgrade all-short
 
   # semantic_pull_request:
   #   uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
