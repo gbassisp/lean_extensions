@@ -1,10 +1,11 @@
 import 'package:lean_extensions/lean_extensions.dart';
+import 'package:lean_extensions/src/string_values.dart';
 import 'package:test/test.dart';
 
 void main() {
   const regexps = [
     '[a-z]',
-    // '[a-z]?',
+    '[a-z]?',
   ];
   for (final re in regexps) {
     group('trim extensions - simple RegExp(re)', () {
@@ -61,6 +62,62 @@ void main() {
     });
     test('trimPatternRight', () {
       final trimmed = str.trimPatternRight(b);
+
+      expect(trimmed, equals('abc12h3def'));
+    });
+  });
+  group('trim extensions - with string "ab"', () {
+    const str = 'abc12h3def';
+    const b = 'ab';
+    test('trimPattern', () {
+      final trimmed = str.trimPattern(b);
+
+      expect(trimmed, equals('c12h3def'));
+    });
+    test('trimPatternLeft', () {
+      final trimmed = str.trimPatternLeft(b);
+
+      expect(trimmed, equals('c12h3def'));
+    });
+    test('trimPatternRight', () {
+      final trimmed = str.trimPatternRight(b);
+
+      expect(trimmed, equals('abc12h3def'));
+    });
+  });
+  group('trim extensions - with string "ef"', () {
+    const str = 'abc12h3def';
+    const b = 'ef';
+    test('trimPattern', () {
+      final trimmed = str.trimPattern(b);
+
+      expect(trimmed, equals('abc12h3d'));
+    });
+    test('trimPatternLeft', () {
+      final trimmed = str.trimPatternLeft(b);
+
+      expect(trimmed, equals('abc12h3def'));
+    });
+    test('trimPatternRight', () {
+      final trimmed = str.trimPatternRight(b);
+
+      expect(trimmed, equals('abc12h3d'));
+    });
+  });
+  group('trim extensions - with empty string', () {
+    const str = 'abc12h3def';
+    test('trimPattern', () {
+      final trimmed = str.trimPattern(string.empty);
+
+      expect(trimmed, equals('abc12h3def'));
+    });
+    test('trimPatternLeft', () {
+      final trimmed = str.trimPatternLeft(string.empty);
+
+      expect(trimmed, equals('abc12h3def'));
+    });
+    test('trimPatternRight', () {
+      final trimmed = str.trimPatternRight(string.empty);
 
       expect(trimmed, equals('abc12h3def'));
     });
