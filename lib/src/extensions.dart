@@ -20,11 +20,13 @@ extension StringOrNullExtensions on String? {
 
 const _anyDate = AnyDate();
 
-T? _tryOrNull<T>(T Function() fn) {
+T? _tryOrNull<T>(T Function() fn) => _tryOrDefault<T?>(fn, null);
+
+T _tryOrDefault<T>(T Function() fn, T defaultValue) {
   try {
     return fn();
   } catch (_) {
-    return null;
+    return defaultValue;
   }
 }
 
@@ -41,10 +43,68 @@ extension StringExtensions on String {
     final matches = exp.allMatches(this);
     final last = matches._lastOrNull;
     if (last != null) {
-      return _tryOrNull(() => endsWith(last.group(0)!)) ?? false;
+      return last.end == length;
     }
 
     return false;
+  }
+
+  /// trims [Pattern] on the start of the string
+  String trimPatternLeft(Pattern pattern) {
+    var res = this;
+    while (res.isNotEmpty && res.startsWith(pattern)) {
+      final newInput = res.replaceFirst(pattern, '');
+      if (newInput.length >= res.length) {
+        throw Exception(
+          'unable to trim left $res, got $newInput while trying.\n'
+          'there is a bug here',
+        );
+      }
+
+      res = newInput;
+    }
+
+    return res;
+  }
+
+  /// trims [Pattern] on the end of the string
+  String trimPatternRight(Pattern pattern) {
+    var res = this;
+    while (res.isNotEmpty && res.endsWithPattern(pattern)) {
+      final newInput = res.replaceLast(pattern, '');
+      if (newInput.length >= res.length) {
+        throw Exception(
+          'unable to trim right $res, got $newInput while trying.\n'
+          'there is a bug here',
+        );
+      }
+
+      res = newInput;
+    }
+
+    return res;
+  }
+
+  /// trims [Pattern] on the string
+  String trimPattern(Pattern pattern) {
+    final trimmedLeft = trimPatternLeft(pattern);
+    final trimmedRight = trimmedLeft.trimPatternRight(pattern);
+
+    return trimmedRight;
+  }
+
+  /// replaces the last occurence of [Pattern] on the string
+  String replaceLast(Pattern from, String to) {
+    final matches = from.allMatches(this);
+    if (matches.isEmpty) {
+      return this;
+    }
+
+    final index = matches.last.start;
+    final sub1 = substring(0, index);
+    final sub2 = substring(index).replaceFirst(from, to);
+
+    return sub1 + sub2;
   }
 
   /// replaces all windows (CRLF) and old mac (CR) line breaks with normal (LF)
