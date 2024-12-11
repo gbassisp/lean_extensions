@@ -49,16 +49,42 @@ extension StringExtensions on String {
     return false;
   }
 
+  Match? _startsWithNonEmpty(Pattern pattern) {
+    final matches = pattern.allMatches(this);
+    for (final m in matches) {
+      final str = m.group(0);
+      if (m.start == 0 && !str.isNullOrEmpty) {
+        return m;
+      }
+    }
+
+    return null;
+  }
+
+  Match? _endsWithNonEmpty(Pattern pattern) {
+    final matches = pattern.allMatches(this);
+    for (final m in matches) {
+      final str = m.group(0);
+      if (m.end == length && !str.isNullOrEmpty) {
+        return m;
+      }
+    }
+
+    return null;
+  }
+
   /// trims [Pattern] on the start of the string
   String trimPatternLeft(Pattern pattern) {
     var res = this;
-    while (res.isNotEmpty && res.startsWith(pattern)) {
+    while (res.isNotEmpty && res._startsWithNonEmpty(pattern) != null) {
       final newInput = res.replaceFirst(pattern, '');
       if (newInput.length >= res.length) {
-        throw Exception(
-          'unable to trim left $res, got $newInput while trying.\n'
-          'there is a bug here',
+        assert(
+          false,
+          'trimming $res on the left incorrectly resulted in $newInput\n',
         );
+
+        return res;
       }
 
       res = newInput;
@@ -70,13 +96,15 @@ extension StringExtensions on String {
   /// trims [Pattern] on the end of the string
   String trimPatternRight(Pattern pattern) {
     var res = this;
-    while (res.isNotEmpty && res.endsWithPattern(pattern)) {
+    while (res.isNotEmpty && res._endsWithNonEmpty(pattern) != null) {
       final newInput = res.replaceLast(pattern, '');
       if (newInput.length >= res.length) {
-        throw Exception(
-          'unable to trim right $res, got $newInput while trying.\n'
-          'there is a bug here',
+        assert(
+          false,
+          'trimming $res on the right incorrectly resulted in $newInput\n',
         );
+
+        return res;
       }
 
       res = newInput;
@@ -94,15 +122,27 @@ extension StringExtensions on String {
   }
 
   /// replaces the last occurence of [Pattern] on the string
+  ///
+  /// definition of "last match" can be ambiguous. one match can be inside
+  /// another. in this case, which one is the last one?
+  /// a - the outer one, because it ends at a greater index? or
+  /// b - the inner one, because it starts at a greater index?
+  ///
+  /// for this extension, whichever is returned as last on [Pattern.allMatches]
+  /// is considered last
   String replaceLast(Pattern from, String to) {
     final matches = from.allMatches(this);
-    if (matches.isEmpty) {
+    final match = matches.reversed.cast<Match?>().firstWhere(
+          (m) => !(m?.group(0)).isNullOrEmpty,
+          orElse: () => null,
+        );
+
+    if (match == null) {
       return this;
     }
 
-    final index = matches.last.start;
-    final sub1 = substring(0, index);
-    final sub2 = substring(index).replaceFirst(from, to);
+    final sub1 = substring(0, match.start);
+    final sub2 = substring(match.start).replaceFirst(from, to);
 
     return sub1 + sub2;
   }
@@ -366,6 +406,9 @@ extension IterableExtensions<T> on Iterable<T> {
 
   /// returns this iterable as a fixed-length list
   List<T> toArray() => toList(growable: false);
+
+  /// returns [List.reversed] of this. needs to convert to list first
+  Iterable<T> get reversed => toArray().reversed;
 
   /// returns item at [index] or null
   T? elementAtOrNull(int index) {
