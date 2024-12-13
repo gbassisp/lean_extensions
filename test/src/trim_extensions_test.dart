@@ -122,4 +122,20 @@ void main() {
       expect(trimmed, equals('abc12h3def'));
     });
   });
+
+  group('trimInvisible', () {
+    var i = 0;
+    final spaces = string.invisibleWhitespace.split('');
+    const placeholder = '%HERE%';
+    const restOfString = '-rest of string $placeholder-';
+    const str = '$placeholder$placeholder$restOfString$placeholder$placeholder';
+    for (final s in spaces) {
+      final untrimmed = str.replaceAll(placeholder, s);
+      final trimmed = restOfString.replaceAll(placeholder, s);
+      test('$i - when space is $s in $untrimmed', () {
+        expect(untrimmed.trimInvisible(), equals(trimmed));
+      });
+      i++;
+    }
+  });
 }

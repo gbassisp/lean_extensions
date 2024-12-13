@@ -121,6 +121,16 @@ extension StringExtensions on String {
     return trimmedRight;
   }
 
+  /// trims all invisible spaces as defined in [string.invisibleWhitespace]
+  ///
+  /// this includes vertical tab, which is not considered by [trim]
+  String trimInvisible() {
+    final spaces = string.invisibleWhitespace.split('');
+    final re = RegExp('[${spaces.join(',')}]+');
+
+    return trimPattern(re);
+  }
+
   /// replaces the last occurence of [Pattern] on the string
   ///
   /// definition of "last match" can be ambiguous. one match can be inside
