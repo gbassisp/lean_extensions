@@ -39,6 +39,21 @@ const punctuation = string.punctuation;
 /// and vertical tab.
 const whitespace = string.whitespace;
 
+/// a string containing all Unicode characters that are considered whitespace.
+///
+/// taken from https://en.wikipedia.org/wiki/Whitespace_character
+const allWhitespace = string.allWhitespace;
+
+/// all Unicode space characters with White_Space=yes
+///
+/// taken from https://en.wikipedia.org/wiki/Whitespace_character
+const visibleWhitespace = string.visibleWhitespace;
+
+/// all Unicode space characters with White_Space=no
+///
+/// taken from https://en.wikipedia.org/wiki/Whitespace_character
+const invisibleWhitespace = string.invisibleWhitespace;
+
 /// String of ASCII characters which are considered printable.
 /// This is a combination of digits, ascii_letters, punctuation, and whitespace.
 const printable = string.printable;
@@ -94,6 +109,61 @@ class string {
   /// This includes the characters space, tab, linefeed, return, formfeed,
   /// and vertical tab.
   static const whitespace = ' \u{0009}\n\r\u{000C}\u{2B7F}';
+
+  /// a string containing all Unicode characters that are considered whitespace.
+  ///
+  /// taken from https://en.wikipedia.org/wiki/Whitespace_character
+  static const allWhitespace =
+      string.visibleWhitespace + string.invisibleWhitespace;
+
+  /// all Unicode space characters with White_Space=yes
+  ///
+  /// taken from https://en.wikipedia.org/wiki/Whitespace_character
+  static const visibleWhitespace = '\u{0009}'
+      '\u{000A}'
+      '\u{000B}'
+      '\u{000C}'
+      '\u{000D}'
+      '\u{0020}'
+      '\u{0085}'
+      '\u{00A0}'
+      '\u{0020}'
+      '\u{1680}'
+      '\u{2000}'
+      '\u{2002}'
+      '\u{2001}'
+      '\u{2003}'
+      '\u{2002}'
+      '\u{2002}'
+      '\u{2003}'
+      '\u{2003}'
+      '\u{2004}'
+      '\u{2005}'
+      '\u{2006}'
+      '\u{2007}'
+      '\u{2008}'
+      '\u{2009}'
+      '\u{2008}'
+      '\u{200A}'
+      '\u{2028}'
+      '\u{2029}'
+      '\u{202F}'
+      '\u{2009}'
+      '\u{205F}'
+      '\u{3000}';
+
+  /// all Unicode space characters with White_Space=no
+  ///
+  /// taken from https://en.wikipedia.org/wiki/Whitespace_character
+  static const invisibleWhitespace = '\u{180E}'
+      '\u{200B}'
+      '\u{200C}'
+      '\u{200D}'
+      '\u{2060}'
+      '\u{200B}'
+      '\u{FEFF}'
+      '\u{2060}'
+      '\u{200B}';
 
   /// String of ASCII characters which are considered printable except spaces.
   /// This is a combination of digits, ascii_letters, and punctuation.

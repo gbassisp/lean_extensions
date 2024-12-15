@@ -1,5 +1,17 @@
 <!-- dart package changelog -->
 
+## 1.4.0
+
+- Added extensions on `String`:  
+  `.trimPattern()`  
+  `.trimPatternLeft()`  
+  `.trimPatternRight()`  
+  `.trimInvisible()`  
+  `.replaceLast()`
+
+- Added extension on `Iterable<T>`:  
+  `.reversed`  
+
 ## 1.3.1
 
 - Lowered constraints on `any_date` dependency
