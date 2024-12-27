@@ -528,7 +528,7 @@ extension RandomExtensions on Random {
     try {
       return _nextBigInt1(max);
     } on InternalException catch (_) {
-      return _nextBigInt2(max);
+      return _nextBigIntNotEvenlyDistributed(max);
     }
   }
 
@@ -540,11 +540,12 @@ extension RandomExtensions on Random {
     }
 
     final size = max.abs().toString().length;
-    for (final _ in range(1000000)) {
+    var res = _ten;
+    for (final _ in range(1000)) {
       final a = nextString(length: size, chars: string.digits);
-      final b = BigInt.parse(a);
-      if (b < max) {
-        return b;
+      res = BigInt.parse(a);
+      if (res < max) {
+        return res;
       }
     }
 
@@ -554,54 +555,25 @@ extension RandomExtensions on Random {
     );
   }
 
-  BigInt _nextBigInt2(BigInt max) {
+  static final _ten = BigInt.from(10);
+  BigInt _nextBigIntNotEvenlyDistributed(BigInt max) {
     if (max <= BigInt.zero) {
       throw RangeError(
         '$max must be greater than 0 to generate number between 0 and $max',
       );
     }
 
-    final ints = max
-        .abs()
-        .toString()
-        .split('')
-        .map((e) => e.toInt())
-        .toList(growable: false);
-    final size = ints.length;
-    int newInt([int? discard]) => nextInt(10);
-    bool isInRange(List<int> original, List<int> generated) {
-      assert(original.length == generated.length, 'sizes are different');
-      for (final i in range(size)) {
-        final g = generated[i];
-        final o = original[i];
-        if (g < o) {
-          return true;
-        } else if (o > g) {
-          return false;
-          // } else {
-          //   continue;
-        }
-      }
-      return false;
+    if (max < _ten) {
+      return BigInt.from(nextInt(max.toInt()));
     }
-
-    final generated = List.generate(size, newInt);
-
-    // pseudo-infinite loop
-    for (final _ in range(1000000)) {
-      if (isInRange(ints, generated)) {
-        return BigInt.parse(generated.join());
-      }
-
-      generated
-        ..removeLast()
-        ..insert(0, newInt());
-    }
-
-    throw RangeError(
-      'Unable to generate a random number between 0 and $max.\n'
-      'This is definitely a bug',
-    );
+    final size = max.abs().toString().length;
+    // using size - 1 ensures our value is less than max
+    // but it also means it's not evenly distributed.
+    // e.g., if max == 1100, then values from 1000 to 1099 inclusive will never
+    // be returned
+    final a = nextString(length: size - 1, chars: string.digits);
+    final b = BigInt.parse(a);
+    return b;
   }
 }
 
