@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_cast
-
 import 'dart:math';
 
 import 'package:any_date/any_date.dart';
@@ -28,7 +26,7 @@ T? _tryOrNull<T>(T Function() fn) => _tryOrDefault<T?>(fn, null);
 T _tryOrDefault<T>(T Function() fn, T defaultValue) {
   try {
     return fn();
-  } catch (_) {
+  } on Object catch (_) {
     return defaultValue;
   }
 }

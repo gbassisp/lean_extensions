@@ -20,8 +20,7 @@ void expectSameCollection(Object? value, Object? expected) {
 
   final diff = value is Map && expected is Map
       ? value.difference(expected)
-      // ignore: inference_failure_on_collection_literal
-      : {};
+      : <Object?, Object?>{};
 
   expect(
     d.equals(value, expected),
