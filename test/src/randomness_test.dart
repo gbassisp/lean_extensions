@@ -11,18 +11,24 @@ void main() {
     () => NextIntBetweenCase(0, 10),
   );
   testRandomValidity(
-    'nextIntBetween - -100~100',
-    () => NextIntBetweenCase(-100, 100),
+    'nextIntBetween - -99~99',
+    () => NextIntBetweenCase(-99, 99),
   );
   testRandomValidity(
     'nextIntBetween - -2000~-1500',
     () => NextIntBetweenCase(-2000, -1500),
   );
 
-  final a = BigInt.parse('1' * 100);
-  final b = a + BigInt.from(100);
+  // 100-length
+  const a1 = '11111111111111111111111111111111111111111111'
+      '11111111111111111111111111111111111111111111111111111111';
+  // a1 + 200
+  const a2 = '11111111111111111111111111111111111111111111'
+      '11111111111111111111111111111111111111111111111111111311';
+  final a = BigInt.parse(a1);
+  final b = BigInt.parse(a2);
   testRandomValidity(
-    'nextBigIntBetween - $a~$b',
+    'nextBigIntBetween - $a1~$a2',
     () => NextBigIntBetweenCase(a, b),
   );
   testRandomValidity(
