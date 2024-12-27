@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/collection_extensions.dart';
-import 'package:lean_extensions/src/exceptions.dart';
 import 'package:lean_extensions/src/internal_functions.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
@@ -524,13 +523,7 @@ extension RandomExtensions on Random {
   }
 
   /// generates a random [BigInt] between 0 (inclusive) and [max] exclusive
-  BigInt nextBigInt(BigInt max) {
-    try {
-      return nextBigInt1(this, max);
-    } on InternalException catch (_) {
-      return nextBigIntNotEvenlyDistributed(this, max);
-    }
-  }
+  BigInt nextBigInt(BigInt max) => nextBigIntComplete(this, max);
 }
 
 /// extensions on [Map] with a lot of recursion; needs more testing
