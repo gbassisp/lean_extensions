@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
 import 'package:lean_extensions/collection_extensions.dart';
-import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/src/exceptions.dart';
+import 'package:lean_extensions/src/internal_functions.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
@@ -526,54 +526,10 @@ extension RandomExtensions on Random {
   /// generates a random [BigInt] between 0 (inclusive) and [max] exclusive
   BigInt nextBigInt(BigInt max) {
     try {
-      return _nextBigInt1(max);
+      return nextBigInt1(this, max);
     } on InternalException catch (_) {
-      return _nextBigIntNotEvenlyDistributed(max);
+      return nextBigIntNotEvenlyDistributed(this, max);
     }
-  }
-
-  BigInt _nextBigInt1(BigInt max) {
-    if (max <= BigInt.zero) {
-      throw RangeError(
-        '$max must be greater than 0 to generate number between 0 and $max',
-      );
-    }
-
-    final size = max.abs().toString().length;
-    var res = _ten;
-    for (final _ in range(1000)) {
-      final a = nextString(length: size, chars: string.digits);
-      res = BigInt.parse(a);
-      if (res < max) {
-        return res;
-      }
-    }
-
-    throw InternalException(
-      'Unable to generate a random number between 0 and $max.\n'
-      'This is definitely a bug',
-    );
-  }
-
-  static final _ten = BigInt.from(10);
-  BigInt _nextBigIntNotEvenlyDistributed(BigInt max) {
-    if (max <= BigInt.zero) {
-      throw RangeError(
-        '$max must be greater than 0 to generate number between 0 and $max',
-      );
-    }
-
-    if (max < _ten) {
-      return BigInt.from(nextInt(max.toInt()));
-    }
-    final size = max.abs().toString().length;
-    // using size - 1 ensures our value is less than max
-    // but it also means it's not evenly distributed.
-    // e.g., if max == 1100, then values from 1000 to 1099 inclusive will never
-    // be returned
-    final a = nextString(length: size - 1, chars: string.digits);
-    final b = BigInt.parse(a);
-    return b;
   }
 }
 
