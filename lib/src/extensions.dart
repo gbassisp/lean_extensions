@@ -34,9 +34,6 @@ T _tryOrDefault<T>(T Function() fn, T defaultValue) {
 
 /// adds utility methods to [String]
 extension StringExtensions on String {
-  /// split this string into an [Iterable]<[String]> with each character
-  Iterable<String> get chars => split('');
-
   /// checks if string ends with pattern
   bool endsWithPattern(Pattern exp) {
     if (exp is String) {

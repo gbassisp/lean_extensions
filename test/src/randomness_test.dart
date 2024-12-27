@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
+import 'package:lean_extensions/src/internal_extensions.dart';
 
 import 'randomness_test_utils.dart';
 
