@@ -1,9 +1,9 @@
-// ignore_for_file: unnecessary_cast
-
 import 'dart:math';
 
 import 'package:any_date/any_date.dart';
 import 'package:english_numerals/english_numerals.dart';
+import 'package:lean_extensions/collection_extensions.dart';
+import 'package:lean_extensions/src/internal_functions.dart';
 import 'package:lean_extensions/src/locale.dart';
 import 'package:lean_extensions/src/map_functions.dart';
 import 'package:lean_extensions/src/numeral_system.dart';
@@ -25,7 +25,7 @@ T? _tryOrNull<T>(T Function() fn) => _tryOrDefault<T?>(fn, null);
 T _tryOrDefault<T>(T Function() fn, T defaultValue) {
   try {
     return fn();
-  } catch (_) {
+  } on Object catch (_) {
     return defaultValue;
   }
 }
@@ -502,6 +502,25 @@ extension RandomExtensions on Random {
         List.generate(length, (index) => nextChar(chars: chars)).join();
     return result;
   }
+
+  /// generates a random [int] between [min] inclusive and [max] exclusive
+  int nextIntBetween(int min, int max) =>
+      nextBigIntBetween(BigInt.from(min), BigInt.from(max)).toIntOrThrow();
+
+  /// generates a random [BigInt] between [min] inclusive and [max] exclusive
+  BigInt nextBigIntBetween(BigInt min, BigInt max) {
+    assert(min < max, '$min should be less than $max.\nNot greater nor equal');
+    final sorted = [min, max].sorted();
+    final a = sorted.first;
+    final b = sorted.last;
+    final diff = b - a;
+    final r = nextBigInt(diff);
+
+    return a + r;
+  }
+
+  /// generates a random [BigInt] between 0 (inclusive) and [max] exclusive
+  BigInt nextBigInt(BigInt max) => nextBigIntComplete(this, max);
 }
 
 /// extensions on [Map] with a lot of recursion; needs more testing
@@ -525,6 +544,15 @@ extension NullableMapLeanExtension<K, V> on Map<K, V>? {
 extension BigIntLeanExtensions on BigInt {
   /// converts to a given [radix] with base up to 64
   String toRadixExtended(int radix) => toRadix(this, radix);
+
+  /// converts to [int] without clamping. Throws if invalid
+  int toIntOrThrow() {
+    if (isValidInt) {
+      return toInt();
+    }
+
+    throw RangeError('$this is not a valid [int]');
+  }
 }
 
 /// adds extensions on non-nullable [Object]
