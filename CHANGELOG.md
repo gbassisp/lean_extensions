@@ -1,5 +1,15 @@
 <!-- dart package changelog -->
 
+## 1.5.0
+
+- Added extensions on `Random`:  
+  `.nextBigInt()`  
+  `.nextBigIntBetween()`  
+  `.nextIntBetween()`  
+
+- Added extensions on `BigInt`:  
+  `.toIntOrThrow()` - this avoids clamping a number; it's up to the user to check if int is valid
+
 ## 1.4.0
 
 - Added extensions on `String`:  
