@@ -32,12 +32,12 @@ dry-run: kill
 	$(DART_CMD) pub publish --dry-run
 
 .PHONY: test
-test:
+test: test-integration
 	@echo "Running tests (exhaustive flag OFF)..."
 	$(DART_CMD) test --test-randomize-ordering-seed=random
 
 .PHONY: test-all
-test-all:
+test-all: test-integration
 	@echo "Running all tests (exhaustive flag ON)..."
 	$(DART_CMD) --define=exhaustive=true test --test-randomize-ordering-seed=random --use-data-isolate-strategy
 
