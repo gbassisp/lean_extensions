@@ -64,4 +64,18 @@ dynamic extendedJsonDecode(String encoded) {
   return r is Iterable ? r.map((e) => _intConverter.fromJson(e)).toList() : r;
 }
 
+/// Similar to Flutter's kDebugMode, but without relying on vm's properties.
+///
+/// This implementation is based on the fact that the `assert` function is
+/// disabled in release mode.
+bool get isDebugMode {
+  try {
+    assert(false, 'if this throws, then we are in debug mode');
+    return false;
+    // ignore: avoid_catching_errors - we intentionally throw for the logic
+  } on AssertionError catch (_) {
+    return true;
+  }
+}
+
 // List<dynamic> _upcastJsonList(Iterable<dynamic> list) {}
