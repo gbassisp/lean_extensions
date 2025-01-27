@@ -1,6 +1,7 @@
 # coverage
 coverage/
 test/results/
+*.bin
 
 # See https://www.dartlang.org/guides/libraries/private-files
 
