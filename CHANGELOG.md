@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 1.6.0
+
+- Added top-level getter `isDebugMode`
+
 ## 1.5.0
 
 - Added extensions on `Random`:  
