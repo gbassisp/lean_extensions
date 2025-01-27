@@ -105,8 +105,9 @@ format_lcov:
 .PHONY: test-integration
 test-integration:
 	@echo "Running integration tests..."
-	# compile the test file:
-	$(DART_CMD) compile exe test/integration/integration_test.dart -o test/integration/integration_test
-	# run the compiled test file and check the content of the output:
-	./test/integration/integration_test | grep -q "running in debug mode? false" || (echo "Integration tests failed" && exit 1)
+	@# compile the test file:
+	@$(DART_CMD) compile exe test/integration/integration_test.dart -o test/integration/integration_test.bin
+	@# run the compiled test file and check the content of the output:
+	@./test/integration/integration_test.bin | grep -q "running in debug mode: false" || (echo "Integration tests failed" && exit 1)
+	@echo "Integration tests passed"
 

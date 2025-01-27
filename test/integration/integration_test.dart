@@ -5,5 +5,5 @@
 import 'package:lean_extensions/dart_essentials.dart';
 
 void main() {
-  print('running in debug mode? $isDebugMode');
+  print('running in debug mode: $isDebugMode');
 }
