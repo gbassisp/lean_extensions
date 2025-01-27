@@ -32,12 +32,12 @@ dry-run: kill
 	$(DART_CMD) pub publish --dry-run
 
 .PHONY: test
-test:
+test: test-integration
 	@echo "Running tests (exhaustive flag OFF)..."
 	$(DART_CMD) test --test-randomize-ordering-seed=random
 
 .PHONY: test-all
-test-all:
+test-all: test-integration
 	@echo "Running all tests (exhaustive flag ON)..."
 	$(DART_CMD) --define=exhaustive=true test --test-randomize-ordering-seed=random --use-data-isolate-strategy
 
@@ -101,3 +101,13 @@ format_lcov:
 	@for file in $(FILES); do \
 		sed -i'' -e 's|$(CWD)/||g' $$file ; \
 	done
+
+.PHONY: test-integration
+test-integration:
+	@echo "Running integration tests..."
+	@# compile the test file:
+	@$(DART_CMD) compile exe test/integration/integration_test.dart -o test/integration/integration_test.bin
+	@# run the compiled test file and check the content of the output:
+	@./test/integration/integration_test.bin | grep -q "running in debug mode: false" || (echo "Integration tests failed" && exit 1)
+	@echo "Integration tests passed"
+

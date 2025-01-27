@@ -77,6 +77,10 @@ void main() {
 
       expect(res, jsonDecode(a), reason: 'failed to eval $a');
     });
+
+    test('isDebugMode', () {
+      expect(isDebugMode, isTrue);
+    });
   });
 
   group('numeral system', () {
