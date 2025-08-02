@@ -35,7 +35,7 @@ const dateTimeStringWithT = '2021-01-01T13:23:31.000';
 final TypeMatcher<AssertionError> isAssertionError = isA<AssertionError>();
 final Matcher throwsAssertionError = throwsA(isAssertionError);
 // valid locales
-const us = [null, '', 'en', 'en_us', 'en-us', 'en-_us'];
+const List<String?> us = [null, '', 'en', 'en_us', 'en-us', 'en-_us'];
 const uk = ['en-au', 'en_uk', 'en_-nz'];
 // invalid locales
 const invalidLocales = ['pt', 'anything else'];

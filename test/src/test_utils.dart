@@ -30,10 +30,10 @@ void expectSameCollection(Object? value, Object? expected) {
   );
 }
 
-final throwsSomething = throwsA(anything);
-
+final Matcher throwsSomething = throwsA(anything);
+final Matcher throwsNothing = isNot(throwsSomething);
 final isTruthy = _Truthy();
-final isFalsy = isNot(isTruthy);
+final Matcher isFalsy = isNot(isTruthy);
 
 class _Truthy extends Matcher {
   @override

@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+## 1.7.0
+
+- Added top-level `zip` and `enumerate` functions similar to python
+- Added extensions on `Iterable` with these same functions
+
 ## 1.6.0
 
 - Added top-level getter `isDebugMode`

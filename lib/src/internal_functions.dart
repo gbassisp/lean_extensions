@@ -6,8 +6,8 @@ import 'package:lean_extensions/src/exceptions.dart';
 import 'package:lean_extensions/src/internal_extensions.dart';
 import 'package:meta/meta.dart';
 
-final _one = BigInt.one;
-final _ten = BigInt.from(10);
+final BigInt _one = BigInt.one;
+final BigInt _ten = BigInt.from(10);
 
 @internal
 BigInt nextBigIntComplete(Random random, BigInt max) {
