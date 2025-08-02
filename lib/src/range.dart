@@ -154,3 +154,12 @@ bool _isInRange(int start, int stop, int step) {
   }
   return start >= stop;
 }
+
+/// creates a lazy [Iterable] that will produce integers until error
+Iterable<int> get infiniteRange sync* {
+  var i = 0;
+  while (true) {
+    yield i;
+    i++;
+  }
+}

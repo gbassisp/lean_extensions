@@ -1,6 +1,9 @@
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/src/iterable_extra_extensions.dart';
+import 'package:lean_extensions/src/pair.dart';
 import 'package:test/test.dart';
+
+import 'test_utils.dart';
 
 void main() {
   const empty = <Object?>[];
@@ -20,7 +23,7 @@ void main() {
       expect(enumerated, isNotEmpty);
       for (final item in enumerated) {
         final i = item.index;
-        final k = item.key;
+        final k = item.$1;
         final v = item.value;
 
         expect(i, equals(k));
@@ -36,7 +39,7 @@ void main() {
       expect(enumerated, isNotEmpty);
       for (final item in enumerated) {
         final i = item.index;
-        final k = item.key;
+        final k = item.$1;
         final expectedIndex = indexes.elementAt(i);
         final v = item.value;
         final expectedValue = many.elementAt(i);
@@ -62,7 +65,7 @@ void main() {
         expect(enumerated, isNotEmpty);
         for (final item in enumerated) {
           final i = item.index;
-          final k = item.key;
+          final k = item.$1;
           final v = item.value;
 
           expect(i, equals(k));
@@ -78,7 +81,7 @@ void main() {
         expect(enumerated, isNotEmpty);
         for (final item in enumerated) {
           final i = item.index;
-          final k = item.key;
+          final k = item.$1;
           final expectedIndex = indexes.elementAt(i - start);
           final v = item.value;
           final expectedValue = many.elementAt(i - start);
@@ -90,4 +93,42 @@ void main() {
       });
     });
   }
+
+  group(
+    'zip',
+    () {
+      const smaller = ['b', 3];
+      const bigger = ['c', 4, false, empty, 0];
+      const zipped = [Pair('b', 'c'), Pair(3, 4)];
+      final flipped = zipped.map((e) => e.flipped);
+
+      test('smaller on the left', () {
+        final result = zip(smaller, bigger);
+
+        expect(result, containsAllInOrder(zipped));
+      });
+
+      test('smaller on the right', () {
+        final result = zip(bigger, smaller);
+
+        expect(result, containsAllInOrder(flipped));
+      });
+
+      test('infinite will throw', () {
+        expect(() {
+          late Pair<int, int> current;
+          for (final pair in zip(infiniteRange, infiniteRange)) {
+            current = pair;
+            // 10mi times:
+            if (pair.$1 > 10000000) {
+              return;
+            }
+          }
+          // else:
+          throw StateError('range terminated before expected: $current');
+        }, throwsNothing);
+      });
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
 }
