@@ -17,3 +17,12 @@ extension MapEntryExtraExtensions<T> on MapEntry<int, T> {
   ///  [IterableExtraExtensions.enumerate] getter
   int get index => key;
 }
+
+/// top-level function matching the behaviour of the Python [enumerate] function
+///
+/// see https://docs.python.org/3/library/functions.html#enumerate
+Iterable<MapEntry<int, T>> enumerate<T>(
+  Iterable<T> iterable, [
+  int start = 0,
+]) =>
+    iterable.enumerate(start);
