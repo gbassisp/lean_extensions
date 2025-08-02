@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 final BigInt _one = BigInt.one;
 final BigInt _ten = BigInt.from(10);
 
-
 @internal
 BigInt nextBigIntComplete(Random random, BigInt max) {
   try {
