@@ -2,8 +2,10 @@ import 'package:lean_extensions/src/range.dart';
 import 'package:lean_extensions/src/string_values.dart';
 import 'package:meta/meta.dart';
 
-const _size = base64chars.length;
-final _mapped = {for (final i in range(_size)) base64chars[i]: i};
+const int _size = base64chars.length;
+final Map<String, int> _mapped = {
+  for (final i in range(_size)) base64chars[i]: i,
+};
 
 /// converts a normal baseN to bash-like baseN; keeps the same base
 @internal

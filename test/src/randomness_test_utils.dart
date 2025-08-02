@@ -62,11 +62,11 @@ abstract class RandomValidityCase<T extends Object> {
   bool get isComparable => true;
   bool valueIsValid(T value);
 
-  final _seed = Random().nextInt(1 << 32);
+  final int _seed = Random().nextInt(1 << 32);
   final _main = Random();
-  late final _seededs = List.generate(3, (_) => Random(_seed));
+  late final List<Random> _seededs = List.generate(3, (_) => Random(_seed));
   final _smallSample = 100000;
-  late final _sampleSize = max(_smallSample, codomainSize * 100000);
+  late final int _sampleSize = max(_smallSample, codomainSize * 100000);
   List<T>? _sample;
   Map<T, int>? _frequency;
 

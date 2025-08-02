@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
-final falsy = [
+final List<Object?> falsy = [
   null,
   0,
   '',
@@ -13,7 +13,7 @@ final falsy = [
   <dynamic, dynamic>{},
   range(0),
 ];
-final truthy = [
+final List<Object> truthy = [
   'a',
   1,
   [1],
