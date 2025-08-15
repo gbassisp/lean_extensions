@@ -30,5 +30,5 @@ class Pair<A, B> {
   int get hashCode => $1.hashCode ^ $2.hashCode;
 
   @override
-  String toString() => 'Pair(${$1}, ${$2})';
+  String toString() => '(${$1}, ${$2})';
 }

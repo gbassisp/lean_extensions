@@ -4,3 +4,4 @@ library lean_extensions;
 
 export 'src/converters.dart';
 export 'src/extensions.dart';
+export 'src/future_extensions.dart';
