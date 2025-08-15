@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+## 1.8.0
+
+- Added `tap()` extension method on `Future`
+- Fix: Removed "Pair" prefix on the returned value of `Pair.toString()`
+
 ## 1.7.0
 
 - Added top-level `zip` and `enumerate` functions similar to python
