@@ -23,34 +23,91 @@ mixin Closeable {
   Iterable<Closeable> get closeables;
 }
 
+Exception _asException(Object e) {
+  return e is Exception ? e : Exception(e.toString());
+}
+
 /// Extension methods for [Closeable]
 extension CloseableExtensions on Closeable {
   /// Runs passed function and closes this resource after it
-  /// If the function throws, the exception is propagated and the resource is
-  /// still closed
+  /// Closes the resource even if the function throws. The first exception
+  /// thrown is propagated, if both the function and the close throw, the
+  /// exception from the function is propagated
   R runAndClose<R>(R Function(Closeable) fn) {
+    Exception? exception;
+    R? result;
     try {
-      return fn(this);
-    } finally {
+      result = fn(this);
+    } on Object catch (e) {
+      exception ??= _asException(e);
+    }
+
+    try {
       close();
+    } on Object catch (e) {
+      exception ??= _asException(e);
+    }
+
+    for (final closeable in closeables) {
+      try {
+        closeable.close();
+      } on Object catch (e) {
+        exception ??= _asException(e);
+      }
+    }
+
+    if (exception != null) {
+      throw exception;
+    } else {
+      return result as R;
     }
   }
 
   /// Runs passed function and closes this resource after it
-  /// If the function throws, the exception is propagated and the resource is
-  /// still closed
+  /// Closes the resource even if the function throws. The first exception
+  /// thrown is propagated, if both the function and the close throw, the
+  /// exception from the function is propagated
   Future<R> runAndCloseAsync<R>(FutureOr<R> Function(Closeable) fn) async {
+    Exception? exception;
+    R? result;
     try {
-      return await fn(this);
-    } finally {
+      result = await fn(this);
+    } on Object catch (e) {
+      exception ??= _asException(e);
+    }
+
+    try {
       await close();
+    } on Object catch (e) {
+      exception ??= _asException(e);
+    }
+
+    final futures = await Future.wait(
+      closeables.map((c) async {
+        try {
+          await c.close();
+        } on Object catch (e) {
+          return _asException(e);
+        }
+      }),
+    );
+    exception ??= futures.firstWhere(
+      (e) => e != null,
+      orElse: () => null,
+    );
+
+    if (exception != null) {
+      throw exception;
+    } else {
+      return result as R;
     }
   }
 }
 
 /// Runs passed function and closes this resource after it
-/// If the function throws, the exception is propagated and the resource is
-/// still closed
+/// Closes the resource even if the function throws. The first exception
+/// thrown is propagated, if both the function and the close throw, the
+/// exception from the function is propagated
 R useCloseable<R>(
   Closeable resource,
   R Function(Closeable) fn,
@@ -59,8 +116,9 @@ R useCloseable<R>(
 }
 
 /// Runs passed function and closes this resource after it
-/// If the function throws, the exception is propagated and the resource is
-/// still closed
+/// Closes the resource even if the function throws. The first exception
+/// thrown is propagated, if both the function and the close throw, the
+/// exception from the function is propagated
 Future<R> useCloseableAsync<R>(
   Closeable resource,
   FutureOr<R> Function(Closeable) fn,
