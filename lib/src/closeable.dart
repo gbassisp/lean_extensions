@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 /// Similar to java Closeable, or python context manager, or c# IDisposable
 ///
 /// **NOTE**:
@@ -7,11 +9,18 @@ import 'dart:async';
 /// canonicalized objects
 mixin Closeable {
   /// Closes this resource, relinquishing any underlying resources.
-  /// This method is invoked automatically on objects managed by
-  /// the `try`-with-resources statement.
+  /// Do not close manually. Use [runAndClose], [runAndCloseAsync], or
+  /// [useCloseable], [useCloseableAsync] functions instead
   ///
   /// @throws Exception if this resource cannot be closed
+  @protected
   FutureOr<void> close();
+
+  /// Inner closeables. If this resource manages other closeables, they should
+  /// be returned here, so they can be closed when this resource is closed.
+  /// If there are no inner closeables, return empty iterable
+  @protected
+  Iterable<Closeable> get closeables;
 }
 
 /// Extension methods for [Closeable]

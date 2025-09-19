@@ -1,4 +1,5 @@
 import 'package:lean_extensions/src/closeable.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -6,7 +7,7 @@ void main() {
     late _MockCloseable resource;
 
     setUp(() {
-      resource = _MockCloseable();
+      resource = _MockCloseable([]);
     });
 
     test('close is called', () async {
@@ -71,10 +72,17 @@ void main() {
 }
 
 class _MockCloseable with Closeable {
+  _MockCloseable(this.closeables);
+
   bool closed = false;
 
+  @protected
   @override
   Future<void> close() async {
     closed = true;
   }
+
+  @protected
+  @override
+  final Iterable<Closeable> closeables;
 }
