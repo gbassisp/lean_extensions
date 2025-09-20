@@ -1,4 +1,4 @@
-import 'package:lean_extensions/src/closeable.dart';
+import 'package:lean_extensions/dart_essentials.dart';
 import 'package:test/test.dart';
 
 void main() {
