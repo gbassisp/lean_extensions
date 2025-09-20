@@ -114,18 +114,21 @@ void main() {
       });
 
       test('infinite will throw', () {
-        expect(() {
-          late Pair<int, int> current;
-          for (final pair in zip(infiniteRange, infiniteRange)) {
-            current = pair;
-            // 10mi times:
-            if (pair.$1 > 10000000) {
-              return;
+        expect(
+          () {
+            late Pair<int, int> current;
+            for (final pair in zip(infiniteRange, infiniteRange)) {
+              current = pair;
+              // 10mi times:
+              if (pair.$1 > 10000000) {
+                return;
+              }
             }
-          }
-          // else:
-          throw StateError('range terminated before expected: $current');
-        }, throwsNothing);
+            // else:
+            throw StateError('range terminated before expected: $current');
+          },
+          throwsNothing,
+        );
       });
     },
     timeout: const Timeout(Duration(minutes: 2)),
