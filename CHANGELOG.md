@@ -1,5 +1,10 @@
 <!-- dart package changelog -->
 
+## 1.9.0
+
+- Added `Closeable` mixin for easy auto-closing resources
+- Added `runCloseable` and `runCloseableAsync` methods
+
 ## 1.8.0
 
 - Added `tap()` extension method on `Future`
