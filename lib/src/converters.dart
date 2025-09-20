@@ -26,7 +26,12 @@ class AnyNullableBoolConverter extends ToDynamicConverter<bool?> {
   /// default const constructor
   const AnyNullableBoolConverter();
   @override
-  bool? fromJson(Object? json) => json?.toBoolean();
+  bool? fromJson(Object? json) {
+    if (json == null) {
+      return null;
+    }
+    return json.toBoolean();
+  }
 }
 
 /// casts into nullable string
