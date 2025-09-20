@@ -16,6 +16,11 @@ mixin Closeable {
   @protected
   FutureOr<void> close();
 
+  bool _closed = false;
+
+  /// Whether this resource has been closed
+  bool get isClosed => _closed;
+
   /// Inner closeables. If this resource manages other closeables, they should
   /// be returned here, so they can be closed when this resource is closed.
   /// If there are no inner closeables, return empty iterable
@@ -23,8 +28,14 @@ mixin Closeable {
   Iterable<Closeable> get closeables;
 }
 
-Exception _asException(Object e) {
-  return e is Exception ? e : Exception(e.toString());
+Never _wrapAndThrow(Object e) {
+  if (e is Exception) {
+    throw e;
+  } else if (e is Error) {
+    throw e;
+  } else {
+    throw Exception('Unknown exception: $e');
+  }
 }
 
 /// Extension methods for [Closeable]
@@ -34,33 +45,37 @@ extension CloseableExtensions on Closeable {
   /// thrown is propagated, if both the function and the close throw, the
   /// exception from the function is propagated
   R runAndClose<R>(R Function(Closeable) fn) {
-    Exception? exception;
+    Object? exception;
+    if (_closed) {
+      exception = StateError('Resource is already closed');
+    }
     R? result;
     try {
       result = fn(this);
     } on Object catch (e) {
-      exception ??= _asException(e);
+      exception ??= e;
     }
 
     try {
       close();
     } on Object catch (e) {
-      exception ??= _asException(e);
+      exception ??= e;
     }
 
     for (final closeable in closeables) {
       try {
         closeable.close();
       } on Object catch (e) {
-        exception ??= _asException(e);
+        exception ??= e;
       }
     }
 
+    _closed = true;
     if (exception != null) {
-      throw exception;
-    } else {
-      return result as R;
+      _wrapAndThrow(exception);
     }
+
+    return result as R;
   }
 
   /// Runs passed function and closes this resource after it
@@ -68,18 +83,21 @@ extension CloseableExtensions on Closeable {
   /// thrown is propagated, if both the function and the close throw, the
   /// exception from the function is propagated
   Future<R> runAndCloseAsync<R>(FutureOr<R> Function(Closeable) fn) async {
-    Exception? exception;
+    Object? exception;
+    if (_closed) {
+      exception = StateError('Resource is already closed');
+    }
     R? result;
     try {
       result = await fn(this);
     } on Object catch (e) {
-      exception ??= _asException(e);
+      exception ??= e;
     }
 
     try {
       await close();
     } on Object catch (e) {
-      exception ??= _asException(e);
+      exception ??= e;
     }
 
     final futures = await Future.wait(
@@ -87,7 +105,7 @@ extension CloseableExtensions on Closeable {
         try {
           await c.close();
         } on Object catch (e) {
-          return _asException(e);
+          return _wrapAndThrow(e);
         }
       }),
     );
@@ -96,8 +114,9 @@ extension CloseableExtensions on Closeable {
       orElse: () => null,
     );
 
+    _closed = true;
     if (exception != null) {
-      throw exception;
+      _wrapAndThrow(exception);
     } else {
       return result as R;
     }
