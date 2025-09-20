@@ -64,7 +64,7 @@ extension CloseableExtensions on Closeable {
 
     for (final closeable in closeables) {
       try {
-        closeable.close();
+        closeable.runAndClose((_) {});
       } on Object catch (e) {
         exception ??= e;
       }
@@ -100,14 +100,12 @@ extension CloseableExtensions on Closeable {
       exception ??= e;
     }
 
-    final futures = await Future.wait(
-      closeables.map((c) async {
-        try {
-          await c.close();
-        } on Object catch (e) {
-          return _wrapAndThrow(e);
-        }
-      }),
+    final Iterable<Object?> futures = await Future.wait(
+      closeables.map(
+        (c) => c
+            .runAndCloseAsync((_) => null as Object?)
+            .catchError((Object e) => e),
+      ),
     );
     exception ??= futures.firstWhere(
       (e) => e != null,

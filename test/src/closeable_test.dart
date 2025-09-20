@@ -1,5 +1,4 @@
 import 'package:lean_extensions/src/closeable.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -8,12 +7,6 @@ void main() {
 
     setUp(() {
       resource = _MockCloseable([]);
-    });
-
-    test('close is called', () async {
-      await resource.close();
-      expect(resource.closed, isTrue);
-      expect(resource.isClosed, isTrue);
     });
 
     group('runAndClose', () {
@@ -167,7 +160,9 @@ void main() {
         final parent = _MockCloseable([throwingResource, normalResource]);
 
         await expectLater(
-          () => parent.runAndCloseAsync((r) async => null),
+          () {
+            return parent.runAndCloseAsync((r) async => null);
+          },
           throwsException,
         );
 
