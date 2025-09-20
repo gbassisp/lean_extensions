@@ -44,7 +44,7 @@ extension CloseableExtensions on Closeable {
   /// Closes the resource even if the function throws. The first exception
   /// thrown is propagated, if both the function and the close throw, the
   /// exception from the function is propagated
-  R runAndClose<R>(R Function(Closeable) fn) {
+  R runAndClose<R>(R Function(Closeable p0) fn) {
     Object? exception;
     if (_closed) {
       exception = StateError('Resource is already closed');
@@ -57,6 +57,7 @@ extension CloseableExtensions on Closeable {
     }
 
     try {
+      // ignore: discarded_futures this is a FutureOr<void>
       close();
     } on Object catch (e) {
       exception ??= e;
@@ -82,7 +83,7 @@ extension CloseableExtensions on Closeable {
   /// Closes the resource even if the function throws. The first exception
   /// thrown is propagated, if both the function and the close throw, the
   /// exception from the function is propagated
-  Future<R> runAndCloseAsync<R>(FutureOr<R> Function(Closeable) fn) async {
+  Future<R> runAndCloseAsync<R>(FutureOr<R> Function(Closeable p0) fn) async {
     Object? exception;
     if (_closed) {
       exception = StateError('Resource is already closed');
@@ -127,7 +128,7 @@ extension CloseableExtensions on Closeable {
 /// exception from the function is propagated
 R useCloseable<R>(
   Closeable resource,
-  R Function(Closeable) fn,
+  R Function(Closeable p0) fn,
 ) {
   return resource.runAndClose(fn);
 }
@@ -138,7 +139,7 @@ R useCloseable<R>(
 /// exception from the function is propagated
 Future<R> useCloseableAsync<R>(
   Closeable resource,
-  FutureOr<R> Function(Closeable) fn,
+  FutureOr<R> Function(Closeable p0) fn,
 ) async {
   return resource.runAndCloseAsync(fn);
 }

@@ -104,54 +104,108 @@ void main() {
         final result = parentResource.runAndClose((r) => 42);
 
         expect(result, 42);
-        expect(parentResource.closed, isTrue,
-            reason: 'parent should be closed');
-        expect(innerResource1.closed, isTrue,
-            reason: 'inner1 should be closed');
-        expect(innerResource2.closed, isTrue,
-            reason: 'inner2 should be closed');
-        expect(parentResource.isClosed, isTrue,
-            reason: 'parent should be closed');
-        expect(innerResource1.isClosed, isTrue,
-            reason: 'inner1 should be closed');
-        expect(innerResource2.isClosed, isTrue,
-            reason: 'inner2 should be closed');
+        expect(
+          parentResource.closed,
+          isTrue,
+          reason: 'parent should be closed',
+        );
+        expect(
+          innerResource1.closed,
+          isTrue,
+          reason: 'inner1 should be closed',
+        );
+        expect(
+          innerResource2.closed,
+          isTrue,
+          reason: 'inner2 should be closed',
+        );
+        expect(
+          parentResource.isClosed,
+          isTrue,
+          reason: 'parent should be closed',
+        );
+        expect(
+          innerResource1.isClosed,
+          isTrue,
+          reason: 'inner1 should be closed',
+        );
+        expect(
+          innerResource2.isClosed,
+          isTrue,
+          reason: 'inner2 should be closed',
+        );
       });
 
       test('runAndCloseAsync closes all resources', () async {
         final result = await parentResource.runAndCloseAsync((r) async => 42);
 
         expect(result, 42);
-        expect(parentResource.closed, isTrue,
-            reason: 'parent should be closed');
-        expect(innerResource1.closed, isTrue,
-            reason: 'inner1 should be closed');
-        expect(innerResource2.closed, isTrue,
-            reason: 'inner2 should be closed');
-        expect(parentResource.isClosed, isTrue,
-            reason: 'parent should be closed');
-        expect(innerResource1.isClosed, isTrue,
-            reason: 'inner1 should be closed');
-        expect(innerResource2.isClosed, isTrue,
-            reason: 'inner2 should be closed');
+        expect(
+          parentResource.closed,
+          isTrue,
+          reason: 'parent should be closed',
+        );
+        expect(
+          innerResource1.closed,
+          isTrue,
+          reason: 'inner1 should be closed',
+        );
+        expect(
+          innerResource2.closed,
+          isTrue,
+          reason: 'inner2 should be closed',
+        );
+        expect(
+          parentResource.isClosed,
+          isTrue,
+          reason: 'parent should be closed',
+        );
+        expect(
+          innerResource1.isClosed,
+          isTrue,
+          reason: 'inner1 should be closed',
+        );
+        expect(
+          innerResource2.isClosed,
+          isTrue,
+          reason: 'inner2 should be closed',
+        );
       });
 
       test('useCloseable closes all resources', () {
         final result = useCloseable(parentResource, (r) => 42);
 
         expect(result, 42);
-        expect(parentResource.closed, isTrue,
-            reason: 'parent should be closed');
-        expect(innerResource1.closed, isTrue,
-            reason: 'inner1 should be closed');
-        expect(innerResource2.closed, isTrue,
-            reason: 'inner2 should be closed');
-        expect(parentResource.isClosed, isTrue,
-            reason: 'parent should be closed');
-        expect(innerResource1.isClosed, isTrue,
-            reason: 'inner1 should be closed');
-        expect(innerResource2.isClosed, isTrue,
-            reason: 'inner2 should be closed');
+        expect(
+          parentResource.closed,
+          isTrue,
+          reason: 'parent should be closed',
+        );
+        expect(
+          innerResource1.closed,
+          isTrue,
+          reason: 'inner1 should be closed',
+        );
+        expect(
+          innerResource2.closed,
+          isTrue,
+          reason: 'inner2 should be closed',
+        );
+        expect(
+          parentResource.isClosed,
+          isTrue,
+          reason: 'parent should be closed',
+        );
+        expect(
+          innerResource1.isClosed,
+          isTrue,
+          reason: 'inner1 should be closed',
+        );
+        expect(
+          innerResource2.isClosed,
+          isTrue,
+          reason: 'inner2 should be closed',
+        );
       });
 
       test('propagates exception but still closes all resources', () async {
@@ -166,15 +220,27 @@ void main() {
           throwsException,
         );
 
-        expect(throwingResource.closed, isTrue,
-            reason: 'throwing resource should be closed');
-        expect(normalResource.closed, isTrue,
-            reason: 'normal resource should be closed');
+        expect(
+          throwingResource.closed,
+          isTrue,
+          reason: 'throwing resource should be closed',
+        );
+        expect(
+          normalResource.closed,
+          isTrue,
+          reason: 'normal resource should be closed',
+        );
         expect(parent.closed, isTrue, reason: 'parent should be closed');
-        expect(throwingResource.isClosed, isTrue,
-            reason: 'throwing resource should be closed');
-        expect(normalResource.isClosed, isTrue,
-            reason: 'normal resource should be closed');
+        expect(
+          throwingResource.isClosed,
+          isTrue,
+          reason: 'throwing resource should be closed',
+        );
+        expect(
+          normalResource.isClosed,
+          isTrue,
+          reason: 'normal resource should be closed',
+        );
         expect(parent.isClosed, isTrue, reason: 'parent should be closed');
       });
     });
