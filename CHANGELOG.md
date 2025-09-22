@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 1.9.1
+
+- Fix not passing correct sub-type to `Closeable` functions
+
 ## 1.9.0
 
 - Added `Closeable` mixin for easy auto-closing resources
