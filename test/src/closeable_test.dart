@@ -10,6 +10,17 @@ void main() {
     });
 
     group('runAndClose', () {
+      test('type is subclass of Closeable', () {
+        final result = resource.runAndClose((r) {
+          expect(r.foo, equals('bar'));
+          expect(r, isA<_MockCloseable>());
+          return 42;
+        });
+        expect(result, 42);
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
+
       test('executes function and closes resource', () {
         final result = resource.runAndClose((r) => 42);
         expect(result, 42);
@@ -28,6 +39,17 @@ void main() {
     });
 
     group('runAndCloseAsync', () {
+      test('type is subclass of Closeable', () {
+        final result = resource.runAndCloseAsync((r) {
+          expect(r.foo, equals('bar'));
+          expect(r, isA<_MockCloseable>());
+          return 42;
+        });
+        expect(result, 42);
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
+
       test('executes async function and closes resource', () async {
         final result = await resource.runAndCloseAsync((r) async => 42);
         expect(result, 42);
@@ -53,6 +75,17 @@ void main() {
     });
 
     group('useCloseable', () {
+      test('type is subclass of Closeable', () {
+        final result = useCloseable(_MockCloseable([]), (_MockCloseable r) {
+          // auto inferrence is only possible in dart 2.18+
+          expect(r.foo, equals('bar'));
+          expect(r, isA<_MockCloseable>());
+          return 42;
+        });
+        expect(result, 42);
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
       test('executes function and closes resource', () {
         final result = useCloseable(resource, (r) => 42);
         expect(result, 42);
@@ -65,6 +98,42 @@ void main() {
           () => useCloseable(resource, (r) => throw Exception('test')),
           throwsException,
         );
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
+    });
+
+    group('useCloseableAsync', () {
+      test('type is subclass of Closeable', () async {
+        final result = await useCloseableAsync(resource, (_MockCloseable r) {
+          expect(r.foo, equals('bar'));
+          expect(r, isA<_MockCloseable>());
+          return 42;
+        });
+        expect(result, 42);
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
+
+      test('executes async function and closes resource', () async {
+        final result = await useCloseableAsync(resource, (r) async => 42);
+        expect(result, 42);
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
+
+      test('closes resource even if async function throws', () async {
+        await expectLater(
+          useCloseableAsync(resource, (r) async => throw Exception('test')),
+          throwsException,
+        );
+        expect(resource.closed, isTrue);
+        expect(resource.isClosed, isTrue);
+      });
+
+      test('executes sync function and closes resource', () async {
+        final result = await useCloseableAsync(resource, (r) => 42);
+        expect(result, 42);
         expect(resource.closed, isTrue);
         expect(resource.isClosed, isTrue);
       });
@@ -251,6 +320,7 @@ class _MockCloseable with Closeable {
   _MockCloseable(this.closeables);
 
   bool closed = false;
+  String get foo => 'bar';
 
   @override
   Future<void> close() async {

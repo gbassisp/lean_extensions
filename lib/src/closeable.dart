@@ -39,12 +39,12 @@ Never _wrapAndThrow(Object e) {
 }
 
 /// Extension methods for [Closeable]
-extension CloseableExtensions on Closeable {
+extension CloseableExtensions<C extends Closeable> on C {
   /// Runs passed function and closes this resource after it
   /// Closes the resource even if the function throws. The first exception
   /// thrown is propagated, if both the function and the close throw, the
   /// exception from the function is propagated
-  R runAndClose<R>(R Function(Closeable p0) fn) {
+  R runAndClose<R>(R Function(C p0) fn) {
     Object? exception;
     if (_closed) {
       exception = StateError('Resource is already closed');
@@ -83,7 +83,7 @@ extension CloseableExtensions on Closeable {
   /// Closes the resource even if the function throws. The first exception
   /// thrown is propagated, if both the function and the close throw, the
   /// exception from the function is propagated
-  Future<R> runAndCloseAsync<R>(FutureOr<R> Function(Closeable p0) fn) async {
+  Future<R> runAndCloseAsync<R>(FutureOr<R> Function(C p0) fn) async {
     Object? exception;
     if (_closed) {
       exception = StateError('Resource is already closed');
@@ -126,20 +126,20 @@ extension CloseableExtensions on Closeable {
 /// Closes the resource even if the function throws. The first exception
 /// thrown is propagated, if both the function and the close throw, the
 /// exception from the function is propagated
-R useCloseable<R>(
-  Closeable resource,
-  R Function(Closeable p0) fn,
+R useCloseable<R, C extends Closeable>(
+  C resource,
+  R Function(C p0) fn,
 ) {
-  return resource.runAndClose(fn);
+  return resource.runAndClose<R>(fn);
 }
 
 /// Runs passed function and closes this resource after it
 /// Closes the resource even if the function throws. The first exception
 /// thrown is propagated, if both the function and the close throw, the
 /// exception from the function is propagated
-Future<R> useCloseableAsync<R>(
-  Closeable resource,
-  FutureOr<R> Function(Closeable p0) fn,
+Future<R> useCloseableAsync<R, C extends Closeable>(
+  C resource,
+  FutureOr<R> Function(C p0) fn,
 ) async {
-  return resource.runAndCloseAsync(fn);
+  return resource.runAndCloseAsync<R>(fn);
 }
