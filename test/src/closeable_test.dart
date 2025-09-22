@@ -39,8 +39,8 @@ void main() {
     });
 
     group('runAndCloseAsync', () {
-      test('type is subclass of Closeable', () {
-        final result = resource.runAndCloseAsync((r) {
+      test('type is subclass of Closeable', () async {
+        final result = await resource.runAndCloseAsync((r) {
           expect(r.foo, equals('bar'));
           expect(r, isA<_MockCloseable>());
           return 42;
@@ -76,7 +76,7 @@ void main() {
 
     group('useCloseable', () {
       test('type is subclass of Closeable', () {
-        final result = useCloseable(_MockCloseable([]), (_MockCloseable r) {
+        final result = useCloseable(resource, (_MockCloseable r) {
           // auto inferrence is only possible in dart 2.18+
           expect(r.foo, equals('bar'));
           expect(r, isA<_MockCloseable>());
@@ -106,6 +106,7 @@ void main() {
     group('useCloseableAsync', () {
       test('type is subclass of Closeable', () async {
         final result = await useCloseableAsync(resource, (_MockCloseable r) {
+          // auto inferrence is only possible in dart 2.18+
           expect(r.foo, equals('bar'));
           expect(r, isA<_MockCloseable>());
           return 42;

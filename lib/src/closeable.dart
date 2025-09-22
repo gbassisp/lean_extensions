@@ -40,6 +40,15 @@ Never _wrapAndThrow(Object e) {
 
 /// Extension methods for [Closeable]
 extension CloseableExtensions<C extends Closeable> on C {
+  void _closeSync() {
+    // using a getter resolves unused futures warning withtout disabling it
+    close().hashCode;
+  }
+
+  Future<void> _closeAsync() async {
+    await close();
+  }
+
   /// Runs passed function and closes this resource after it
   /// Closes the resource even if the function throws. The first exception
   /// thrown is propagated, if both the function and the close throw, the
@@ -57,15 +66,14 @@ extension CloseableExtensions<C extends Closeable> on C {
     }
 
     try {
-      // ignore: discarded_futures this is a FutureOr<void>
-      close();
+      _closeSync();
     } on Object catch (e) {
       exception ??= e;
     }
 
     for (final closeable in closeables) {
       try {
-        closeable.runAndClose((_) {});
+        closeable.runAndClose<void>((_) {});
       } on Object catch (e) {
         exception ??= e;
       }
@@ -96,7 +104,7 @@ extension CloseableExtensions<C extends Closeable> on C {
     }
 
     try {
-      await close();
+      await _closeAsync();
     } on Object catch (e) {
       exception ??= e;
     }
