@@ -7,6 +7,7 @@ library dart_essentials;
 export 'src/closeable.dart';
 export 'src/comparable.dart';
 export 'src/iterable_extra_extensions.dart';
+export 'src/pair.dart';
 export 'src/range.dart' hide RangeFactory, safeRange;
 export 'src/string_values.dart' show string;
 export 'src/utils.dart';

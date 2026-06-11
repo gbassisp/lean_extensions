@@ -1,5 +1,9 @@
 <!-- dart package changelog -->
 
+## 1.10.0
+
+- Export `Pair` type to dart_essentials.dart lib
+
 ## 1.9.1
 
 - Fix not passing correct sub-type to `Closeable` functions
