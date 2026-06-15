@@ -1,5 +1,4 @@
 import 'package:lean_extensions/dart_essentials.dart';
-import 'package:lean_extensions/src/pair.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';

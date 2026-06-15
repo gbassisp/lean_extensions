@@ -1,5 +1,4 @@
 import 'package:lean_extensions/dart_essentials.dart';
-import 'package:lean_extensions/src/pair.dart';
 
 /// adds utility methods to [Iterable]
 extension IterableExtraExtensions<T> on Iterable<T> {
