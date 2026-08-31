@@ -3,5 +3,6 @@
 library lean_extensions;
 
 export 'src/converters.dart';
+export 'src/duration_extensions.dart';
 export 'src/extensions.dart';
 export 'src/future_extensions.dart';
