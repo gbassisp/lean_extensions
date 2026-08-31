@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Extension methods for [Future].
 extension FutureLeanExtensions<T> on Future<T> {
   /// Executes a function when the future completes successfully.
@@ -10,5 +12,18 @@ extension FutureLeanExtensions<T> on Future<T> {
       action(v);
       return v;
     });
+  }
+
+  /// a wrapper around the [timeout] method that allows passing nullable a
+  /// [Duration]. If null, no timeout rule is applied
+  Future<T> maybeTimeout(
+    Duration? timeLimit, {
+    FutureOr<T> Function()? onTimeout,
+  }) {
+    if (timeLimit == null) {
+      return this;
+    } else {
+      return timeout(timeLimit, onTimeout: onTimeout);
+    }
   }
 }
