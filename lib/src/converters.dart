@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lean_extensions/src/extensions.dart';
 
@@ -183,5 +186,104 @@ class AnyUriOrNullConverter extends ToDynamicConverter<Uri?> {
 
   @override
   String? toJson(Uri? object) =>
+      object == null ? null : _converter.toJson(object);
+}
+
+/// converts to Uri if not null, otherwise returns null
+class AnyBytesConverter extends ToDynamicConverter<Uint8List> {
+  /// default const constructor
+  const AnyBytesConverter({this.encodeToHex = false});
+
+  /// optional flag to use hexadecimal notation when encoding [toJson]
+  /// e.g., 0x12AB34
+  ///
+  /// This does not change [fromJson], because it checks for this regardless
+  final bool encodeToHex;
+
+  static final _hexRegex =
+      RegExp('(?<pair>[0-9,a-f]{2})', caseSensitive: false);
+
+  static final _fullHexRegex =
+      RegExp('0x([0-9,a-f]{2})+', caseSensitive: false);
+
+  static Iterable<String> _extractGroups(Iterable<RegExpMatch> matches) sync* {
+    for (final match in matches) {
+      yield match.namedGroup('pair').orEmpty;
+    }
+  }
+
+  static Uint8List _fromString(String json) {
+    if (json.startsWith('0x') && _fullHexRegex.hasMatch(json)) {
+      final matches = _hexRegex.allMatches(json.substring(2));
+      final extracted = _extractGroups(matches);
+      final ints = extracted.map((pair) {
+        assert(pair.length == 2, 'expected a hexadecimal byte $pair');
+        return int.parse(pair, radix: 16);
+      });
+      final result = ints.toArray();
+      assert(
+        () {
+          final resLength = result.length;
+          final expected =
+              // total length of 0x010203
+              // minus the preffix 0x
+              // divided by 2 (pairs of hex)
+              (json.length - 2) / 2;
+
+          return resLength == expected;
+        }(),
+        'res $result has length ${result.length} '
+        'but expected ${(json.length - 2) / 2}',
+      );
+      return Uint8List.fromList(result);
+    } else {
+      return Uint8List.fromList(json.codeUnits);
+    }
+  }
+
+  @override
+  Uint8List fromJson(dynamic json) {
+    if (json is String) {
+      return _fromString(json);
+    }
+
+    final forceCastToIterable = json as Iterable<Object?>;
+    final forceCastToInt = forceCastToIterable.map((e) => e! as int);
+
+    return Uint8List.fromList(forceCastToInt.toArray());
+  }
+
+  @override
+  String toJson(Uint8List object) {
+    final ints = object.toArray();
+    if (encodeToHex) {
+      return '0x${ints.map((e) => e.toRadixString(16).padLeft(2, '0')).join()}';
+    } else {
+      return jsonEncode(ints);
+    }
+  }
+}
+
+/// converts to Uri if not null, otherwise returns null
+class AnyBytesOrNullConverter extends ToDynamicConverter<Uint8List?> {
+  /// default const constructor
+  const AnyBytesOrNullConverter({this.encodeToHex = false});
+
+  /// optional flag to use hexadecimal notation when encoding [toJson]
+  /// e.g., 0x12AB34
+  ///
+  /// This does not change [fromJson], because it checks for this regardless
+  final bool encodeToHex;
+  static const _nonHexConverter = AnyBytesConverter();
+  static const _hexConverter = AnyBytesConverter(encodeToHex: true);
+  AnyBytesConverter get _converter =>
+      encodeToHex ? _hexConverter : _nonHexConverter;
+
+  @override
+  Uint8List? fromJson(dynamic json) =>
+      json == null ? null : _converter.fromJson(json);
+
+  @override
+  String? toJson(Uint8List? object) =>
       object == null ? null : _converter.toJson(object);
 }

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:lean_extensions/lean_extensions.dart';
@@ -6,27 +8,6 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 import 'truthy_test.dart';
-
-// /// converts to nullable DateTime
-// class AnyDateTimeOrNull extends ToDynamicConverter<DateTime?> {
-//   /// default const constructor
-//   const AnyDateTimeOrNull();
-
-//   @override
-//   DateTime? fromJson(dynamic json) => _string.fromJson(json).tryToDateTime();
-// }
-
-// /// converts to DateTime
-// class AnyDateTime extends ToDynamicConverter<DateTime> {
-//   /// default const constructor
-//   const AnyDateTime();
-
-//   @override
-//   DateTime fromJson(dynamic json) => _string.fromJson(json).toDateTime();
-
-//   @override
-//   dynamic toJson(DateTime object) => object.toIso8601String();
-// }
 
 const dateString = '2021-01-01';
 const dateStringWithT = '2021-01-01T00:00:00.000';
@@ -282,6 +263,63 @@ void main() {
       expect(converter.fromJson(uri), uri);
 
       expect(converter.toJson(converter.fromJson(url)), url);
+    });
+
+    test('bytes - from List<int>', () {
+      const converter = AnyBytesConverter();
+      final input = [1, 2, 3];
+      final expected = Uint8List.fromList(input);
+
+      expect(converter.fromJson(input), expected);
+    });
+
+    test('bytes - from Uint8List', () {
+      const converter = AnyBytesConverter();
+      final input = Uint8List.fromList([1, 2, 3]);
+      final expected = input;
+
+      expect(converter.fromJson(input), expected);
+    });
+
+    test('bytes - from hex string', () {
+      const converter = AnyBytesConverter();
+      const input = '0x010203';
+      final expected = Uint8List.fromList([1, 2, 3]);
+
+      expect(converter.fromJson(input), expected);
+    });
+
+    test('bytes - from other string', () {
+      const converter = AnyBytesConverter();
+      const input = 'this will take the utf8 code units';
+      final expected = utf8.encode(input);
+
+      expect(converter.fromJson(input), expected);
+    });
+
+    test('bytes - toJson', () {
+      const converter = AnyBytesConverter();
+      final input = Uint8List.fromList([1, 2, 3]);
+      const expected = '[1,2,3]';
+
+      expect(converter.toJson(input), expected);
+    });
+
+    test('bytes - toJson using hex notation', () {
+      const converter = AnyBytesConverter(encodeToHex: true);
+      final input = Uint8List.fromList([1, 2, 3]);
+      const expected = '0x010203';
+
+      expect(converter.toJson(input), expected);
+    });
+
+    test('bytes or null handles nulls', () {
+      const converter = AnyBytesOrNullConverter();
+      const Uint8List? input = null;
+      const expected = null;
+
+      expect(converter.fromJson(input), expected);
+      expect(converter.toJson(input), expected);
     });
   });
   group('extensions', () {
