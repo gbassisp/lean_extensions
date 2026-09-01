@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:lean_extensions/src/extensions.dart';
+import 'package:lean_extensions/lean_extensions.dart';
 
 /// A convenience wrapper around [JsonConverter] that implement default toJson()
 abstract class ToDynamicConverter<T> extends JsonConverter<T, dynamic> {
@@ -220,9 +220,9 @@ class AnyBytesConverter extends ToDynamicConverter<Uint8List> {
         assert(pair.length == 2, 'expected a hexadecimal byte $pair');
         return int.parse(pair, radix: 16);
       });
-      final result = ints.toArray();
       assert(
         () {
+          final result = ints.toArray();
           final resLength = result.length;
           final expected =
               // total length of 0x010203
@@ -232,10 +232,10 @@ class AnyBytesConverter extends ToDynamicConverter<Uint8List> {
 
           return resLength == expected;
         }(),
-        'res $result has length ${result.length} '
+        'res $ints has length ${ints.length} '
         'but expected ${(json.length - 2) / 2}',
       );
-      return Uint8List.fromList(result);
+      return ints.toUint8List();
     } else {
       return Uint8List.fromList(json.codeUnits);
     }
@@ -255,10 +255,10 @@ class AnyBytesConverter extends ToDynamicConverter<Uint8List> {
 
   @override
   String toJson(Uint8List object) {
-    final ints = object.toArray();
     if (encodeToHex) {
-      return '0x${ints.map((e) => e.toRadixString(16).padLeft(2, '0')).join()}';
+      return object.toHexString();
     } else {
+      final ints = object.toArray();
       return jsonEncode(ints);
     }
   }
