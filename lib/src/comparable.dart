@@ -1,5 +1,17 @@
 import 'package:meta/meta.dart';
 
+/// similar to min() from the math lib, but applied to any [Comparable]
+// ignore: strict_raw_type
+A minComparable<A extends Comparable>(A p0, A p1) {
+  return p0.compareTo(p1) > 0 ? p1 : p0;
+}
+
+/// similar to max() from the math lib, but applied to any [Comparable]
+// ignore: strict_raw_type
+A maxComparable<A extends Comparable>(A p0, A p1) {
+  return p0.compareTo(p1) < 0 ? p1 : p0;
+}
+
 /// An easy way to implement [Comparable] in a way that [compareTo] aggrees
 /// with [>] and [==] operators
 @immutable
