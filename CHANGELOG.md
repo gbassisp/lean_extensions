@@ -1,5 +1,14 @@
 <!-- dart package changelog -->
 
+## 1.11.0
+
+Added:
+
+- `.maybeTimeout()` on `Future` with `Duration?` arg
+- `Duration` getters on num, like `seconds`, `minutes`, `hours`, etc...
+- `List<int>` <-> `Uint8List` and hex-formatted `String`
+- `minComparable` and `maxComparable` to return min and max of `Comparable` objects
+
 ## 1.10.0
 
 - Export `Pair` type to dart_essentials.dart lib
