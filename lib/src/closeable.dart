@@ -148,6 +148,6 @@ R useCloseable<R, C extends Closeable>(
 Future<R> useCloseableAsync<R, C extends Closeable>(
   C resource,
   FutureOr<R> Function(C p0) fn,
-) async {
+) {
   return resource.runAndCloseAsync<R>(fn);
 }
