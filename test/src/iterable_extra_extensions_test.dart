@@ -92,6 +92,105 @@ void main() {
     });
   }
 
+  group('Iterable.startsWith', () {
+    test('smaller than sublist is false', () {
+      final a = [1];
+      final b = [1, 2];
+
+      expect(a.startsWith(b), isFalse);
+    });
+    test('same size as sublist is true', () {
+      final a = [1, 2];
+      final b = [1, 2];
+
+      expect(a.startsWith(b), isTrue);
+    });
+    test('greater than sublist is true', () {
+      final a = [1, 2, 3];
+      final b = [1, 2];
+
+      expect(a.startsWith(b), isTrue);
+    });
+    test('same size as and does not start with returns false', () {
+      final a = [1, 1];
+      final b = [1, 2];
+
+      expect(a.startsWith(b), isFalse);
+    });
+    test('greather than and does not start with returns false', () {
+      final a = [0, 1, 2];
+      final b = [1, 2];
+
+      expect(a.startsWith(b), isFalse);
+    });
+  });
+
+  group('Iterable.containsSub', () {
+    test('smaller than sublist is false', () {
+      final a = [1];
+      final b = [1, 2];
+
+      expect(a.containsSub(b), isFalse);
+    });
+    test('same size as sublist is true', () {
+      final a = [1, 2];
+      final b = [1, 2];
+
+      expect(a.containsSub(b), isTrue);
+    });
+    test('greater than sublist is true', () {
+      final a = [1, 2, 3];
+      final b = [1, 2];
+
+      expect(a.containsSub(b), isTrue);
+    });
+    test('same size as and does not contain sub with returns false', () {
+      final a = [1, 1];
+      final b = [1, 2];
+
+      expect(a.containsSub(b), isFalse);
+    });
+    test('greather than and does not contain sub with returns false', () {
+      final a = [0, 1, 2];
+      final b = [1, 2];
+
+      expect(a.containsSub(b), isTrue);
+    });
+  });
+
+  group('Iterable.endsWith', () {
+    test('smaller than sublist is false', () {
+      final a = [2];
+      final b = [1, 2];
+
+      expect(a.endsWith(b), isFalse);
+    });
+    test('same size as sublist is true', () {
+      final a = [1, 2];
+      final b = [1, 2];
+
+      expect(a.endsWith(b), isTrue);
+    });
+    test('greater than sublist is true', () {
+      final a = [0, 1, 2];
+      final b = [1, 2];
+
+      expect(a.endsWith(b), isTrue);
+    });
+    test('same size as and does not end with returns false', () {
+      final a = [1, 1];
+      final b = [1, 2];
+
+      expect(a.endsWith(b), isFalse);
+    });
+    test('greather than and does not end with returns false', () {
+      final a = [1, 2, 3];
+      final b = [1, 2];
+
+      expect(a.endsWith(b), isFalse);
+    });
+  });
+
   group(
     'zip',
     () {
