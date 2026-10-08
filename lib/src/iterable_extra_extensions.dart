@@ -1,4 +1,5 @@
 import 'package:lean_extensions/dart_essentials.dart';
+import 'package:lean_extensions/lean_extensions.dart';
 
 /// adds utility methods to [Iterable]
 extension IterableExtraExtensions<T> on Iterable<T> {
@@ -12,6 +13,52 @@ extension IterableExtraExtensions<T> on Iterable<T> {
 
   /// apply [zip](this, [other])
   Iterable<Pair<T, U>> zip<U>(Iterable<U> other) => _zipCore(this, other);
+
+  /// check if this starts with [sub] list
+  bool startsWith(Iterable<T> sub) {
+    final a = toList();
+    final b = sub.toList();
+    if (b.length > a.length) {
+      return false;
+    }
+
+    for (final element in zip(sub)) {
+      if (element.$1 != element.$2) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// check if this contains [sub] list
+  bool containsSub(Iterable<T> sub) {
+    final a = toList();
+    final l1 = a.length;
+    final b = sub.toList();
+    final l2 = b.length;
+
+    for (final i in range(l1)) {
+      final r1 = l1 - i;
+      if (r1 < l2) {
+        break;
+      }
+
+      final aSub = a.sublist(i);
+      if (aSub.startsWith(b)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /// check if this ends with [sub] list
+  bool endsWith(Iterable<T> sub) {
+    final a = reversed;
+    final b = sub.reversed;
+
+    return a.startsWith(b);
+  }
 }
 
 /// syntax sugar to use [Pair] in a more meaningful way with
@@ -36,6 +83,8 @@ Iterable<Pair<int, T>> enumerate<T>(
     iterable.enumerate(start);
 
 /// top-level function matching the behaviour of the Python [zip] function
+///
+/// zip is as long as the shortest [Iterable]
 ///
 /// see https://docs.python.org/3/library/functions.html#zip
 Iterable<Pair<A, B>> zip<A, B>(
