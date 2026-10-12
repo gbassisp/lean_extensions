@@ -12,6 +12,60 @@ A maxComparable<A extends Comparable>(A p0, A p1) {
   return p0.compareTo(p1) < 0 ? p1 : p0;
 }
 
+/// similar to [minComparable] and [maxComparable]
+extension LeanComparableExtensions<T> on Comparable<T> {
+  /// shorthand for: compareTo(other) == 0
+  bool isEqualTo(T other) => compareTo(other) == 0;
+
+  /// shorthand for: compareTo(other) > 0
+  bool isGreaterThan(T other) => compareTo(other) > 0;
+
+  /// shorthand for: compareTo(other) < 0
+  bool isSmallerThan(T other) => compareTo(other) < 0;
+
+  /// shorthand for: compareTo(other) >= 0
+  bool isGreaterThanOrEqualTo(T other) => compareTo(other) >= 0;
+
+  /// shorthand for: compareTo(other) <= 0
+  bool isSmallerThanOrEqualTo(T other) => compareTo(other) <= 0;
+
+  /// compares if this is between [min] and [max]
+  ///
+  /// additional named params allow making full/open-ended inclusive range
+  /// comparison
+  ///
+  /// an assertion error is thrown if [min] and [max] are in the wrong order.
+  /// on production code you always get false
+  bool isBetween(
+    T min,
+    T max, {
+    bool? inclusiveMin,
+    bool? inclusiveMax,
+  }) {
+    if ((max as Comparable).isSmallerThan(min as Comparable)) {
+      assert(false, 'min and max values passed in wrong order');
+      return false;
+    }
+
+    final iMin = inclusiveMin ?? false;
+    final iMax = inclusiveMax ?? false;
+
+    if (iMin) {
+      if (!isGreaterThanOrEqualTo(min)) return false;
+    } else {
+      if (!isGreaterThan(min)) return false;
+    }
+
+    if (iMax) {
+      if (!isSmallerThanOrEqualTo(max)) return false;
+    } else {
+      if (!isSmallerThan(max)) return false;
+    }
+
+    return true;
+  }
+}
+
 /// An easy way to implement [Comparable] in a way that [compareTo] aggrees
 /// with [>] and [==] operators
 @immutable
