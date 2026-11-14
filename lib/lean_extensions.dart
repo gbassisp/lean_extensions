@@ -7,3 +7,4 @@ export 'src/converters.dart';
 export 'src/duration_extensions.dart';
 export 'src/extensions.dart';
 export 'src/future_extensions.dart';
+export 'src/set_extensions.dart';
