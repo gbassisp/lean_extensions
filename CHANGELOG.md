@@ -1,5 +1,13 @@
 <!-- dart package changelog -->
 
+## 1.12.0
+
+Added:
+
+- `.addUnique()` on `Set`
+- `.startsWith`, `containsSub`, and `endsWith` on `Iterable`
+- Simple comparison between `Comparable` objects, like `isGreaterThan`
+
 ## 1.11.0
 
 Added:
